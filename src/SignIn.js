@@ -6,6 +6,7 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import ddf from './ddf.png';
 
 const theme = createTheme();
 
@@ -40,7 +41,7 @@ export default function SignIn() {
           maxWidth: { xs: 400, md: 400 },
         }}
         alt="Digital Dream Forge Logo"
-        src="https://cdn.discordapp.com/attachments/1034568887544598611/1067208857341919344/ddf.png"
+        src={ddf}
       />
           <Typography component="h1" variant="h5">
             Sign in
