@@ -34,13 +34,13 @@ export default function SignIn() {
           <Box
         component="img"
         sx={{
-          height: 233,
-          width: 350,
-          maxHeight: { xs: 233, md: 167 },
-          maxWidth: { xs: 233, md: 167 },
+          height: 150,
+          width: 400,
+          maxHeight: { xs: 150, md: 150 },
+          maxWidth: { xs: 400, md: 400 },
         }}
         alt="Digital Dream Forge Logo"
-        src="https://res.cloudinary.com/crunchbase-production/image/upload/c_lpad,h_170,w_170,f_auto,b_white,q_auto:eco,dpr_1/v1449641703/ahkspdqlxjhszqybrxsm.gif"
+        src="https://cdn.discordapp.com/attachments/1034568887544598611/1067208857341919344/ddf.png"
       />
           <Typography component="h1" variant="h5">
             Sign in
