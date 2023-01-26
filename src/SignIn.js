@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useState } from 'react';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
@@ -7,8 +8,7 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import ddf from './ddf.png';
-
-const theme = createTheme();
+import { Switch } from '@mui/material';
 
 export default function SignIn() {
   const handleSubmit = (event) => {
@@ -18,11 +18,24 @@ export default function SignIn() {
       email: data.get('email'),
       password: data.get('password'),
     });
-  };
+  }
+  const [mode, setMode] = useState(false)
+  const theme = createTheme({
+    palette:{
+      mode: mode ? "dark" : "light"
+    }})
+  
 
   return (
     <ThemeProvider theme={theme}>
-      <Container component="main" maxWidth="xs">
+      <Box
+      display="flex"
+      justifyContent="flex-end"
+      alignItems="flex-end"
+      >
+        <Switch onClick={()=>setMode(!mode)} ></Switch>
+      </Box>
+      <Container component="main" maxWidth="xs">  
         <CssBaseline />
         <Box
           sx={{
