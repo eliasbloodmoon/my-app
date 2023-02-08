@@ -20,7 +20,6 @@ const rows = [
 export default function BasicTable() {
   return (
     <TableContainer component={Paper}>
-    <DarkToggle />
     <Box
           sx={{
             marginTop: 8,
@@ -29,7 +28,7 @@ export default function BasicTable() {
             alignItems: 'center',
           }}
         ></Box>
-      <Table sx={{ minWidth: 650 }} aria-label="simple table">
+      <Table sx={{ maxWidth: 800, justifySelf: 'flex-end' }} aria-label="simple table">
         <TableHead>
           <TableRow>
             <TableCell>Employee Name</TableCell>
