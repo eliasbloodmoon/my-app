@@ -4,11 +4,14 @@ import './index.css';
 import SignIn from './SignIn';
 import reportWebVitals from './reportWebVitals';
 import BasicTable from './BasicView';
+import { ProSidebarProvider } from "react-pro-sidebar";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <BasicTable />
+    <ProSidebarProvider>
+      <BasicTable />
+    </ProSidebarProvider>
   </React.StrictMode>
 );
 

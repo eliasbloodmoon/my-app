@@ -1,3 +1,11 @@
+import { Sidebar, Menu, MenuItem, useProSidebar } from "react-pro-sidebar";
+import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
+import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
+import ContactsOutlinedIcon from "@mui/icons-material/ContactsOutlined";
+import ReceiptOutlinedIcon from "@mui/icons-material/ReceiptOutlined";
+import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined";
+import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
+import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import * as React from 'react';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -18,8 +26,29 @@ const rows = [
 ];
 
 export default function BasicTable() {
+
   return (
-    <TableContainer component={Paper}>
+    <div id="app" style={({ height: "100vh" }, { display: "flex" })}>
+      <Sidebar style={{ height: "100vh" }}>
+        <Menu>
+          <MenuItem
+            icon={<MenuOutlinedIcon />}
+            style={{ textAlign: "center" }}
+          >
+            {" "}
+            <h2>Admin</h2>
+          </MenuItem>
+
+          <MenuItem icon={<HomeOutlinedIcon />}>Home</MenuItem>
+          <MenuItem icon={<PeopleOutlinedIcon />}>Team</MenuItem>
+          <MenuItem icon={<ContactsOutlinedIcon />}>Contacts</MenuItem>
+          <MenuItem icon={<ReceiptOutlinedIcon />}>Profile</MenuItem>
+          <MenuItem icon={<HelpOutlineOutlinedIcon />}>FAQ</MenuItem>
+          <MenuItem icon={<CalendarTodayOutlinedIcon />}>Calendar</MenuItem>
+        </Menu>
+      </Sidebar>
+      <main >
+        <TableContainer component={Paper}>
     <Box
           sx={{
             marginTop: 8,
@@ -28,7 +57,7 @@ export default function BasicTable() {
             alignItems: 'center',
           }}
         ></Box>
-      <Table sx={{ maxWidth: 1200, float: 'right', }} aria-label="simple table">
+      <Table sx={{ minWidth: '100%', float: 'right', }} aria-label="simple table">
         <TableHead>
           <TableRow>
             <TableCell>Employee Name</TableCell>
@@ -62,5 +91,7 @@ export default function BasicTable() {
         </TableBody>
       </Table>
     </TableContainer>
+      </main>
+    </div>
   );
 }
