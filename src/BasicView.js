@@ -15,7 +15,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
-
+import DarkToggle from './DarkToggle.js';
 
 function createData(name, date, shiftIN, FirstMO, FirstMI, SecondMO, SecondMI, shiftOUT) {
   return { name, date, shiftIN, FirstMO, FirstMI, SecondMO, SecondMI, shiftOUT };
@@ -48,16 +48,18 @@ export default function BasicTable() {
         </Menu>
       </Sidebar>
       <main >
-        <TableContainer component={Paper}>
+      
+        <TableContainer component={Paper} sx={{display: 'block', width: '100%',}}>
+        
     <Box
           sx={{
-            marginTop: 8,
+            marginBottom: 8,
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
           }}
         ></Box>
-      <Table sx={{ minWidth: '100%', float: 'right', }} aria-label="simple table">
+      <Table sx={{ minWidth: '100%', minHeight: '100%', float: 'right', }} aria-label="simple table">
         <TableHead>
           <TableRow>
             <TableCell>Employee Name</TableCell>
@@ -90,6 +92,7 @@ export default function BasicTable() {
           ))}
         </TableBody>
       </Table>
+      
     </TableContainer>
       </main>
     </div>
