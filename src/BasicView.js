@@ -101,7 +101,7 @@ export default function BasicTable() {
             alignItems: 'center',
           }}
         ></Box>
-      <Table sx={{ minWidth: '100%', minHeight: '100%', float: 'right', }} aria-label="simple table">
+      <Table sx={{ width: `calc(100% - ${drawerWidth}px)`, ml: `${drawerWidth}px`, minHeight: '100%', float: 'right', }} aria-label="simple table">
         <TableHead>
           <TableRow>
             <TableCell>Employee Name</TableCell>
