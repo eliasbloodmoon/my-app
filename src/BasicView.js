@@ -22,6 +22,9 @@ import { Switch } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useState } from 'react';
 import Typography from '@mui/material/Typography';
+import BackupTableIcon from '@mui/icons-material/BackupTable';
+import BadgeIcon from '@mui/icons-material/Badge';
+import LogoutIcon from '@mui/icons-material/Logout';
 
 const drawerWidth = 240;
 
@@ -53,7 +56,7 @@ export default function BasicTable() {
 
 
           <Typography variant="h6" noWrap component="div">
-            Permanent drawer
+            Admin View
           </Typography>
           <Switch onClick={()=>setMode(!mode)} sx={{display: 'flex-end'}}></Switch>
         </Toolbar>
@@ -84,14 +87,30 @@ export default function BasicTable() {
           <ListItem disablePadding>
             <ListItemButton>
               <ListItemIcon>
-                <ArticleIcon />
+                <BackupTableIcon />
               </ListItemIcon>
-              <ListItemText primary="Day View" />
+              <ListItemText primary="Employee View" />
+            </ListItemButton>
+          </ListItem>
+          <ListItem disablePadding>
+            <ListItemButton>
+              <ListItemIcon>
+                <BadgeIcon />
+              </ListItemIcon>
+              <ListItemText primary="Edit Employees" />
+            </ListItemButton>
+          </ListItem>
+          <ListItem disablePadding>
+            <ListItemButton>
+              <ListItemIcon>
+                <LogoutIcon />
+              </ListItemIcon>
+              <ListItemText primary="Logout" />
             </ListItemButton>
           </ListItem>
         </List>
       </Drawer>
-        <TableContainer component={Paper} sx={{display: 'block', width: 'auto', height: 'vh100'}}>
+        <TableContainer id="DayView" component={Paper} sx={{display: 'block', width: 'auto', height: 'vh100'}}>
         
     <Box
           sx={{
@@ -134,7 +153,6 @@ export default function BasicTable() {
           ))}
         </TableBody>
       </Table>
-      
     </TableContainer>
   </ThemeProvider>
   );
