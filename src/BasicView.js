@@ -7,16 +7,23 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
-import { Sidebar, Menu, MenuItem} from "react-pro-sidebar";
-import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
-import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
-import ReceiptOutlinedIcon from "@mui/icons-material/ReceiptOutlined";
-import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
-import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
+import Drawer from '@mui/material/Drawer';
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import CssBaseline from '@mui/material/CssBaseline';
+import ArticleIcon from '@mui/icons-material/Article';
+import Divider from '@mui/material/Divider';
 import { Switch } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useState } from 'react';
+import Typography from '@mui/material/Typography';
 
+const drawerWidth = 240;
 
 function createDataEveryone(name, date, shiftIN, FirstMO, FirstMI, SecondMO, SecondMI, shiftOUT) {
   return { name, date, shiftIN, FirstMO, FirstMI, SecondMO, SecondMI, shiftOUT };
@@ -36,35 +43,56 @@ export default function BasicTable() {
   
   return (
     <ThemeProvider theme={theme}>
-<div id="app" style={({ height: "100vh" }, { display: "flex" })}>
-
-      <Sidebar backgroundColor="background.default" style={{ height: "100vh",  }}>
-        <Menu>
-          <MenuItem
-            icon={<MenuOutlinedIcon />}
-            style={{ textAlign: "center" }}
-          >
-            {" "}
-            <h2>Admin</h2>
-          </MenuItem>
-
-          <MenuItem icon={<HomeOutlinedIcon />}>Home</MenuItem>
-          <MenuItem icon={<PeopleOutlinedIcon />}>Team</MenuItem>
-          <MenuItem icon={<ReceiptOutlinedIcon />}>Profile</MenuItem>
-          <MenuItem icon={<HelpOutlineOutlinedIcon />}>Log Out</MenuItem>
-        </Menu>
-      </Sidebar>
-      <main >
-
+      <CssBaseline />
       
-        <TableContainer component={Paper} sx={{display: 'block', width: 'auto', height: 'vh100'}}>
-        <Box
-      display="flex"
-      justifyContent="flex-end"
-      alignItems="flex-end"
+      <AppBar
+        position="fixed"
+        sx={{ width: `calc(100% - ${drawerWidth}px)`, ml: `${drawerWidth}px` }}
       >
-        <Switch onClick={()=>setMode(!mode)} ></Switch>
-      </Box>
+        <Toolbar>
+
+
+          <Typography variant="h6" noWrap component="div">
+            Permanent drawer
+          </Typography>
+          <Switch onClick={()=>setMode(!mode)} sx={{display: 'flex-end'}}></Switch>
+        </Toolbar>
+      </AppBar>
+      <Drawer
+        sx={{
+          width: drawerWidth,
+          flexShrink: 0,
+          '& .MuiDrawer-paper': {
+            width: drawerWidth,
+            boxSizing: 'border-box',
+          },
+        }}
+        variant="permanent"
+        anchor="left"
+      >
+        <Toolbar />
+        <Divider />
+        <List>
+          <ListItem disablePadding>
+            <ListItemButton>
+              <ListItemIcon>
+                <ArticleIcon />
+              </ListItemIcon>
+              <ListItemText primary="Day View" />
+            </ListItemButton>
+          </ListItem>
+          <ListItem disablePadding>
+            <ListItemButton>
+              <ListItemIcon>
+                <ArticleIcon />
+              </ListItemIcon>
+              <ListItemText primary="Day View" />
+            </ListItemButton>
+          </ListItem>
+        </List>
+      </Drawer>
+        <TableContainer component={Paper} sx={{display: 'block', width: 'auto', height: 'vh100'}}>
+        
     <Box
           sx={{
             marginBottom: 8,
@@ -108,10 +136,6 @@ export default function BasicTable() {
       </Table>
       
     </TableContainer>
-
-      </main>
-
-    </div>
-    </ThemeProvider>
+  </ThemeProvider>
   );
 }
