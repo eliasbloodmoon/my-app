@@ -36,6 +36,7 @@ export default function BasicTable() {
   
   return (
     <div id="app" style={({ height: "100vh" }, { display: "flex" })}>
+          <ThemeProvider theme={theme}>
       <Sidebar style={{ height: "100vh" }}>
         <Menu>
           <MenuItem
@@ -53,16 +54,16 @@ export default function BasicTable() {
         </Menu>
       </Sidebar>
       <main >
-      <ThemeProvider theme={theme}>
-      <Box
+
+      
+        <TableContainer component={Paper} sx={{display: 'block', width: 'auto', height: 'vh100'}}>
+        <Box
       display="flex"
       justifyContent="flex-end"
       alignItems="flex-end"
       >
         <Switch onClick={()=>setMode(!mode)} ></Switch>
       </Box>
-        <TableContainer component={Paper} sx={{display: 'block', width: '100%',}}>
-        
     <Box
           sx={{
             marginBottom: 8,
@@ -106,8 +107,9 @@ export default function BasicTable() {
       </Table>
       
     </TableContainer>
-    </ThemeProvider>
+
       </main>
+      </ThemeProvider>
     </div>
   );
 }
