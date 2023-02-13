@@ -1,4 +1,4 @@
-import { Sidebar, Menu, MenuItem, useProSidebar } from "react-pro-sidebar";
+import { Sidebar, Menu, MenuItem} from "react-pro-sidebar";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
 import ContactsOutlinedIcon from "@mui/icons-material/ContactsOutlined";
@@ -15,7 +15,6 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
-import DarkToggle from './DarkToggle.js';
 
 function createData(name, date, shiftIN, FirstMO, FirstMI, SecondMO, SecondMI, shiftOUT) {
   return { name, date, shiftIN, FirstMO, FirstMI, SecondMO, SecondMI, shiftOUT };
