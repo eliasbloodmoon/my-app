@@ -1,9 +1,3 @@
-import { Sidebar, Menu, MenuItem} from "react-pro-sidebar";
-import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
-import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
-import ReceiptOutlinedIcon from "@mui/icons-material/ReceiptOutlined";
-import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
-import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import * as React from 'react';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -13,6 +7,12 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
+import { Sidebar, Menu, MenuItem} from "react-pro-sidebar";
+import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
+import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
+import ReceiptOutlinedIcon from "@mui/icons-material/ReceiptOutlined";
+import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
+import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import { Switch } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useState } from 'react';
@@ -35,9 +35,10 @@ export default function BasicTable() {
 
   
   return (
-    <div id="app" style={({ height: "100vh" }, { display: "flex" })}>
-          <ThemeProvider theme={theme}>
-      <Sidebar style={{ height: "100vh" }}>
+    <ThemeProvider theme={theme}>
+<div id="app" style={({ height: "100vh" }, { display: "flex" })}>
+
+      <Sidebar backgroundColor="background.default" style={{ height: "100vh",  }}>
         <Menu>
           <MenuItem
             icon={<MenuOutlinedIcon />}
@@ -109,7 +110,8 @@ export default function BasicTable() {
     </TableContainer>
 
       </main>
-      </ThemeProvider>
+
     </div>
+    </ThemeProvider>
   );
 }
