@@ -18,12 +18,12 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useState } from 'react';
 
 
-function createData(name, date, shiftIN, FirstMO, FirstMI, SecondMO, SecondMI, shiftOUT) {
+function createDataEveryone(name, date, shiftIN, FirstMO, FirstMI, SecondMO, SecondMI, shiftOUT) {
   return { name, date, shiftIN, FirstMO, FirstMI, SecondMO, SecondMI, shiftOUT };
 }
 
 const rowsEveryoneDay = [
-  createData('Adam Tester','Feb 24, 2023', 1000, 1200, 1300, 1500, 1600, 1800),
+  createDataEveryone('Adam Tester','Feb 24, 2023', 1000, 1200, 1300, 1500, 1600, 1800),
 ];
 
 export default function BasicTable() {
