@@ -21,7 +21,7 @@ function createData(name, date, shiftIN, FirstMO, FirstMI, SecondMO, SecondMI, s
   return { name, date, shiftIN, FirstMO, FirstMI, SecondMO, SecondMI, shiftOUT };
 }
 
-const rows = [
+const rowsEveryoneDay = [
   createData('Adam Tester','Feb 24, 2023', 1000, 1200, 1300, 1500, 1600, 1800),
 ];
 
@@ -73,7 +73,7 @@ export default function BasicTable() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
+          {rowsEveryoneDay.map((row) => (
             <TableRow
               key={row.name}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
