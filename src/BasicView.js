@@ -1,9 +1,7 @@
 import { Sidebar, Menu, MenuItem} from "react-pro-sidebar";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
-import ContactsOutlinedIcon from "@mui/icons-material/ContactsOutlined";
 import ReceiptOutlinedIcon from "@mui/icons-material/ReceiptOutlined";
-import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import * as React from 'react';
@@ -15,6 +13,10 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
+import { Switch } from '@mui/material';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { useState } from 'react';
+
 
 function createData(name, date, shiftIN, FirstMO, FirstMI, SecondMO, SecondMI, shiftOUT) {
   return { name, date, shiftIN, FirstMO, FirstMI, SecondMO, SecondMI, shiftOUT };
@@ -25,7 +27,13 @@ const rowsEveryoneDay = [
 ];
 
 export default function BasicTable() {
+  const [mode, setMode] = useState(false)
+  const theme = createTheme({
+    palette:{
+      mode: mode ? "dark" : "light"
+    }})
 
+  
   return (
     <div id="app" style={({ height: "100vh" }, { display: "flex" })}>
       <Sidebar style={{ height: "100vh" }}>
@@ -40,14 +48,19 @@ export default function BasicTable() {
 
           <MenuItem icon={<HomeOutlinedIcon />}>Home</MenuItem>
           <MenuItem icon={<PeopleOutlinedIcon />}>Team</MenuItem>
-          <MenuItem icon={<ContactsOutlinedIcon />}>Contacts</MenuItem>
           <MenuItem icon={<ReceiptOutlinedIcon />}>Profile</MenuItem>
-          <MenuItem icon={<HelpOutlineOutlinedIcon />}>FAQ</MenuItem>
-          <MenuItem icon={<CalendarTodayOutlinedIcon />}>Calendar</MenuItem>
+          <MenuItem icon={<HelpOutlineOutlinedIcon />}>Log Out</MenuItem>
         </Menu>
       </Sidebar>
       <main >
-      
+      <ThemeProvider theme={theme}>
+      <Box
+      display="flex"
+      justifyContent="flex-end"
+      alignItems="flex-end"
+      >
+        <Switch onClick={()=>setMode(!mode)} ></Switch>
+      </Box>
         <TableContainer component={Paper} sx={{display: 'block', width: '100%',}}>
         
     <Box
@@ -93,6 +106,7 @@ export default function BasicTable() {
       </Table>
       
     </TableContainer>
+    </ThemeProvider>
       </main>
     </div>
   );
