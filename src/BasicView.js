@@ -41,7 +41,7 @@ export default function TableView() {
 
   
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider theme={SignIn.theme}>
       <CssBaseline />
       
       <AppBar
@@ -54,7 +54,7 @@ export default function TableView() {
           <Typography variant="h6" noWrap component="div">
             Admin View
           </Typography>
-          <Switch onClick={()=>setMode(!mode)} sx={{display: 'flex-end'}}></Switch>
+          <Switch onClick={()=>setMode(!SignIn.theme.mode)} sx={{display: 'flex-end'}}></Switch>
         </Toolbar>
       </AppBar>
       <Drawer
