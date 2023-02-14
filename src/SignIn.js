@@ -9,8 +9,14 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import ddf from './ddf.png';
 import { Switch } from '@mui/material';
+import TableView from './BasicView';
+
 
 export default function SignIn() {
+
+  const [showSignIn, setSShow] = useState(true);
+  const [showTableView, setTShow] = useState(false);
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -18,6 +24,8 @@ export default function SignIn() {
       email: data.get('email'),
       password: data.get('password'),
     });
+    setSShow(!showSignIn);
+    setTShow(!showTableView);
   }
   const [mode, setMode] = useState(false)
   const theme = createTheme({
@@ -35,7 +43,7 @@ export default function SignIn() {
       >
         <Switch onClick={()=>setMode(!mode)} ></Switch>
       </Box>
-      <Container component="main" maxWidth="xs">  
+      {showSignIn && <Container component="main" maxWidth="xs">  
         <CssBaseline />
         <Box
           sx={{
@@ -90,7 +98,8 @@ export default function SignIn() {
             </Button>
           </Box>
         </Box>
-      </Container>
-    </ThemeProvider>
+      </Container> }
+     {showTableView && <TableView />}
+     </ThemeProvider>
   );
 }

@@ -3,12 +3,12 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import SignIn from './SignIn';
 import reportWebVitals from './reportWebVitals';
-import BasicTable from './BasicView';
+import TableView from './BasicView';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <BasicTable />
+    <SignIn />
   </React.StrictMode>
 );
 

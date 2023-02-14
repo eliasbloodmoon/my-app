@@ -7,7 +7,21 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
+import { drawerWidth } from './BasicView';
 
+
+function createDataEveryone(name, date, shiftIN, FirstMO, FirstMI, SecondMO, SecondMI, shiftOUT) {
+    return { name, date, shiftIN, FirstMO, FirstMI, SecondMO, SecondMI, shiftOUT };
+  }
+  
+  const rowsEveryoneDay = [
+    createDataEveryone('Adam Tester','Feb 24, 2023', 1000, 1200, 1300, 1500, 1600, 1800),
+  ];
+  
+
+export default function BasicTable(){
+    
+    return(
 <TableContainer id="DayView" component={Paper} sx={{display: 'block', width: 'auto', height: 'vh100'}}>
         
     <Box
@@ -52,3 +66,4 @@ import Box from '@mui/material/Box';
         </TableBody>
       </Table>
     </TableContainer>
+)}

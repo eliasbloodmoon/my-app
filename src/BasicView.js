@@ -17,18 +17,22 @@ import Typography from '@mui/material/Typography';
 import BackupTableIcon from '@mui/icons-material/BackupTable';
 import BadgeIcon from '@mui/icons-material/Badge';
 import LogoutIcon from '@mui/icons-material/Logout';
+import BasicTable from './DailyView';
+import SignIn from './SignIn';
 
-const drawerWidth = 240;
+export const drawerWidth = 240;
 
-function createDataEveryone(name, date, shiftIN, FirstMO, FirstMI, SecondMO, SecondMI, shiftOUT) {
-  return { name, date, shiftIN, FirstMO, FirstMI, SecondMO, SecondMI, shiftOUT };
+const handleDV = (event) => {
+
 }
 
-const rowsEveryoneDay = [
-  createDataEveryone('Adam Tester','Feb 24, 2023', 1000, 1200, 1300, 1500, 1600, 1800),
-];
+const handleLogout = (event) => {
+  SignIn.setSShow(!SignIn.showSignIn);
+  SignIn.setTShow(!SignIn.showTableView);
+}
 
-export default function BasicTable() {
+
+export default function TableView() {
   const [mode, setMode] = useState(false)
   const theme = createTheme({
     palette:{
@@ -69,7 +73,7 @@ export default function BasicTable() {
         <Divider />
         <List>
           <ListItem disablePadding>
-            <ListItemButton>
+            <ListItemButton onClick={handleDV}>
               <ListItemIcon>
                 <ArticleIcon />
               </ListItemIcon>
@@ -93,7 +97,7 @@ export default function BasicTable() {
             </ListItemButton>
           </ListItem>
           <ListItem disablePadding>
-            <ListItemButton>
+            <ListItemButton onClick={handleLogout}>
               <ListItemIcon>
                 <LogoutIcon />
               </ListItemIcon>
@@ -102,7 +106,7 @@ export default function BasicTable() {
           </ListItem>
         </List>
       </Drawer>
-        
+        <BasicTable />
   </ThemeProvider>
   );
 }
