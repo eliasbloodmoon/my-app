@@ -1,5 +1,6 @@
 import { Box, Typography, useTheme, useMediaQuery } from "@mui/material";
 import Form from "./Form";
+import ddf from "./ddf.png"
 
 const LoginPage = () => {
   const theme = useTheme();
@@ -24,6 +25,17 @@ const LoginPage = () => {
         borderRadius="1.5rem"
         backgroundColor={theme.palette.background.alt}
       >
+      <Box
+        component="img"
+        sx={{
+          height: 150,
+          width: 400,
+          maxHeight: { xs: 150, md: 150 },
+          maxWidth: { xs: 400, md: 400 },
+        }}
+        alt="Digital Dream Forge Logo"
+        src={ddf}
+      />
         <Typography fontWeight="500" variant="h5" sx={{ mb: "1.5rem" }}>
           Please enter your employee login information
         </Typography>
