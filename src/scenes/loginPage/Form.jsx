@@ -16,7 +16,7 @@ import { setLogin } from "../../state/index";
 import Dropzone from "react-dropzone";
 import FlexBetween from "../../components/FlexBetween";
 
-const registerSchema = yup.object().shape({
+/*const registerSchema = yup.object().shape({
   firstName: yup.string().required("required"),
   lastName: yup.string().required("required"),
   email: yup.string().email("invalid email").required("required"),
@@ -24,14 +24,14 @@ const registerSchema = yup.object().shape({
   location: yup.string().required("required"),
   occupation: yup.string().required("required"),
   picture: yup.string().required("required"),
-});
+});*/
 
 const loginSchema = yup.object().shape({
   email: yup.string().email("invalid email").required("required"),
   password: yup.string().required("required"),
 });
 
-const initialValuesRegister = {
+/*const initialValuesRegister = {
   firstName: "",
   lastName: "",
   email: "",
@@ -39,7 +39,7 @@ const initialValuesRegister = {
   location: "",
   occupation: "",
   picture: "",
-};
+};*/
 
 const initialValuesLogin = {
   email: "",
@@ -247,7 +247,13 @@ const Form = () => {
             >
               LOGIN
             </Button>
-            
+            <Typography              
+              sx={{
+                p: "1rem",
+                pb: "0 auto"
+              }}>
+              Please contact the administrator if you have trouble logging in.
+            </Typography>
           </Box>
         </form>
       )}
