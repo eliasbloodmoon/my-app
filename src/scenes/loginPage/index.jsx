@@ -15,7 +15,7 @@ const LoginPage = () => {
         textAlign="center"
         
       >
-        <Typography fontWeight="bold" fontSize="32px" color="primary">
+        <Typography fontWeight="bold" fontSize="32px" color="red">
           Digital Dream Forge
         </Typography>
       </Box>
