@@ -1,6 +1,7 @@
-import { Box, Typography, useTheme, useMediaQuery } from "@mui/material";
+import { Box, ImageList, Typography, useTheme, useMediaQuery } from "@mui/material";
 import Form from "./Form";
 import ddf from "./ddf.png"
+import { ImageListItem } from "@mui/material";
 
 const LoginPage = () => {
   const theme = useTheme();
@@ -12,9 +13,10 @@ const LoginPage = () => {
         backgroundColor={theme.palette.background.alt}
         p="1rem 6%"
         textAlign="center"
+        
       >
         <Typography fontWeight="bold" fontSize="32px" color="primary">
-          Sociopedia
+          Digital Dream Forge
         </Typography>
       </Box>
 
@@ -25,18 +27,24 @@ const LoginPage = () => {
         borderRadius="1.5rem"
         backgroundColor={theme.palette.background.alt}
       >
+      
       <Box
         component="img"
         sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
           height: 150,
           width: 400,
           maxHeight: { xs: 150, md: 150 },
           maxWidth: { xs: 400, md: 400 },
-        }}
+          margin: '0 auto'
+        }}        
         alt="Digital Dream Forge Logo"
         src={ddf}
       />
-        <Typography fontWeight="500" variant="h5" sx={{ mb: "1.5rem" }}>
+
+        <Typography fontWeight="500" variant="h5" textAlign="center" sx={{ mb: "1.5rem" }}>
           Please enter your employee login information
         </Typography>
         <Form />
