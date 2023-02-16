@@ -14,7 +14,7 @@ const LoginPage = () => {
         textAlign="center"
       >
         <Typography fontWeight="bold" fontSize="32px" color="primary">
-          Sociopedia
+          Digital Dream Forge
         </Typography>
       </Box>
 
@@ -36,7 +36,7 @@ const LoginPage = () => {
         alt="Digital Dream Forge Logo"
         src={ddf}
       />
-        <Typography fontWeight="500" variant="h5" sx={{ mb: "1.5rem" }}>
+        <Typography fontWeight="500" variant="h5" textAlign="center" sx={{ mb: "1.5rem" }}>
           Please enter your employee login information
         </Typography>
         <Form />
