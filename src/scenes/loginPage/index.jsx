@@ -1,19 +1,18 @@
-import { Box, ImageList, Typography, useTheme, useMediaQuery } from "@mui/material";
+import { Box, Typography, useTheme, useMediaQuery } from "@mui/material";
 import Form from "./Form";
 import ddf from "./ddf.png"
-import { ImageListItem } from "@mui/material";
-
+import Navbar from "../navbar/index";
 const LoginPage = () => {
   const theme = useTheme();
   const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
   return (
     <Box>
+      <Navbar />
       <Box
         width="100%"
         backgroundColor={theme.palette.background.alt}
         p="1rem 6%"
         textAlign="center"
-        
       >
         <Typography fontWeight="bold" fontSize="32px" color="red">
           Digital Dream Forge
