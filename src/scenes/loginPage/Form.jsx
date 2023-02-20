@@ -64,7 +64,7 @@ const Form = () => {
     formData.append("picturePath", values.picture.name);
 
     const savedUserResponse = await fetch(
-      "http://localhost:5000/auth/register",
+      "../../../../../home/ubuntu/express_backend",
       {
         method: "POST",
         body: formData,
