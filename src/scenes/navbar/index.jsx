@@ -39,7 +39,7 @@ const Navbar = () => {
   const primaryLight = theme.palette.primary.light;
   const alt = theme.palette.background.alt;
 
-  const fullName = "Settings";
+  const fullName = `${user.firstName} ${user.lastName}`;
 
   return (
     <FlexBetween padding="1rem 6%" backgroundColor={alt}>
@@ -56,6 +56,7 @@ const Navbar = () => {
             },
           }}
         >
+          Sociopedia
         </Typography>
         {isNonMobileScreens && (
           <FlexBetween

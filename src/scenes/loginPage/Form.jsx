@@ -12,35 +12,30 @@ import { Formik } from "formik";
 import * as yup from "yup";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { setLogin } from "../../state/index";
+import { login } from "../../state/index";
 import Dropzone from "react-dropzone";
 import FlexBetween from "../../components/FlexBetween";
-import * as axios from "axios";
 
-/*const registerSchema = yup.object().shape({
+const registerSchema = yup.object().shape({
   firstName: yup.string().required("required"),
   lastName: yup.string().required("required"),
   email: yup.string().email("invalid email").required("required"),
   password: yup.string().required("required"),
-  location: yup.string().required("required"),
   occupation: yup.string().required("required"),
-  picture: yup.string().required("required"),
-});*/
+});
 
 const loginSchema = yup.object().shape({
   email: yup.string().email("invalid email").required("required"),
   password: yup.string().required("required"),
 });
 
-/*const initialValuesRegister = {
+const initialValuesRegister = {
   firstName: "",
   lastName: "",
   email: "",
   password: "",
-  location: "",
   occupation: "",
-  picture: "",
-};*/
+};
 
 const initialValuesLogin = {
   email: "",
@@ -65,7 +60,7 @@ const Form = () => {
     formData.append("picturePath", values.picture.name);
 
     const savedUserResponse = await fetch(
-      "../../../../../home/ubuntu/express_backend",
+      "http://localhost:3001/auth/register",
       {
         method: "POST",
         body: formData,
@@ -79,30 +74,53 @@ const Form = () => {
     }
   };
 
-  const login = async (values, onSubmitProps) => {
-    const loggedInResponse = axios.post('http://localhost:5000/auth/login');
+  /*const login = async (values, onSubmitProps) => {
+    const loggedInResponse = await fetch("http://localhost:3001/auth/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(values),
+    });
     const loggedIn = await loggedInResponse.json();
     onSubmitProps.resetForm();
     if (loggedIn) {
       dispatch(
-        setLogin({
+        login({
           user: loggedIn.user,
           token: loggedIn.token,
         })
       );
-      navigate("/admin");
+      navigate("/home");
     }
-  };
+  };*/
 
-  const handleFormSubmit = async (values, onSubmitProps) => {
-    
-    if (isLogin) await login(values, onSubmitProps);
-    else if (isRegister) await register(values, onSubmitProps);
-  };
+  // const handleFormSubmit = async (values, onSubmitProps) => {
+  //   if (isLogin) await login(values, onSubmitProps);
+  //   if (isRegister) await register(values, onSubmitProps);
+  // };
+
+  // const onSubmit = (e) => {
+  //   e.preventDefault()
+
+  //   const userData = {
+  //     email,
+  //     password,
+  //   }
+
+  //   dispatch(login(userData))
+  // }
 
   return (
     <Formik
-      onSubmit={handleFormSubmit}
+      onSubmit={(e) => {
+        e.preventDefault()
+    
+        const userData = {
+          email,
+          password,
+        }
+    
+        dispatch(login(userData))
+      }}
       initialValues={initialValuesLogin}
       validationSchema= {loginSchema}
     >
@@ -238,21 +256,14 @@ const Form = () => {
               sx={{
                 m: "2rem 0",
                 p: "1rem",
-                backgroundColor: "red",
+                backgroundColor: palette.primary.main,
                 color: palette.background.alt,
                 "&:hover": { color: palette.primary.main },
               }}
-              value="Login"
             >
               LOGIN
             </Button>
-            <Typography              
-              sx={{
-                p: "1rem",
-                pb: "0 auto"
-              }}>
-              Please contact the administrator if you have trouble logging in.
-            </Typography>
+            
           </Box>
         </form>
       )}
