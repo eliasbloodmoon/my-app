@@ -93,13 +93,14 @@ const Form = () => {
           token: loggedIn.token,
         })
       );
-      navigate("/home");
+      navigate("/admin");
     }
   };
 
   const handleFormSubmit = async (values, onSubmitProps) => {
+    
     if (isLogin) await login(values, onSubmitProps);
-    if (isRegister) await register(values, onSubmitProps);
+    else if (isRegister) await register(values, onSubmitProps);
   };
 
   return (
@@ -244,6 +245,7 @@ const Form = () => {
                 color: palette.background.alt,
                 "&:hover": { color: palette.primary.main },
               }}
+              value="Login"
             >
               LOGIN
             </Button>

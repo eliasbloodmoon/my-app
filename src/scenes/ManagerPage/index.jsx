@@ -1,6 +1,6 @@
 import React from 'react';
 
-const UnderConstruction = () => {
+const UnderConstruction3 = () => {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
       <h1 style={{ fontSize: '3rem', textAlign: 'center' }}>Manager Page Is Under Construction</h1>
@@ -9,4 +9,4 @@ const UnderConstruction = () => {
   );
 };
 
-export default UnderConstruction;
+export default UnderConstruction3;
