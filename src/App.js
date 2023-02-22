@@ -7,6 +7,9 @@ import { useSelector } from "react-redux";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { createTheme } from "@mui/material/styles";
 import { themeSettings } from "./theme";
+import UnderConstruction from "./scenes/AdministratorPage";
+import UnderConstruction2 from "./scenes/EmployeePage";
+import UnderConstruction3 from "./scenes/ManagerPage";
 
 function App() {
   const mode = useSelector((state) => state.mode);
