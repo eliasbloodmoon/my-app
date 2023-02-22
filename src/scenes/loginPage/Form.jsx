@@ -12,30 +12,36 @@ import { Formik } from "formik";
 import * as yup from "yup";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { login } from "../../state/index";
+import { setLogin } from "../../state/index";
 import Dropzone from "react-dropzone";
 import FlexBetween from "../../components/FlexBetween";
+import { user } from "@userfront/core";
+//import * as axios from "axios";
 
-const registerSchema = yup.object().shape({
+/*const registerSchema = yup.object().shape({
   firstName: yup.string().required("required"),
   lastName: yup.string().required("required"),
   email: yup.string().email("invalid email").required("required"),
   password: yup.string().required("required"),
+  location: yup.string().required("required"),
   occupation: yup.string().required("required"),
-});
+  picture: yup.string().required("required"),
+});*/
 
 const loginSchema = yup.object().shape({
   email: yup.string().email("invalid email").required("required"),
   password: yup.string().required("required"),
 });
 
-const initialValuesRegister = {
+/*const initialValuesRegister = {
   firstName: "",
   lastName: "",
   email: "",
   password: "",
+  location: "",
   occupation: "",
-};
+  picture: "",
+};*/
 
 const initialValuesLogin = {
   email: "",
@@ -60,7 +66,7 @@ const Form = () => {
     formData.append("picturePath", values.picture.name);
 
     const savedUserResponse = await fetch(
-      "http://localhost:3001/auth/register",
+      "../../../../../home/ubuntu/express_backend",
       {
         method: "POST",
         body: formData,
@@ -74,8 +80,8 @@ const Form = () => {
     }
   };
 
-  /*const login = async (values, onSubmitProps) => {
-    const loggedInResponse = await fetch("http://localhost:3001/auth/login", {
+  const login = async (values, onSubmitProps) => {
+    const loggedInResponse = await fetch("http://frontend.digitaldreamforge.chat:5000/auth/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(values),
@@ -84,43 +90,34 @@ const Form = () => {
     onSubmitProps.resetForm();
     if (loggedIn) {
       dispatch(
-        login({
+        setLogin({
           user: loggedIn.user,
           token: loggedIn.token,
         })
       );
-      navigate("/home");
+      //navigate('/admin');
     }
-  };*/
+    if(values.email === "adam@ddfmail.com"){
+      navigate('/admin');
+    }
+    else if (values.email === "john@ddfmail.com"){
+      navigate('/manager');
+    }
+    else
+    {
+      navigate('/employee');
+    }
+  };
 
-  // const handleFormSubmit = async (values, onSubmitProps) => {
-  //   if (isLogin) await login(values, onSubmitProps);
-  //   if (isRegister) await register(values, onSubmitProps);
-  // };
-
-  // const onSubmit = (e) => {
-  //   e.preventDefault()
-
-  //   const userData = {
-  //     email,
-  //     password,
-  //   }
-
-  //   dispatch(login(userData))
-  // }
+  const handleFormSubmit = async (values, onSubmitProps) => {
+    
+    if (isLogin) await login(values, onSubmitProps);
+    else if (isRegister) await register(values, onSubmitProps);
+  };
 
   return (
     <Formik
-      onSubmit={(e) => {
-        e.preventDefault()
-    
-        const userData = {
-          email,
-          password,
-        }
-    
-        dispatch(login(userData))
-      }}
+      onSubmit={handleFormSubmit}
       initialValues={initialValuesLogin}
       validationSchema= {loginSchema}
     >
@@ -256,14 +253,21 @@ const Form = () => {
               sx={{
                 m: "2rem 0",
                 p: "1rem",
-                backgroundColor: palette.primary.main,
+                backgroundColor: "red",
                 color: palette.background.alt,
                 "&:hover": { color: palette.primary.main },
               }}
+              value="Login"
             >
               LOGIN
             </Button>
-            
+            <Typography              
+              sx={{
+                p: "1rem",
+                pb: "0 auto"
+              }}>
+              Please contact the administrator if you have trouble logging in.
+            </Typography>
           </Box>
         </form>
       )}

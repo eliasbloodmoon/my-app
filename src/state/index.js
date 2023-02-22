@@ -1,15 +1,10 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import authService from './authService';
-
-const user = JSON.parse(localStorage.getItem('user'));
+import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   mode: "light",
   user: null,
-  isError: false,
-  isSuccess: false,
-  isLoading: false,
   token: null,
+  posts: [],
 };
 
 export const authSlice = createSlice({
@@ -27,43 +22,26 @@ export const authSlice = createSlice({
       state.user = null;
       state.token = null;
     },
-  },
-
-  extraReducers: (builder) => {
-    builder
-    .addCase(login.pending, (state) => {
-        state.isLoading = true
-    })
-      .addCase(login.fulfilled, (state, action) => {
-        state.isLoading = false
-        state.isSuccess = true
-        state.user = action.payload
-    })
-      .addCase(login.rejected, (state, action) => {
-        state.isLoading = false
-        state.isError = true
-        state.message = action.payload
-        state.user = null
-    })
-/*      .addCase(logout.fulfilled, (state) => {
-        state.user = null
-    })*/
+    setFriends: (state, action) => {
+      if (state.user) {
+        state.user.friends = action.payload.friends;
+      } else {
+        console.error("user friends non-existent :(");
+      }
+    },
+    setPosts: (state, action) => {
+      state.posts = action.payload.posts;
+    },
+    setPost: (state, action) => {
+      const updatedPosts = state.posts.map((post) => {
+        if (post._id === action.payload.post._id) return action.payload.post;
+        return post;
+      });
+      state.posts = updatedPosts;
+    },
   },
 });
 
-export const login = createAsyncThunk('auth/login', async (user, thunkAPI) => {
-    try {
-      return await authService.login(user)
-    } catch (error) {
-      const message =
-        (error.response && error.response.data && error.response.data.message) ||
-        error.message ||
-        error.toString()
-      return thunkAPI.rejectWithValue(message)
-    }
-  })
-
-
-export const { setMode, setLogin, setLogout } =
+export const { setMode, setLogin, setLogout, setFriends, setPosts, setPost } =
   authSlice.actions;
 export default authSlice.reducer;

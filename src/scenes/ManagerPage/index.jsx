@@ -1,12 +1,39 @@
-import React from 'react';
-
-const UnderConstruction3 = () => {
+import { Box, Typography, useTheme, useMediaQuery } from "@mui/material";
+//import Form from "./Form";
+//import ddf from "./ddf.png"
+import Navbar from "../navbar/index";
+const Underconstruction3 = () => {
+  const theme = useTheme();
+  const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-      <h1 style={{ fontSize: '3rem', textAlign: 'center' }}>Manager Page Is Under Construction</h1>
-      <p style={{ fontSize: '1.5rem', textAlign: 'center', margin: '1rem 0' }}>We're sorry, this page is currently under construction. Please check back soon!</p>
-    </div>
+
+
+
+    <Box>
+      <Navbar />
+      <Box
+        width="100%"
+        backgroundColor={theme.palette.background.alt}
+        p="1rem 6%"
+        textAlign="center"
+      >
+        <Typography fontWeight="bold" fontSize="32px" color="red">
+          Digital Dream Forge
+        </Typography>
+      </Box>
+
+      <Typography font Weight="bold" fontSize="69px" color="red" textAlign="center">
+      Manager Page Is Under Construction
+      </Typography>
+
+      <Typography font Weight="bold" fontSize="32px" color="red" textAlign="center">
+      We're sorry, this page is currently under construction. Please check back soon!
+      </Typography>
+
+    </Box>
+
+
   );
 };
 
-export default UnderConstruction3;
+export default Underconstruction3;

@@ -28,6 +28,18 @@ function App() {
               path="/profile/:userId"
               element={isAuth ? <ProfilePage /> : <Navigate to="/" />}
             />
+            <Route
+              path="/admin"
+              element={isAuth ? <UnderConstruction /> : <Navigate to="/" />}
+            />
+            <Route
+              path="/employee"
+              element={isAuth ? <UnderConstruction2 /> : <Navigate to="/" />}
+            />
+            <Route
+              path="/manager"
+              element={isAuth ? <UnderConstruction3 /> : <Navigate to="/" />}
+            />
           </Routes>
         </ThemeProvider>
       </BrowserRouter>
