@@ -79,9 +79,10 @@ const Form = () => {
       setPageType("login");
     }
   };
-
+  //"Access-Control-Allow-Origin": "http://frontend.digitaldreamforge.chat:5000/auth/login"
   const login = async (values, onSubmitProps) => {
-    const loggedInResponse = await fetch("http://frontend.digitaldreamforge.chat:3000/auth/login", {
+    const API_URL = 'http://frontend.digitaldreamforge.chat:5000/auth/login';
+    const loggedInResponse = await fetch(API_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(values),
