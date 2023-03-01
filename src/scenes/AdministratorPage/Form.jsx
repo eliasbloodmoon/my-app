@@ -46,7 +46,7 @@ const Form = () => {
     }
 
     const savedUserResponse = await fetch(
-      "../../../../../home/ubuntu/express_backend",
+      "http://frontend.digitaldreamforge.chat:5000/auth/register",
       {
         method: "POST",
         body: formData,
