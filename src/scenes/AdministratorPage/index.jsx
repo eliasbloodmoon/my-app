@@ -22,11 +22,11 @@ const Underconstruction = () => {
         </Typography>
       </Box>
 
-      <Typography font Weight="bold" fontSize="69px" color="red" textAlign="center">
+      <Typography font Weight="bold" fontSize="69px" textAlign="center">
       Admin Page Is Under Construction
       </Typography>
 
-      <Typography font Weight="bold" fontSize="32px" color="red" textAlign="center">
+      <Typography font Weight="bold" fontSize="32px" textAlign="center">
       We're sorry, this page is currently under construction. Please check back soon!
       </Typography>
 
