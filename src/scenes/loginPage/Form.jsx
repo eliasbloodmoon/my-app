@@ -96,16 +96,17 @@ const Form = () => {
           token: loggedIn.token,
         })
       );
-      //navigate('/admin');
-    }
-    if(values.email === "adam@ddfmail.com"){
+    } 
+    const usersResponse = await fetch(`http://frontend.digitaldreamforge.chat:5000/users`);
+    const users = await usersResponse.json();
+    const user = users.find(u => u.email === values.email);
+    console.log("User data:", user);
+    console.log("Occupation:", user && user.occupation);
+    if (user && user.occupation === "Admin") {
       navigate('/admin');
-    }
-    else if (values.email === "john@ddfmail.com"){
+    } else if (user && user.occupation === "Management") {
       navigate('/manager');
-    }
-    else
-    {
+    } else {
       navigate('/employee');
     }
   };
