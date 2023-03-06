@@ -2,7 +2,6 @@ import { Box, Typography, useTheme, useMediaQuery } from "@mui/material";
 import Navbar from "../navbar/index";
 const Underconstruction = () => {
   const theme = useTheme();
-  const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
   return (
 
 
