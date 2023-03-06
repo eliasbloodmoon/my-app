@@ -4,8 +4,6 @@ const Underconstruction = () => {
   const theme = useTheme();
   return (
 
-
-
     <Box>
       <Navbar />
       <Box
@@ -26,10 +24,7 @@ const Underconstruction = () => {
       <Typography font Weight="bold" fontSize="32px" textAlign="center">
       We're sorry, this page is currently under construction. Please check back soon!
       </Typography>
-
     </Box>
-
-
   );
 };
 
