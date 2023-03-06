@@ -1,6 +1,4 @@
 import { Box, Typography, useTheme, useMediaQuery } from "@mui/material";
-//import Form from "./Form";
-//import ddf from "./ddf.png"
 import Navbar from "../navbar/index";
 const Underconstruction = () => {
   const theme = useTheme();
