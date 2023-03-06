@@ -5,6 +5,7 @@ import App from "./App";
 import authReducer from "./state";
 import { configureStore } from "@reduxjs/toolkit";
 import { Provider } from "react-redux";
+import { api } from "./state/api"
 import {
   persistStore,
   persistReducer,
@@ -22,6 +23,7 @@ const persistConfig = { key: "root", storage, version: 1 };
 const persistedReducer = persistReducer(persistConfig, authReducer);
 const store = configureStore({
   reducer: persistedReducer,
+  [api.reducerPath]: api.reducer,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {

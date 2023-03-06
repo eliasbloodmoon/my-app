@@ -1,12 +1,13 @@
 import { BrowserRouter, Navigate, Routes, Route } from "react-router-dom";
 import HomePage from "./scenes/homePage/index";
 import LoginPage from "./scenes/loginPage/index";
+
 import { useMemo } from "react";
 import { useSelector } from "react-redux";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { createTheme } from "@mui/material/styles";
 import { themeSettings } from "./theme";
-import UnderConstruction from "./scenes/AdministratorPage";
+import AdminLogin from "./scenes/AdministratorPage";
 import UnderConstruction2 from "./scenes/EmployeePage";
 import UnderConstruction3 from "./scenes/ManagerPage";
 
@@ -27,8 +28,12 @@ function App() {
               element={isAuth ? <HomePage /> : <Navigate to="/" />}
             />
             <Route
+              path="/profile/:userId"
+              element={isAuth ? <ProfilePage /> : <Navigate to="/" />}
+            />
+            <Route
               path="/admin"
-              element={isAuth ? <UnderConstruction /> : <Navigate to="/" />}
+              element={isAuth ? <AdminLogin /> : <Navigate to="/" />}
             />
             <Route
               path="/employee"

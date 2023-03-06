@@ -1,32 +1,42 @@
 // color design tokens export
 export const colorTokens = {
-  grey: {
-    0: "#FFFFFF",
-    10: "#F6F6F6",
-    50: "#F0F0F0",
-    100: "#E0E0E0",
-    200: "#C2C2C2",
-    300: "#A3A3A3",
-    400: "#858585",
-    500: "#666666",
-    600: "#4D4D4D",
-    700: "#333333",
-    800: "#1A1A1A",
-    900: "#0A0A0A",
-    1000: "#000000",
-  },
-  primary: {
-    50: "#E6FBFF",
-    100: "#CCF7FE",
-    200: "#99EEFD",
-    300: "#66E6FC",
-    400: "#33DDFB",
-    500: "#00D5FA",
-    600: "#00A0BC",
-    700: "#006B7D",
-    800: "#00353F",
-    900: "#001519",
-  },
+      grey: {
+        0: "#ffffff", // manually adjusted
+        10: "#f6f6f6", // manually adjusted
+        50: "#f0f0f0", // manually adjusted
+        100: "#e0e0e0",
+        200: "#c2c2c2",
+        300: "#a3a3a3",
+        400: "#858585",
+        500: "#666666",
+        600: "#525252",
+        700: "#3d3d3d",
+        800: "#292929",
+        900: "#141414",
+        1000: "#000000",
+      },
+      primary: {
+          100: "#cdcdce",
+          200: "#9b9c9d",
+          300: "#6a6a6d",
+          400: "#38393c",
+          500: "#06070b",
+          600: "#050609",
+          700: "#040407",
+          800: "#020304",
+          900: "#010102"
+      },
+      secondary: {
+          100: "#e7cecd",
+          200: "#d09d9c",
+          300: "#b86d6a",
+          400: "#a13c39",
+          500: "#890b07",
+          600: "#6e0906",
+          700: "#520704",
+          800: "#370403",
+          900: "#1b0201"
+        }, 
 };
 
 // mui theme settings
@@ -40,6 +50,11 @@ export const themeSettings = (mode) => {
             primary: {
               dark: colorTokens.primary[200],
               main: colorTokens.primary[500],
+              light: colorTokens.primary[800],
+            },
+            secondary: {
+              dark: colorTokens.primary[200],
+              main: colorTokens.secondary[300],
               light: colorTokens.primary[800],
             },
             neutral: {
@@ -60,6 +75,11 @@ export const themeSettings = (mode) => {
               dark: colorTokens.primary[700],
               main: colorTokens.primary[500],
               light: colorTokens.primary[50],
+            },
+            secondary: {
+              //dark: colorTokens.primary[200],
+              main: colorTokens.secondary[600],
+              light: colorTokens.secondary[700],
             },
             neutral: {
               dark: colorTokens.grey[700],
