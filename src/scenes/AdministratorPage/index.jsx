@@ -71,7 +71,9 @@ const AdminLogin = () => {
     );
 
     const savedUser = await savedUserResponse.json();
-    onSubmitProps.setOpen(false);
+    if (savedUser) {
+      setOpen(false);
+    }
   };
 
   //This is where the UserList displays from.
