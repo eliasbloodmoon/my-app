@@ -1,11 +1,8 @@
 import { Box, Button, Typography, useTheme, Dialog, DialogContent, DialogTitle, TextField } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import Navbar from "../navbar/index";
-import Header from "../../components/Header";
 import { DataGrid } from '@mui/x-data-grid';
-import DownloadOutlinedIcon from "@mui/icons-material/DownloadOutlined";
 import { v4 as uuidv4 } from 'uuid';
-import { colorTokens } from "../../theme";
 
 //Columns for the UserList
 const columns = [
