@@ -81,6 +81,26 @@ const AdminLogin = () => {
     setOpen(false);
   };
 
+  const handleRegisterSubmit = async (values, onSubmitProps) => {
+    await register(values, onSubmitProps);
+  };
+
+  const register = async (values, onSubmitProps) => {
+    // this allows us to send form info with image
+    const formData = new FormData();
+    for (let value in values) {
+      formData.append(value, values[value]);
+    }
+
+    const savedUserResponse = await fetch(
+      "http://frontend.digitaldreamforge.chat:5000/users/register",
+      {
+        method: "POST",
+        body: formData,
+      }
+    );
+  };
+
   //This is where the UserList displays from.
   //It makes a GET request to the /users route from the backend
   useEffect(() => {
@@ -116,7 +136,7 @@ const AdminLogin = () => {
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Add User</DialogTitle>
         <DialogContent>
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleRegisterSubmit}>
             <Box display="flex" flexDirection="column" alignItems="center" marginBottom={2}>
               <TextField label="First name" variant="outlined" value={firstName} onChange={(e) => setFirstName(e.target.value)} margin="normal" required />
               <TextField label="Last name" variant="outlined" value={lastName} onChange={(e) => setLastName(e.target.value)} margin="normal" required />
