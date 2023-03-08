@@ -93,7 +93,7 @@ const AdminLogin = () => {
     }
 
     const savedUserResponse = await fetch(
-      "http://frontend.digitaldreamforge.chat:5000/users/register",
+      "http://frontend.digitaldreamforge.chat:5000/auth/register",
       {
         method: "POST",
         body: formData,
