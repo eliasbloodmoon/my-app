@@ -18,6 +18,9 @@ const LoginPage = () => {
         <Typography fontWeight="bold" fontSize="32px" color="red">
           Digital Dream Forge
         </Typography>
+        <Typography>
+          Version 3.8.1744
+        </Typography>
       </Box>
 
       <Box
