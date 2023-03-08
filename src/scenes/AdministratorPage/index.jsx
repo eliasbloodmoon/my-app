@@ -41,24 +41,7 @@ const AdminLogin = () => {
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [occupation, setOccupation] = useState("");
-
-  const onAddUser = async (values, onSubmitProps) => {
-    // this allows us to send form info with image
-    const formData = new FormData();
-    for (let value in values) {
-      formData.append(value, values[value]);
-    }
-
-    const savedUserResponse = await fetch(
-      "http://frontend.digitaldreamforge.chat:5000/auth/register",
-      {
-        method: "POST",
-        body: formData,
-      }
-    );
-  };
-  
+  const [occupation, setOccupation] = useState("");  
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -68,25 +51,12 @@ const AdminLogin = () => {
     setOpen(false);
   };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const newUser = {
-      firstName,
-      lastName,
-      email,
-      password,
-      occupation,
-    };
-    onAddUser(newUser);
-    setOpen(false);
-  };
-
   const handleRegisterSubmit = async (values, onSubmitProps) => {
     await register(values, onSubmitProps);
   };
 
   const register = async (values, onSubmitProps) => {
-    // this allows us to send form info with image
+    // this allows us to send form info
     const formData = new FormData();
     for (let value in values) {
       formData.append(value, values[value]);
@@ -99,6 +69,9 @@ const AdminLogin = () => {
         body: formData,
       }
     );
+
+    const savedUser = await savedUserResponse.json();
+    onSubmitProps.setOpen(false);
   };
 
   //This is where the UserList displays from.
