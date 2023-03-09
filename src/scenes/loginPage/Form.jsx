@@ -24,7 +24,7 @@ import { user } from "@userfront/core";
   email: yup.string().email("invalid email").required("required"),
   password: yup.string().required("required"),
   location: yup.string().required("required"),
-  occupation: yup.string().required("required"),
+  role: yup.string().required("required"),
   picture: yup.string().required("required"),
 });*/
 
@@ -39,7 +39,7 @@ const loginSchema = yup.object().shape({
   email: "",
   password: "",
   location: "",
-  occupation: "",
+  role: "",
   picture: "",
 };*/
 
@@ -101,10 +101,10 @@ const Form = () => {
     const users = await usersResponse.json();
     const user = users.find(u => u.email === values.email);
     console.log("User data:", user);
-    console.log("Occupation:", user && user.occupation);
-    if (user && user.occupation === "Admin") {
+    console.log("Role:", user && user.role);
+    if (user && user.role === "Admin") {
       navigate('/admin');
-    } else if (user && user.occupation === "Management") {
+    } else if (user && user.role === "Management") {
       navigate('/manager');
     } else {
       navigate('/employee');
@@ -177,15 +177,15 @@ const Form = () => {
                   sx={{ gridColumn: "span 4" }}
                 />
                 <TextField
-                  label="Occupation"
+                  label="role"
                   onBlur={handleBlur}
                   onChange={handleChange}
-                  value={values.occupation}
-                  name="occupation"
+                  value={values.role}
+                  name="role"
                   error={
-                    Boolean(touched.occupation) && Boolean(errors.occupation)
+                    Boolean(touched.role) && Boolean(errors.role)
                   }
-                  helperText={touched.occupation && errors.occupation}
+                  helperText={touched.role && errors.role}
                   sx={{ gridColumn: "span 4" }}
                 />
                 <Box

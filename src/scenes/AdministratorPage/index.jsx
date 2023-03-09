@@ -6,7 +6,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 //Columns for the UserList
 const columns = [
-  { field: "_id", headerName: "ID", flex: 1},
+  //{ field: "_id", headerName: "ID", flex: 1},
   { field: "firstName", headerName: "First Name", flex: 1 },
   { field: "lastName", headerName: "Last Name", flex: 1 },
   { field: "email", headerName: "Email", flex: 1 },
@@ -59,13 +59,13 @@ const AdminLogin = () => {
     setOpen(false);
   };
 
-  const handleRegisterSubmit = async (values, onSubmitProps) => {
+  const handleRegisterSubmit = async () => {
     try{
       const savedUserResponse = await fetch (
         "http://frontend.digitaldreamforge.chat:5000/auth/register",
         {
           method: "POST",
-          headers: { "Content-Type": "applications/json",},
+          headers: { "Content-Type": "application/json",},
           body: JSON.stringify({
             firstName,
             lastName,
@@ -75,6 +75,7 @@ const AdminLogin = () => {
           }),
         }
       );
+      console.log(role);
       const savedUser = await savedUserResponse.json();
       console.log(savedUser);
       if (savedUser) {setOpen(false);}
@@ -124,9 +125,10 @@ const AdminLogin = () => {
               <TextField label="Last name" variant="outlined" value={lastName} onChange={(e) => setLastName(e.target.value)} margin="normal" required />
               <TextField label="Email" variant="outlined" value={email} onChange={(e) => setEmail(e.target.value)} margin="normal" required />
               <TextField label="Password" variant="outlined" value={password} onChange={(e) => setPassword(e.target.value)} margin="normal" required />
-              <select id="role" name="role" size="1">
-                <option value="Admin">Admin</option>
-                <option value="Manager">Manager</option>
+              <select id="role" name="role" size="1" value={role} onChange={(e) => setRole(e.target.value)}>
+                <option value= "">Select a role</option>
+                <option value= "Admin">Admin</option>
+                <option value="Management">Management</option>
                 <option value="Employee">Employee</option>
               </select>
               <Button variant="contained" type="submit">Submit</Button>
