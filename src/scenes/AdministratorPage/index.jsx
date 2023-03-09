@@ -6,11 +6,11 @@ import { v4 as uuidv4 } from 'uuid';
 
 //Columns for the UserList
 const columns = [
-  { field: "_id", headerName: "ID", flex: 1},
+  //{ field: "_id", headerName: "ID", flex: 1},
   { field: "firstName", headerName: "First Name", flex: 1 },
   { field: "lastName", headerName: "Last Name", flex: 1 },
   { field: "email", headerName: "Email", flex: 1 },
-  { field: "occupation", headerName: "Occupation", flex: 1 },
+  { field: "occupation", headerName: "Role", flex: 1 },
 ];
 
 //Layout of the UserList
