@@ -6,29 +6,37 @@ import { v4 as uuidv4 } from 'uuid';
 
 //Columns for the UserList
 const columns = [
-  //{ field: "_id", headerName: "ID", flex: 1},
+  { field: "_id", headerName: "ID", flex: 1},
   { field: "firstName", headerName: "First Name", flex: 1 },
   { field: "lastName", headerName: "Last Name", flex: 1 },
   { field: "email", headerName: "Email", flex: 1 },
-  { field: "occupation", headerName: "Role", flex: 1 },
+  { field: "role", headerName: "Role", flex: 1 },
 ];
 
 //Layout of the UserList
-const UserList = ({ users }) => (
+const UserList = ({ users }) => {
+  const [pageSize, setPageSize] = useState(5);
+
+  const handlePageSizeChange = (params) => {
+    setPageSize(params.pageSize);
+  };
+
+  return(
   <Box display="flex" flexDirection="column" marginTop={1}>
     <DataGrid
       rows={users}
       columns={columns}
-      pageSize={5}
+      pageSize={pageSize}
       rowsPerPageOptions={[5, 10, 20]}
       autoHeight
       rowHeight={45}
       rowId="id"
       columnBuffer={2}
+      onPageSizeChange={handlePageSizeChange}
     />
   </Box>
 );
-
+  };
 /*
   The register new user should be added somewhere here.
   This is the main function. Replaced "Underconstruction"
