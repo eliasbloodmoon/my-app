@@ -19,7 +19,7 @@ const LoginPage = () => {
           Digital Dream Forge
         </Typography>
         <Typography>
-          Version 3.8.1744
+          Version 3.9.1357
         </Typography>
       </Box>
 
