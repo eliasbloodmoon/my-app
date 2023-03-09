@@ -41,7 +41,7 @@ const AdminLogin = () => {
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [occupation, setOccupation] = useState("");  
+  const [role, setRole] = useState("");  
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -52,27 +52,26 @@ const AdminLogin = () => {
   };
 
   const handleRegisterSubmit = async (values, onSubmitProps) => {
-    await register(values, onSubmitProps);
-  };
-
-  const register = async (values, onSubmitProps) => {
-    // this allows us to send form info
-    const formData = new FormData();
-    for (let value in values) {
-      formData.append(value, values[value]);
-    }
-
-    const savedUserResponse = await fetch(
-      "http://frontend.digitaldreamforge.chat:5000/auth/register",
-      {
-        method: "POST",
-        body: formData,
-      }
-    );
-
-    const savedUser = await savedUserResponse.json();
-    if (savedUser) {
-      setOpen(false);
+    try{
+      const savedUserResponse = await fetch (
+        "http://frontend.digitaldreamforge.chat:5000/auth/register",
+        {
+          method: "POST",
+          headers: { "Content-Type": "applications/json",},
+          body: JSON.stringify({
+            firstName,
+            lastName,
+            email,
+            password,
+            role,
+          }),
+        }
+      );
+      const savedUser = await savedUserResponse.json();
+      console.log(savedUser);
+      if (savedUser) {setOpen(false);}
+    } catch (error) {
+      console.error(error);
     }
   };
 
@@ -116,8 +115,12 @@ const AdminLogin = () => {
               <TextField label="First name" variant="outlined" value={firstName} onChange={(e) => setFirstName(e.target.value)} margin="normal" required />
               <TextField label="Last name" variant="outlined" value={lastName} onChange={(e) => setLastName(e.target.value)} margin="normal" required />
               <TextField label="Email" variant="outlined" value={email} onChange={(e) => setEmail(e.target.value)} margin="normal" required />
-              <TextField label="Password" variant="outlined" type="password" value={password} onChange={(e) => setPassword(e.target.value)} margin="normal" required />
-              <TextField label="Occupation" variant="outlined" value={occupation} onChange={(e) => setOccupation(e.target.value)} margin="normal" required />
+              <TextField label="Password" variant="outlined" value={password} onChange={(e) => setPassword(e.target.value)} margin="normal" required />
+              <select id="role" name="role" size="1">
+                <option value="Admin">Admin</option>
+                <option value="Manager">Manager</option>
+                <option value="Employee">Employee</option>
+              </select>
               <Button variant="contained" type="submit">Submit</Button>
             </Box>
           </form>
