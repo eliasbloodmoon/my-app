@@ -48,6 +48,7 @@ const AdminLogin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("");  
+  const [changeOpen, setChangeOpen] = useState(false);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -55,6 +56,32 @@ const AdminLogin = () => {
 
   const handleClose = () => {
     setOpen(false);
+  };
+
+  const handleChangeOpen = () => {
+    setChangeOpen(true);
+  };
+
+  const handleChangeClose = () => {
+    setChangeOpen(false);
+  };
+
+  const handlePasswordChange = async () => {
+    try{
+      const savedUserResponse = await fetch (
+        "http://frontend.digitaldreamforge.chat:5000/users", {
+          method: "PUT",
+          headers: { "Content-Type": "application/json",},
+          body: JSON.stringify({
+            email,
+            password,
+          }),
+        }
+      );
+    }
+    catch (error) {
+      console.error(error);
+    }
   };
 
   const handleRegisterSubmit = async () => {
@@ -114,10 +141,13 @@ const AdminLogin = () => {
       <Box display="flex" justifyContent="flex-start" marginBottom={1} paddingLeft={12}>
         <Button variant="contained" onClick={handleClickOpen}>Add User</Button>
       </Box>
+      <Box display="flex" justifyContent="flex-start" marginBottom={1} paddingLeft={12}>
+        <Button variant="contained" onClick={handleChangeOpen}>Change Password</Button>
+      </Box>
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Add User</DialogTitle>
         <DialogContent>
-          <form onSubmit={handleRegisterSubmit}>
+        <form onSubmit={handlePasswordChange}>
             <Box display="flex" flexDirection="column" alignItems="center" marginBottom={2}>
               <TextField label="First name" variant="outlined" value={firstName} onChange={(e) => setFirstName(e.target.value)} margin="normal" required />
               <TextField label="Last name" variant="outlined" value={lastName} onChange={(e) => setLastName(e.target.value)} margin="normal" required />
@@ -129,6 +159,18 @@ const AdminLogin = () => {
                 <option value="Management">Management</option>
                 <option value="Employee">Employee</option>
               </select>
+              <Button variant="contained" type="submit">Submit</Button>
+            </Box>
+          </form>
+        </DialogContent>
+      </Dialog>
+      <Dialog open={changeOpen} onClose={handleChangeClose}>
+        <DialogTitle>Change Password</DialogTitle>
+        <DialogContent>
+        <form onSubmit={handleRegisterSubmit}>
+            <Box display="flex" flexDirection="column" alignItems="center" marginBottom={2}>
+              <TextField label="Email" variant="outlined" value={email} onChange={(e) => setEmail(e.target.value)} margin="normal" required />
+              <TextField label="New Password" variant="outlined" value={password} onChange={(e) => setPassword(e.target.value)} margin="normal" required />
               <Button variant="contained" type="submit">Submit</Button>
             </Box>
           </form>
