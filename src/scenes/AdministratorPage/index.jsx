@@ -4,13 +4,11 @@ import Navbar from "../navbar/index";
 import { DataGrid } from '@mui/x-data-grid';
 import { v4 as uuidv4 } from 'uuid';
 
-//Columns for the UserList
+//Columns for the ComandList Command Name Time
 const columns = [
-  //{ field: "_id", headerName: "ID", flex: 1},
-  { field: "firstName", headerName: "First Name", flex: 1 },
-  { field: "lastName", headerName: "Last Name", flex: 1 },
-  { field: "email", headerName: "Email", flex: 1 },
-  { field: "role", headerName: "Role", flex: 1 },
+  { field: "command", headerName: "Command", flex: 1 },
+  { field: "name", headerName: "Name", flex: 1 },
+  { field: "time", headerName: "Time", flex: 1 },
 ];
 
 //Layout of the UserList
@@ -87,7 +85,7 @@ const AdminLogin = () => {
   //This is where the UserList displays from.
   //It makes a GET request to the /users route from the backend
   useEffect(() => {
-  fetch("http://frontend.digitaldreamforge.chat:5000/users")
+  fetch("http://frontend.digitaldreamforge.chat:5000/api/database")
     .then((response) => response.json())
     .then((data) => {
       // add a unique `id` property to each user object
