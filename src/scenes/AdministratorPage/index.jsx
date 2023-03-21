@@ -147,7 +147,7 @@ const AdminLogin = () => {
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Add User</DialogTitle>
         <DialogContent>
-        <form onSubmit={handlePasswordChange}>
+        <form onSubmit={handleRegisterSubmit}>
             <Box display="flex" flexDirection="column" alignItems="center" marginBottom={2}>
               <TextField label="First name" variant="outlined" value={firstName} onChange={(e) => setFirstName(e.target.value)} margin="normal" required />
               <TextField label="Last name" variant="outlined" value={lastName} onChange={(e) => setLastName(e.target.value)} margin="normal" required />
@@ -167,7 +167,7 @@ const AdminLogin = () => {
       <Dialog open={changeOpen} onClose={handleChangeClose}>
         <DialogTitle>Change Password</DialogTitle>
         <DialogContent>
-        <form onSubmit={handleRegisterSubmit}>
+        <form onSubmit={handlePasswordChange}>
             <Box display="flex" flexDirection="column" alignItems="center" marginBottom={2}>
               <TextField label="Email" variant="outlined" value={email} onChange={(e) => setEmail(e.target.value)} margin="normal" required />
               <TextField label="New Password" variant="outlined" value={password} onChange={(e) => setPassword(e.target.value)} margin="normal" required />
