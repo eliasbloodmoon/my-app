@@ -1,4 +1,3 @@
-
 import { Box, Typography, useTheme, useMediaQuery } from "@mui/material";
 import Form from "./Form";
 import ddf from "../loginPage/ddf.png"

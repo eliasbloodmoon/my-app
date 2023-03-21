@@ -126,8 +126,8 @@ const AdminLogin = () => {
               <select id="role" name="role" size="1" value={role} onChange={(e) => setRole(e.target.value)}>
                 <option value= "">Select a role</option>
                 <option value= "Admin">Admin</option>
-                <option value="Management">Management</option>
-                <option value="Employee">Employee</option>
+                <option value= "Management">Management</option>
+                <option value= "Employee">Employee</option>
               </select>
               <Button variant="contained" type="submit">Submit</Button>
             </Box>
