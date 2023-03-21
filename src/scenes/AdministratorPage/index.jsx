@@ -69,7 +69,7 @@ const AdminLogin = () => {
   const handlePasswordChange = async () => {
     try{
       const savedUserResponse = await fetch (
-        "http://frontend.digitaldreamforge.chat:5000/users", {
+        "http://frontend.digitaldreamforge.chat:5000/users/update", {
           method: "PUT",
           headers: { "Content-Type": "application/json",},
           body: JSON.stringify({
