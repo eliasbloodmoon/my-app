@@ -84,7 +84,7 @@ const AdminLogin = () => {
   const [changeOpen, setChangeOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState("users");
   const [opener, setOpener] = useState(false);
-  const [lastUpdate, setLastUpdate] = useState(null);
+  const [setLastUpdate] = useState(null);
   // Add a loading state to indicate that the data is being fetched
   const [loading, setLoading] = useState(true);
 
@@ -255,9 +255,6 @@ const AdminLogin = () => {
         <Button variant="contained" onClick={handleClickOpen}>Add Employee</Button>
       </Box>
       <Box display="flex" justifyContent="flex-start" marginBottom={1} paddingLeft={12}>
-        <Button variant="contained" onClick={handleClickOpen}>Add Employee</Button>
-      </Box>
-      <Box display="flex" justifyContent="flex-start" marginBottom={1} paddingLeft={12}>
         <Button variant="contained" onClick={handleClickerOpen}>Delete Employee</Button>
       </Box>
       <Box display="flex" justifyContent="flex-start" marginBottom={1} paddingLeft={12}>
@@ -295,17 +292,6 @@ const AdminLogin = () => {
           </form>
         </DialogContent>
       </Dialog> 
-      <Dialog open={opener} onClose={handleClickerClose}>
-        <DialogTitle>Delete Employee</DialogTitle>
-        <DialogContent>
-        <form onSubmit={handleDeleteChange}>
-          <Box display="flex" flexDirection="column" alignItems="center" marginBottom={2}>
-            <TextField label="Email" variant="outlined" value={email} onChange={(e) => setEmail(e.target.value)} margin="normal" required />
-            <Button variant="contained" type="submit">Submit</Button>
-          </Box>
-        </form>
-        </DialogContent>
-      </Dialog>
       <Dialog open={opener} onClose={handleClickerClose}>
         <DialogTitle>Delete Employee</DialogTitle>
         <DialogContent>
