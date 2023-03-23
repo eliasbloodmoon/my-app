@@ -84,7 +84,7 @@ const AdminLogin = () => {
   const [changeOpen, setChangeOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState("users");
   const [opener, setOpener] = useState(false);
-  const [lastUpdate, setLastUpdate] = useState(null);
+  const [setLastUpdate] = useState(null);
   // Add a loading state to indicate that the data is being fetched
   const [loading, setLoading] = useState(true);
 
