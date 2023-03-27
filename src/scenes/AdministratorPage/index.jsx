@@ -3,6 +3,9 @@ import React, { useEffect, useState } from "react";
 import Navbar from "../navbar/index";
 import { DataGrid } from '@mui/x-data-grid';
 import { v4 as uuidv4 } from 'uuid';
+import { saveAs } from 'file-saver';
+import jsPDF from 'jspdf';
+import 'jspdf-autotable';
 
 //Columns for the ComandList Command Name Time
 const commandsColumn = [
@@ -19,54 +22,6 @@ const usersColumn = [
   { field: "role", headerName: "Role", flex: 1 },
 ];
 
-const CommandList = ({ users }) => {
-  const [pageSize, setPageSize] = useState(5);
-
-  const handlePageSizeChange = (params) => {
-    setPageSize(params.pageSize);
-  };
-
-  return(
-  <Box display="flex" flexDirection="column" marginTop={1}>
-    <DataGrid
-      rows={users}
-      columns={commandsColumn}
-      pageSize={pageSize}
-      rowsPerPageOptions={[5, 10, 20]}
-      autoHeight
-      rowHeight={45}
-      rowId="id"
-      columnBuffer={2}
-      onPageSizeChange={handlePageSizeChange}
-    />
-  </Box>
-);
-  };
-
-//Layout of the UserList
-const UserList = ({ users }) => {
-  const [pageSize, setPageSize] = useState(5);
-
-  const handlePageSizeChange = (params) => {
-    setPageSize(params.pageSize);
-  };
-
-  return(
-  <Box display="flex" flexDirection="column" marginTop={1}>
-    <DataGrid
-      rows={users}
-      columns={usersColumn}
-      pageSize={pageSize}
-      rowsPerPageOptions={[5, 10, 20]}
-      autoHeight
-      rowHeight={45}
-      rowId="id"
-      columnBuffer={2}
-      onPageSizeChange={handlePageSizeChange}
-    />
-  </Box>
-);
-  };
 /*
   The register new user should be added somewhere here.
   This is the main function. Replaced "Underconstruction"
@@ -111,6 +66,123 @@ const AdminLogin = () => {
   const handleClickerClose = () => {
     setOpener(false);
   };
+
+  const CommandList = ({ users }) => {
+    const [pageSize, setPageSize] = useState(5);
+  
+    const handlePageSizeChange = (params) => {
+      setPageSize(params.pageSize);
+    };
+  
+    return(
+    <Box display="flex" flexDirection="column" marginTop={1}>
+      <DataGrid
+        rows={users}
+        columns={commandsColumn}
+        pageSize={pageSize}
+        rowsPerPageOptions={[5, 10, 20]}
+        autoHeight
+        rowHeight={45}
+        rowId="id"
+        columnBuffer={2}
+        onPageSizeChange={handlePageSizeChange}
+      />
+    </Box>
+  );
+    };
+  
+  //Layout of the UserList
+  const UserList = ({ users }) => {
+    const [pageSize, setPageSize] = useState(5);
+  
+    const handlePageSizeChange = (params) => {
+      setPageSize(params.pageSize);
+    };
+  
+    return(
+    <Box display="flex" flexDirection="column" marginTop={1}>
+      <DataGrid
+        rows={users}
+        columns={usersColumn}
+        pageSize={pageSize}
+        rowsPerPageOptions={[5, 10, 20]}
+        autoHeight
+        rowHeight={45}
+        rowId="id"
+        columnBuffer={2}
+        onPageSizeChange={handlePageSizeChange}
+      />
+    </Box>
+    );
+  };
+
+  const handleExportCsv = () => {
+    const rows = currentPage === 'users' ? users : commands;
+  
+    // Get the current date and time
+    const currentDate = new Date();
+    const dateString = currentDate.toLocaleDateString();
+    const timeString = currentDate.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+  
+    // Get the columns for the current page
+    const columns = currentPage === 'users' ? usersColumn : commandsColumn;
+  
+    // Create the header rows
+    const headerRows = [
+      ['Digital Dream Forge'],
+      ['Time of Data Download:' + dateString + ' ' + timeString]
+    ];
+  
+    // Create the header row for the csv
+    const headerRow = columns.map(column => column.headerName);
+  
+    // Add the header rows to the csv
+    const csvContent = headerRows.map(row => row.join(',')).join('\n') + '\n' + headerRow.join(",") + "\n" + rows.map(row => {
+      const definedFields = Object.keys(row);
+      const filteredColumns = columns.filter(column => definedFields.includes(column.field));
+      return filteredColumns.map(column => row[column.field]).join(",");
+    }).join("\n");
+  
+    // Download the csv file
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    saveAs(blob, `${currentPage}_${dateString}_${timeString}.csv`);
+  };
+
+  const handleExportPdf = async () => {
+    const rows = currentPage === 'users' ? users : commands;
+
+    // Get the columns for the current page
+    const columns = currentPage === 'users' ? usersColumn : commandsColumn;
+
+    // Create a new instance of jsPDF
+    const doc = new jsPDF({
+      orientation: "landscape",
+      unit: "mm",
+      format: "a4",
+      putOnlyUsedFonts: true,
+      floatPrecision: 16,
+    });
+
+    // Add the header rows
+    doc.setFontSize(14);
+    doc.text("Digital Dream Forge", 20, 20);
+    doc.text("Time of Data Download: " + new Date().toLocaleString(), 20, 30);
+    doc.setFontSize(12);
+
+    // Add the column headers
+    const header = columns.map((column) => column.headerName);
+    const rowsData = rows.map((row) => columns.map((column) => row[column.field]));
+    doc.autoTable({
+      startY: 40,
+      head: [header],
+      body: rowsData,
+      margin: { top: 20 },
+    });
+
+    // Save the PDF file
+    const blob = doc.output("blob");
+    saveAs(blob, `${currentPage}_${new Date().toLocaleString()}.pdf`);
+};
 
   const handleDeleteChange = async () => {
     try{
@@ -193,7 +265,7 @@ const AdminLogin = () => {
       const commandsWithIds = commandsData.map(command => ({ ...command, id: uuidv4() }));
       setUsers(usersWithIds);
       setCommands(commandsWithIds);
-      setLastUpdate(Date.now()); // Update the lastUpdate state variable
+      //setLastUpdate(Date.now()); // Update the lastUpdate state variable
     } catch (error) {
       console.error(error);
     }
@@ -211,8 +283,6 @@ const AdminLogin = () => {
     }, 10000);
     return () => clearInterval(timer); // Clear the timer when the component unmounts
   }, []);
-  
-  
   
   // Modify the useEffect hook to set loading to false when the data is fetched
   useEffect(() => {
@@ -259,6 +329,12 @@ const AdminLogin = () => {
       </Box>
       <Box display="flex" justifyContent="flex-start" marginBottom={1} paddingLeft={12}>
         <Button variant="contained" onClick={handleChangeOpen}>Change Password</Button>
+      </Box>
+      <Box display="flex" justifyContent="flex-start" marginBottom={1} paddingLeft={12}>
+        <Button variant="contained" onClick={handleExportCsv}>Export All as CSV</Button>
+      </Box>
+      <Box display="flex" justifyContent="flex-start" marginBottom={1} paddingLeft={12}>
+        <Button variant="contained" onClick={handleExportPdf}>Export All as PDF</Button>
       </Box>
       <Dialog open={open} onClose={handleClose} paddingTop={1}>  
         <DialogTitle>Add Employee</DialogTitle>
