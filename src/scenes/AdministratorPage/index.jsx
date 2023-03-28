@@ -1,4 +1,4 @@
-import { Box, Button, Typography, useTheme, Dialog, DialogContent, DialogTitle, TextField } from "@mui/material";
+import { Box, Button, Typography, useTheme, Dialog, DialogContent, DialogActions, DialogContentText, DialogTitle, TextField } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import Navbar from "../navbar/index";
 import { DataGrid } from '@mui/x-data-grid';
@@ -6,21 +6,6 @@ import { v4 as uuidv4 } from 'uuid';
 import { saveAs } from 'file-saver';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
-
-//Columns for the ComandList Command Name Time
-const commandsColumn = [
-  { field: "command", headerName: "Command", flex: 1 },
-  { field: "name", headerName: "Name", flex: 1 },
-  { field: "time", headerName: "Time", flex: 1 },
-];
-
-const usersColumn = [
-  { field: "firstName", headerName: "First Name", flex: 1 },
-  { field: "lastName", headerName: "Last Name", flex: 1 },
-  { field: "email", headerName: "Email", flex: 1 },
-  { field: "password", headerName: "Password", flex: 1 },
-  { field: "role", headerName: "Role", flex: 1 },
-];
 
 /*
   The register new user should be added somewhere here.
@@ -42,6 +27,60 @@ const AdminLogin = () => {
   const [setLastUpdate] = useState(null);
   // Add a loading state to indicate that the data is being fetched
   const [loading, setLoading] = useState(true);
+  const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
+  const [deleteId, setDeleteId] = useState(null);
+  const [editOpen, setEditOpen] = useState(false);
+  const [editCommand, setEditCommand] = useState({ id: "", time: "", name: "", command: "" });
+  const [deletedCommand, setDeletedCommand] = useState(null);
+
+  //Columns for the ComandList Command Name Time
+  const commandsColumn = [
+    { field: "command", headerName: "Command", flex: 1 },
+    { field: "name", headerName: "Name", flex: 1 },
+    { field: "time", headerName: "Time", flex: 1 },
+    {
+      field: "edit",
+      headerName: "Edit",
+      sortable: false,
+      filterable: false,
+      width: 100,
+      disableColumnMenu: true,
+      renderCell: (params) => (
+        <Button
+          variant="outlined"
+          color="info"
+          onClick={() => handleEditCommand(params.row.id)}
+        >
+          Edit
+        </Button>
+        ),
+    },
+    {
+      field: "delete",
+      headerName: "Delete",
+      sortable: false,
+      filterable: false,
+      width: 100,
+      disableColumnMenu: true,
+      renderCell: (params) => (
+        <Button
+          variant="outlined"
+          color="error"
+          onClick={() => handleOpenDeleteConfirm(params.row.id)}
+        >
+          Delete
+        </Button>
+      ),
+    },
+  ];
+
+  const usersColumn = [
+    { field: "firstName", headerName: "First Name", flex: 1 },
+    { field: "lastName", headerName: "Last Name", flex: 1 },
+    { field: "email", headerName: "Email", flex: 1 },
+    { field: "password", headerName: "Password", flex: 1 },
+    { field: "role", headerName: "Role", flex: 1 },
+  ];
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -65,6 +104,74 @@ const AdminLogin = () => {
 
   const handleClickerClose = () => {
     setOpener(false);
+  };
+
+  const handleEditCommand = (id) => {
+    const commandToEdit = commands.find((command) => command.id === id);
+  
+    if (commandToEdit) {
+      setEditCommand(commandToEdit);
+      setEditOpen(true);
+    }
+  };
+
+  const handleEditCommandSubmit = async (e) => {
+    e.preventDefault();
+  
+    if (!editCommand.id) return;
+  
+    try {
+      await fetch(`http://frontend.digitaldreamforge.chat:5000/api/database/${editCommand._id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          time: editCommand.time,
+          name: editCommand.name,
+          command: editCommand.command,
+        }),
+      });
+  
+      // Update the local state with the edited command
+      setCommands(
+        commands.map((command) => (command.id === editCommand.id ? editCommand : command))
+      );
+  
+      // Close the edit dialog
+      setEditOpen(false);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleOpenDeleteConfirm = (id) => {
+    setDeleteId(id);
+    setDeleteConfirmOpen(true);
+  };
+
+  const handleDeleteCommand = async () => {
+    if (!deleteId) return;
+  
+    try {
+      const commandToDelete = commands.find((command) => command.id === deleteId);
+  
+      if (!commandToDelete) {
+        throw new Error("Command not found");
+      }
+  
+      await fetch(`http://frontend.digitaldreamforge.chat:5000/api/database/${commandToDelete._id}`, {
+        method: "DELETE",
+      });
+  
+      // Remove the deleted command from the local state
+      setCommands(commands.filter((command) => command.id !== deleteId));
+      setDeleteId(null);
+    } catch (error) {
+      console.error(error);
+    }
+  
+    setDeleteConfirmOpen(false);
   };
 
   const CommandList = ({ users }) => {
@@ -115,6 +222,7 @@ const AdminLogin = () => {
     </Box>
     );
   };
+  
 
   const handleExportCsv = () => {
     const rows = currentPage === 'users' ? users : commands;
@@ -336,6 +444,60 @@ const AdminLogin = () => {
       <Box display="flex" justifyContent="flex-start" marginBottom={1} paddingLeft={12}>
         <Button variant="contained" onClick={handleExportPdf}>Export All as PDF</Button>
       </Box>
+      <Dialog open={deleteConfirmOpen} onClose={() => setDeleteConfirmOpen(false)}>
+      <DialogTitle>Confirm Delete</DialogTitle>
+      <DialogContent>
+        <DialogContentText>
+          Are you sure you want to delete this entry?
+        </DialogContentText>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={() => setDeleteConfirmOpen(false)} color="info">
+          Cancel
+        </Button>
+        <Button onClick={handleDeleteCommand} autoFocus color="error">
+          Confirm
+        </Button>
+      </DialogActions>
+      </Dialog>
+
+      <Dialog open={editOpen} onClose={() => setEditOpen(false)}>
+        <DialogTitle>Edit Command</DialogTitle>
+        <DialogContent>
+          <form onSubmit={handleEditCommandSubmit}>
+            <Box display="flex" flexDirection="column" alignItems="center" marginBottom={2}>
+              <TextField
+                label="Time"
+                variant="outlined"
+                value={editCommand.time}
+                onChange={(e) => setEditCommand({ ...editCommand, time: e.target.value })}
+                margin="normal"
+                required
+              />
+              <TextField
+                label="Name"
+                variant="outlined"
+                value={editCommand.name}
+                onChange={(e) => setEditCommand({ ...editCommand, name: e.target.value })}
+                margin="normal"
+                required
+              />
+              <TextField
+                label="Command"
+                variant="outlined"
+                value={editCommand.command}
+                onChange={(e) => setEditCommand({ ...editCommand, command: e.target.value })}
+                margin="normal"
+                required
+              />
+              <Button variant="contained" type="submit">
+                Save
+              </Button>
+            </Box>
+          </form>
+        </DialogContent>
+      </Dialog>
+
       <Dialog open={open} onClose={handleClose} paddingTop={1}>  
         <DialogTitle>Add Employee</DialogTitle>
         <DialogContent>
