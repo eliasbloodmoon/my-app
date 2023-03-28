@@ -1,15 +1,58 @@
-import { Box, Typography, useTheme, useMediaQuery } from "@mui/material";
-//import Form from "./Form";
-//import ddf from "./ddf.png"
+import { Box, Typography, useTheme } from "@mui/material";
+import React, { useState } from "react";
 import Navbar from "../navbar/index";
-const Underconstruction2 = () => {
+import { DataGrid } from '@mui/x-data-grid';
+
+const EmployeeLogin = () => {
   const theme = useTheme();
-  const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
+  const [users] = useState([]);
+
+  const commandsColumn = [
+    {
+      field: 'command',
+      headerName: 'Command',
+      flex: 1,
+      headerAlign: 'center',
+      align: 'center',
+      sortable: false,
+      resizable: false,
+    },
+    {
+      field: 'time',
+      headerName: 'Time',
+      flex: 1,
+      headerAlign: 'center',
+      align: 'center',
+      sortable: false,
+      resizable: false,
+    },
+  ];
+
+  const CommandList = ({ users }) => {
+    const [pageSize, setPageSize] = useState(5);
+  
+    const handlePageSizeChange = (params) => {
+      setPageSize(params.pageSize);
+    };
+  
+    return (
+      <Box display="flex" flexDirection="column" marginTop={1}>
+        <DataGrid
+          rows={users}
+          columns={commandsColumn}
+          pageSize={pageSize}
+          rowsPerPageOptions={[5, 10, 20]}
+          autoHeight
+          rowHeight={45}
+          columnBuffer={2}
+          onPageSizeChange={handlePageSizeChange}
+        />
+      </Box>
+    );
+  };
+
   return (
-
-
-
-    <Box>
+    <Box width="100%">
       <Navbar />
       <Box
         width="100%"
@@ -21,19 +64,9 @@ const Underconstruction2 = () => {
           Digital Dream Forge
         </Typography>
       </Box>
-
-      <Typography font Weight="bold" fontSize="69px" color="red" textAlign="center">
-      Employee Page Is Under Construction
-      </Typography>
-
-      <Typography font Weight="bold" fontSize="32px" color="red" textAlign="center">
-      We're sorry, this page is currently under construction. Please check back soon!
-      </Typography>
-
+      <CommandList users={users} commandsColumn={commandsColumn} />
     </Box>
-
-
   );
 };
 
-export default Underconstruction2;
+export default EmployeeLogin;

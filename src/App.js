@@ -8,7 +8,7 @@ import { CssBaseline, ThemeProvider } from "@mui/material";
 import { createTheme } from "@mui/material/styles";
 import { themeSettings } from "./theme";
 import AdminLogin from "./scenes/AdministratorPage";
-import UnderConstruction2 from "./scenes/EmployeePage";
+import EmployeeLogin from "./scenes/EmployeePage";
 import UnderConstruction3 from "./scenes/ManagerPage";
 
 function App() {
@@ -32,7 +32,7 @@ function App() {
             />
             <Route
               path="/employee"
-              element={isAuth ? <UnderConstruction2 /> : <Navigate to="/" />}
+              element={isAuth ? <EmployeeLogin /> : <Navigate to="/" />}
             />
             <Route
               path="/manager"
