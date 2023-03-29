@@ -2,6 +2,23 @@ import { Box, Typography, useTheme } from "@mui/material";
 import React, { useState } from "react";
 import Navbar from "../navbar/index";
 import { DataGrid } from '@mui/x-data-grid';
+import { userEmail } from "../loginPage/Form";
+
+const API_URL1 = 'http://frontend.digitaldreamforge.chat:5000/users?email=' + userEmail;
+
+fetch(API_URL1)
+  .then(response => response.json())
+  .then(data => {
+    const user = data[0];
+    const firstName = user.firstName;
+    const lastName = user.lastName;
+
+    const Name = firstName + " " + lastName;
+
+    
+  })
+  .catch(error => console.error(error));
+
 
 const EmployeeLogin = () => {
   const theme = useTheme();

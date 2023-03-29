@@ -145,5 +145,5 @@ const Form = () => {
     </Formik>
   );
 };
-
+export const exportEmail = user.email;
 export default Form;
