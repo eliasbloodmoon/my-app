@@ -12,6 +12,9 @@ import * as yup from "yup";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setLogin } from "../../state/index";
+import { useContext } from "react";
+import { UserContext } from "../../UserContext";
+
 
 const loginSchema = yup.object().shape({
   email: yup.string().email("invalid email").required("required"),
@@ -23,6 +26,10 @@ const initialValuesLogin = {
   password: "",
 };
 
+function getEmail(input){
+  return input;
+}
+
 const Form = () => {
   const [pageType, /*setPageType*/] = useState("login");
   const { palette } = useTheme();
@@ -30,6 +37,8 @@ const Form = () => {
   const navigate = useNavigate();
   const isNonMobile = useMediaQuery("(min-width:600px)");
   const isLogin = pageType === "login";
+  const { setEmail } = useContext(UserContext);
+  const { email } = useContext(UserContext);
 
   //"Access-Control-Allow-Origin": "http://frontend.digitaldreamforge.chat:5000/auth/login"
   const login = async (values, onSubmitProps) => {
@@ -61,10 +70,11 @@ const Form = () => {
     } else {
       navigate('/employee');
     }
+    setEmail(values.email);
   };
 
   const handleFormSubmit = async (values, onSubmitProps) => {
-    
+    const userEmail = values.email;
     if (isLogin) await login(values, onSubmitProps);
   };
 
@@ -145,5 +155,4 @@ const Form = () => {
     </Formik>
   );
 };
-export const exportEmail = user.email;
 export default Form;

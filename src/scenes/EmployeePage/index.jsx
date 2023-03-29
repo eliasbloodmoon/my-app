@@ -2,7 +2,8 @@ import { Box, Typography, useTheme } from "@mui/material";
 import React, { useState } from "react";
 import Navbar from "../navbar/index";
 import { DataGrid } from '@mui/x-data-grid';
-import { userEmail } from "../loginPage/Form";
+import { useContext } from "react";
+import { UserContext } from "../../UserContext";
 
 const getUserData = async (email) => {
   try {
@@ -21,7 +22,7 @@ const getUserData = async (email) => {
 const EmployeeLogin = () => {
   const theme = useTheme();
   const [users] = useState([]);
-
+  const {email} = useContext(UserContext);
   const commandsColumn = [
     {
       field: 'command',
