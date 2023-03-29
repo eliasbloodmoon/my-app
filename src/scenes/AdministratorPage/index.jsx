@@ -23,15 +23,16 @@ const AdminLogin = () => {
   const [role, setRole] = useState("");  
   const [changeOpen, setChangeOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState("users");
-  const [opener, setOpener] = useState(false);
-  const [setLastUpdate] = useState(null);
-  // Add a loading state to indicate that the data is being fetched
+  //const [setLastUpdate] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
-  const [deleteId, setDeleteId] = useState(null);
+  const [deleteCommandConfirmOpen, setDeleteCommandConfirmOpen] = useState(false);
+  const [deleteUserConfirmOpen, setDeleteUserConfirmOpen] = useState(false);
+  const [deleteCommandId, setDeleteCommandId] = useState(null);
+  const [deleteUserId, setDeleteUserId] = useState(null);
   const [editOpen, setEditOpen] = useState(false);
   const [editCommand, setEditCommand] = useState({ id: "", time: "", name: "", command: "" });
-  const [deletedCommand, setDeletedCommand] = useState(null);
+  const [lastDeletedItem, setLastDeletedItem] = useState(null);
+  const [fetchData, setFetchData] = useState(true);
 
   //Columns for the ComandList Command Name Time
   const commandsColumn = [
@@ -66,7 +67,7 @@ const AdminLogin = () => {
         <Button
           variant="outlined"
           color="error"
-          onClick={() => handleOpenDeleteConfirm(params.row.id)}
+          onClick={() => handleOpenDeleteCommandConfirm(params.row.id)}
         >
           Delete
         </Button>
@@ -80,6 +81,23 @@ const AdminLogin = () => {
     { field: "email", headerName: "Email", flex: 1 },
     { field: "password", headerName: "Password", flex: 1 },
     { field: "role", headerName: "Role", flex: 1 },
+    {
+      field: "delete",
+      headerName: "Delete",
+      sortable: false,
+      filterable: false,
+      width: 100,
+      disableColumnMenu: true,
+      renderCell: (params) => (
+        <Button
+          variant="outlined"
+          color="error"
+          onClick={() => handleOpenDeleteUserConfirm(params.row.id)}
+        >
+          Delete
+        </Button>
+      ),
+    },
   ];
 
   const handleClickOpen = () => {
@@ -98,12 +116,8 @@ const AdminLogin = () => {
     setChangeOpen(false);
   };
 
-  const handleClickerOpen = () => {
-    setOpener(true);
-  };
-
-  const handleClickerClose = () => {
-    setOpener(false);
+  const handleToggleFetch = () => {
+    setFetchData(!fetchData);
   };
 
   const handleEditCommand = (id) => {
@@ -145,33 +159,66 @@ const AdminLogin = () => {
     }
   };
 
-  const handleOpenDeleteConfirm = (id) => {
-    setDeleteId(id);
-    setDeleteConfirmOpen(true);
+  const handleOpenDeleteCommandConfirm = (id) => {
+    setDeleteCommandId(id);
+    setDeleteCommandConfirmOpen(true);
   };
 
-  const handleDeleteCommand = async () => {
-    if (!deleteId) return;
+  const handleOpenDeleteUserConfirm = (id) => {
+    setDeleteUserId(id);
+    setDeleteUserConfirmOpen(true);
+  };
+  
+
+  const handleDeleteUser = async () => {
+    if (!deleteUserId) return;
   
     try {
-      const commandToDelete = commands.find((command) => command.id === deleteId);
+      const userToDelete = users.find((user) => user.id === deleteUserId);
   
-      if (!commandToDelete) {
+      if (!userToDelete) {
         throw new Error("Command not found");
       }
   
-      await fetch(`http://frontend.digitaldreamforge.chat:5000/api/database/${commandToDelete._id}`, {
+      await fetch(`http://frontend.digitaldreamforge.chat:5000/users/${userToDelete._id}`, {
         method: "DELETE",
       });
   
       // Remove the deleted command from the local state
-      setCommands(commands.filter((command) => command.id !== deleteId));
-      setDeleteId(null);
+      setUsers(users.filter((user) => user.id !== deleteUserId));
+      setDeleteUserId(null);
     } catch (error) {
       console.error(error);
     }
   
-    setDeleteConfirmOpen(false);
+    setDeleteUserConfirmOpen(false);
+  };
+
+  const handleDeleteCommand = async () => {
+    if (!deleteCommandId) return;
+    
+    try {
+      const commandToDelete = commands.find((command) => command.id === deleteCommandId);
+    
+      if (!commandToDelete) {
+        throw new Error("Command not found");
+      }
+  
+      // Save the deleted command so it can be undone
+      setLastDeletedItem(commandToDelete);
+    
+      await fetch(`http://frontend.digitaldreamforge.chat:5000/api/database/${commandToDelete._id}`, {
+        method: "DELETE",
+      });
+    
+      // Remove the deleted command from the local state
+      setCommands(commands.filter((command) => command.id !== deleteCommandId));
+      setDeleteCommandId(null);
+    } catch (error) {
+      console.error(error);
+    }
+    
+    setDeleteCommandConfirmOpen(false);
   };
 
   const CommandList = ({ users }) => {
@@ -292,22 +339,30 @@ const AdminLogin = () => {
     saveAs(blob, `${currentPage}_${new Date().toLocaleString()}.pdf`);
 };
 
-  const handleDeleteChange = async () => {
-    try{
-      const savedUserResponse = await fetch (
-        "http://frontend.digitaldreamforge.chat:5000/users/delete",{
-          method: "DELETE",
-          headers: { "Content-Type": "application/json",},
-          body: JSON.stringify({
-            email,
-          }),
-        }
-      );
+const handleUndo = async () => {
+  
+  try {
+    if (!lastDeletedItem) {
+      throw new Error("No item to undo");
     }
-    catch (error) {
-      console.error(error);
-    }
-  };
+
+    await fetch(`http://frontend.digitaldreamforge.chat:5000/api/database`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(lastDeletedItem),
+    });
+
+    // Add the deleted item back to the local state
+    setCommands([...commands, lastDeletedItem]);
+
+    // Reset the last deleted item state
+    setLastDeletedItem(null);
+  } catch (error) {
+    console.error(error);
+  }
+};
 
   const handlePasswordChange = async () => {
     try{
@@ -386,11 +441,14 @@ const AdminLogin = () => {
   
   // Call the fetchUserData function every 10 seconds
   useEffect(() => {
-    const timer = setInterval(() => {
-      fetchUserData();
-    }, 10000);
-    return () => clearInterval(timer); // Clear the timer when the component unmounts
-  }, []);
+    if (fetchData) {
+      const timer = setInterval(() => {
+        fetchUserData();
+      }, 10000);
+      return () => clearInterval(timer); // Clear the timer when the component unmounts
+    }
+  }, [fetchData]);
+  
   
   // Modify the useEffect hook to set loading to false when the data is fetched
   useEffect(() => {
@@ -423,28 +481,61 @@ const AdminLogin = () => {
           {currentPage === "users" ? "Switch to Commands" : "Switch to Employees"}
         </Button>
       </Box>
+      <Box display="flex" justifyContent="flex-start" marginBottom={1} paddingLeft={12} paddingRight={12}>
+        <Button color="info" variant="contained" onClick={handleToggleFetch} style={{width: '100%'}}>
+          {fetchData ? "Turn off auto-refresh" : "Turn on auto-refresh"}
+        </Button>
+      </Box>
+
+      
 
       {currentPage === "users" ? (
         <UserList users={users} />
       ) : (
         <CommandList users={commands} />
       )}
+
+      {currentPage === "users" && (
       <Box display="flex" justifyContent="flex-start" marginBottom={1} paddingLeft={12}>
         <Button variant="contained" onClick={handleClickOpen}>Add Employee</Button>
       </Box>
-      <Box display="flex" justifyContent="flex-start" marginBottom={1} paddingLeft={12}>
-        <Button variant="contained" onClick={handleClickerOpen}>Delete Employee</Button>
-      </Box>
+      )}
+      {currentPage === "users" && (
       <Box display="flex" justifyContent="flex-start" marginBottom={1} paddingLeft={12}>
         <Button variant="contained" onClick={handleChangeOpen}>Change Password</Button>
       </Box>
+      )}
       <Box display="flex" justifyContent="flex-start" marginBottom={1} paddingLeft={12}>
         <Button variant="contained" onClick={handleExportCsv}>Export All as CSV</Button>
       </Box>
       <Box display="flex" justifyContent="flex-start" marginBottom={1} paddingLeft={12}>
         <Button variant="contained" onClick={handleExportPdf}>Export All as PDF</Button>
       </Box>
-      <Dialog open={deleteConfirmOpen} onClose={() => setDeleteConfirmOpen(false)}>
+      {currentPage === "commands" && (
+      <Box display="flex" justifyContent="flex-start" marginBottom={1} paddingLeft={12}>
+        <Button variant="contained" onClick={handleUndo}>Undo Time Entry Delete</Button>
+      </Box>
+      )}
+
+
+      <Dialog open={deleteUserConfirmOpen} onClose={() => setDeleteUserConfirmOpen(false)}>
+      <DialogTitle>Confirm Delete</DialogTitle>
+      <DialogContent>
+        <DialogContentText>
+          Are you sure you want to delete this user?
+        </DialogContentText>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={() => setDeleteUserConfirmOpen(false)} color="info">
+          Cancel
+        </Button>
+        <Button onClick={handleDeleteUser} autoFocus color="error">
+          Confirm
+        </Button>
+      </DialogActions>
+      </Dialog>
+
+      <Dialog open={deleteCommandConfirmOpen} onClose={() => setDeleteCommandConfirmOpen(false)}>
       <DialogTitle>Confirm Delete</DialogTitle>
       <DialogContent>
         <DialogContentText>
@@ -452,7 +543,7 @@ const AdminLogin = () => {
         </DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={() => setDeleteConfirmOpen(false)} color="info">
+        <Button onClick={() => setDeleteCommandConfirmOpen(false)} color="info">
           Cancel
         </Button>
         <Button onClick={handleDeleteCommand} autoFocus color="error">
@@ -530,17 +621,6 @@ const AdminLogin = () => {
           </form>
         </DialogContent>
       </Dialog> 
-      <Dialog open={opener} onClose={handleClickerClose}>
-        <DialogTitle>Delete Employee</DialogTitle>
-        <DialogContent>
-        <form onSubmit={handleDeleteChange}>
-          <Box display="flex" flexDirection="column" alignItems="center" marginBottom={2}>
-            <TextField label="Email" variant="outlined" value={email} onChange={(e) => setEmail(e.target.value)} margin="normal" required />
-            <Button variant="contained" type="submit">Submit</Button>
-          </Box>
-        </form>
-        </DialogContent>
-      </Dialog>
     </Box>
   );
 };
