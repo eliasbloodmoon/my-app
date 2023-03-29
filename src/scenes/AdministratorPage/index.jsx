@@ -1,4 +1,4 @@
-import { Box, Button, Typography, useTheme, Dialog, DialogContent, DialogActions, DialogContentText, DialogTitle, TextField } from "@mui/material";
+import { Box, Button, Typography, useTheme, Dialog, DialogContent, DialogActions, DialogContentText, DialogTitle, TextField, FormControl, InputLabel, Select, MenuItem } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import Navbar from "../navbar/index";
 import { DataGrid } from '@mui/x-data-grid';
@@ -29,8 +29,10 @@ const AdminLogin = () => {
   const [deleteUserConfirmOpen, setDeleteUserConfirmOpen] = useState(false);
   const [deleteCommandId, setDeleteCommandId] = useState(null);
   const [deleteUserId, setDeleteUserId] = useState(null);
-  const [editOpen, setEditOpen] = useState(false);
+  const [editCommandOpen, setCommandEditOpen] = useState(false);
+  const [editUserOpen, setUserEditOpen] = useState(false);
   const [editCommand, setEditCommand] = useState({ id: "", time: "", name: "", command: "" });
+  const [editUser, setEditUser] = useState({ id: "", firstName: "", lastName: "", email: "", password: "", role: ""});
   const [lastDeletedItem, setLastDeletedItem] = useState(null);
   const [fetchData, setFetchData] = useState(true);
 
@@ -82,6 +84,23 @@ const AdminLogin = () => {
     { field: "password", headerName: "Password", flex: 1 },
     { field: "role", headerName: "Role", flex: 1 },
     {
+      field: "edit",
+      headerName: "Edit",
+      sortable: false,
+      filterable: false,
+      width: 100,
+      disableColumnMenu: true,
+      renderCell: (params) => (
+        <Button
+          variant="outlined"
+          color="info"
+          onClick={() => handleEditUser(params.row.id)}
+        >
+          Edit
+        </Button>
+        ),
+    },
+    {
       field: "delete",
       headerName: "Delete",
       sortable: false,
@@ -120,12 +139,53 @@ const AdminLogin = () => {
     setFetchData(!fetchData);
   };
 
+  const handleEditUser = (id) => {
+    const userToEdit = users.find((user) => user.id === id);
+  
+    if (userToEdit) {
+      setEditUser(userToEdit);
+      setUserEditOpen(true);
+    }
+  };
+
   const handleEditCommand = (id) => {
     const commandToEdit = commands.find((command) => command.id === id);
   
     if (commandToEdit) {
       setEditCommand(commandToEdit);
-      setEditOpen(true);
+      setCommandEditOpen(true);
+    }
+  };
+
+  const handleEditUserSubmit = async (e) => {
+    e.preventDefault();
+  
+    if (!editUser.id) return;
+  
+    try {
+      await fetch(`http://frontend.digitaldreamforge.chat:5000/users/${editUser._id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          firstName: editUser.firstName,
+          lastName: editUser.lastName,
+          email: editUser.email,
+          password: editUser.password,
+          role: editUser.role,
+        }),
+      });
+  
+      // Update the local state with the edited command
+      setUsers(
+        users.map((user) => (user.id === editUser.id ? editUser : user))
+      );
+  
+      // Close the edit dialog
+      setUserEditOpen(false);
+    } catch (error) {
+      console.error(error);
     }
   };
 
@@ -153,7 +213,7 @@ const AdminLogin = () => {
       );
   
       // Close the edit dialog
-      setEditOpen(false);
+      setCommandEditOpen(false);
     } catch (error) {
       console.error(error);
     }
@@ -552,7 +612,7 @@ const handleUndo = async () => {
       </DialogActions>
       </Dialog>
 
-      <Dialog open={editOpen} onClose={() => setEditOpen(false)}>
+      <Dialog open={editCommandOpen} onClose={() => setCommandEditOpen(false)}>
         <DialogTitle>Edit Command</DialogTitle>
         <DialogContent>
           <form onSubmit={handleEditCommandSubmit}>
@@ -581,6 +641,60 @@ const handleUndo = async () => {
                 margin="normal"
                 required
               />
+              <Button variant="contained" type="submit">
+                Save
+              </Button>
+            </Box>
+          </form>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={editUserOpen} onClose={() => setUserEditOpen(false)}>
+        <DialogTitle>Edit Employee</DialogTitle>
+        <DialogContent>
+          <form onSubmit={handleEditUserSubmit}>
+            <Box display="flex" flexDirection="column" alignItems="center" marginBottom={2}>
+              <TextField
+                label="First Name"
+                variant="outlined"
+                value={editCommand.firstName}
+                onChange={(e) => setEditUser({ ...editUser, firstName: e.target.value })}
+                margin="normal"
+              />
+              <TextField
+                label="Last Name"
+                variant="outlined"
+                value={editCommand.lastName}
+                onChange={(e) => setEditUser({ ...editUser, lastName: e.target.value })}
+                margin="normal"
+              />
+              <TextField
+                label="Email"
+                variant="outlined"
+                value={editCommand.email}
+                onChange={(e) => setEditUser({ ...editUser, email: e.target.value })}
+                margin="normal"
+              />
+              <TextField
+                label="Password"
+                variant="outlined"
+                value={editCommand.password}
+                onChange={(e) => setEditUser({ ...editUser, password: e.target.value })}
+                margin="normal"
+              />
+              <FormControl variant="outlined" margin="normal" required>
+                <InputLabel id="role-label">Role</InputLabel>
+                <Select
+                  labelId="role-label"
+                  value={editUser.role}
+                  onChange={(e) => setEditUser({ ...editUser, role: e.target.value })}
+                  label="Role"
+                >
+                  <MenuItem value="Admin">Admin</MenuItem>
+                  <MenuItem value="Management">Management</MenuItem>
+                  <MenuItem value="Employee">Employee</MenuItem>
+                </Select>
+              </FormControl>
               <Button variant="contained" type="submit">
                 Save
               </Button>
