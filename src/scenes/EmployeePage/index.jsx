@@ -4,21 +4,19 @@ import Navbar from "../navbar/index";
 import { DataGrid } from '@mui/x-data-grid';
 import { userEmail } from "../loginPage/Form";
 
-const API_URL1 = 'http://frontend.digitaldreamforge.chat:5000/users?email=' + userEmail;
-
-fetch(API_URL1)
-  .then(response => response.json())
-  .then(data => {
-    const user = data[0];
-    const firstName = user.firstName;
-    const lastName = user.lastName;
-
-    const Name = firstName + " " + lastName;
-
-    
-  })
-  .catch(error => console.error(error));
-
+const getUserData = async (email) => {
+  try {
+    const usersResponse = await fetch(`http://frontend.digitaldreamforge.chat:5000/users?email=${email}`);
+    const users = await usersResponse.json();
+    const user = users[0];
+    const name = user.first_name + " " + user.last_name;
+    const databaseResponse = await fetch(`http://frontend.digitaldreamforge.chat:5000/api/database?name=${name}`);
+    const databaseData = await databaseResponse.json();
+    console.log(databaseData);
+  } catch (error) {
+    console.error(error);
+  }
+};
 
 const EmployeeLogin = () => {
   const theme = useTheme();
