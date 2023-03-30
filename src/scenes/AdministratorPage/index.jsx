@@ -126,15 +126,7 @@ const AdminLogin = () => {
   const handleClose = () => {
     setOpen(false);
   };
-
-  const handleChangeOpen = () => {
-    setChangeOpen(true);
-  };
-
-  const handleChangeClose = () => {
-    setChangeOpen(false);
-  };
-
+  
   const handleToggleFetch = () => {
     setFetchData(!fetchData);
   };
@@ -424,24 +416,6 @@ const handleUndo = async () => {
   }
 };
 
-  const handlePasswordChange = async () => {
-    try{
-      const savedUserResponse = await fetch (
-        "http://frontend.digitaldreamforge.chat:5000/users/update", {
-          method: "PUT",
-          headers: { "Content-Type": "application/json",},
-          body: JSON.stringify({
-            email,
-            password,
-          }),
-        }
-      );
-    }
-    catch (error) {
-      console.error(error);
-    }
-  };
-
   const handleRegisterSubmit = async () => {
     try{
       const savedUserResponse = await fetch (
@@ -558,11 +532,6 @@ const handleUndo = async () => {
       {currentPage === "users" && (
       <Box display="flex" justifyContent="flex-start" marginBottom={1} paddingLeft={12}>
         <Button variant="contained" onClick={handleClickOpen}>Add Employee</Button>
-      </Box>
-      )}
-      {currentPage === "users" && (
-      <Box display="flex" justifyContent="flex-start" marginBottom={1} paddingLeft={12}>
-        <Button variant="contained" onClick={handleChangeOpen}>Change Password</Button>
       </Box>
       )}
       <Box display="flex" justifyContent="flex-start" marginBottom={1} paddingLeft={12}>
@@ -723,18 +692,6 @@ const handleUndo = async () => {
           </form>
         </DialogContent>
       </Dialog>
-      <Dialog open={changeOpen} onClose={handleChangeClose}>
-        <DialogTitle>Change Password</DialogTitle>
-        <DialogContent>
-        <form onSubmit={handlePasswordChange}>
-            <Box display="flex" flexDirection="column" alignItems="center" marginBottom={2}>
-              <TextField label="Email" variant="outlined" value={email} onChange={(e) => setEmail(e.target.value)} margin="normal" required />
-              <TextField label="New Password" variant="outlined" value={password} onChange={(e) => setPassword(e.target.value)} margin="normal" required />
-              <Button variant="contained" type="submit">Submit</Button>
-            </Box>
-          </form>
-        </DialogContent>
-      </Dialog> 
     </Box>
   );
 };
