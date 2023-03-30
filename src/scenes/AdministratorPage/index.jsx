@@ -4,6 +4,7 @@ import Navbar from "../navbar/index";
 import { DataGrid } from '@mui/x-data-grid';
 import { v4 as uuidv4 } from 'uuid';
 import { saveAs } from 'file-saver';
+import { alpha } from "@mui/system";
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 
@@ -522,8 +523,26 @@ const handleUndo = async () => {
           value={currentPage}
           onChange={handlePageToggle}
         >
-          <Tab value="users" label="Employees" color="red" />
-          <Tab value="commands" label="Commands" color="red" />
+          <Tab
+            value="users"
+            label="Employees"
+            sx={{
+              color: theme.palette.mode === 'dark' ? theme.palette.common.white : theme.palette.common.black,
+              '&.Mui-selected': {
+                backgroundColor: theme.palette.mode === 'dark' ? alpha(theme.palette.common.white, 0.3) : alpha(theme.palette.primary.main, 0.08),
+              },
+            }}
+          />
+          <Tab
+            value="commands"
+            label="Commands"
+            sx={{
+              color: theme.palette.mode === 'dark' ? theme.palette.common.white : theme.palette.common.black,
+              '&.Mui-selected': {
+                backgroundColor: theme.palette.mode === 'dark' ? alpha(theme.palette.common.white, 0.3) : alpha(theme.palette.primary.main, 0.08),
+              },
+            }}
+          />
         </Tabs>
       </Box>
 
