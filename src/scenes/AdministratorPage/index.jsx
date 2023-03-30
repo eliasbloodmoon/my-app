@@ -21,7 +21,6 @@ const AdminLogin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("");  
-  const [changeOpen, setChangeOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState("users");
   //const [setLastUpdate] = useState(null);
   const [loading, setLoading] = useState(true);
