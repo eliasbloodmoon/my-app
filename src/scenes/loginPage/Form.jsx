@@ -61,6 +61,7 @@ const Form = () => {
     const usersResponse = await fetch(`http://frontend.digitaldreamforge.chat:5000/users`);
     const users = await usersResponse.json();
     const user = users.find(u => u.email === values.email);
+    setEmail(values.email);
     console.log("User data:", user);
     console.log("Role:", user && user.role);
     if (user && user.role === "Admin") {
@@ -70,7 +71,6 @@ const Form = () => {
     } else {
       navigate('/employee');
     }
-    setEmail(values.email);
   };
 
   const handleFormSubmit = async (values, onSubmitProps) => {

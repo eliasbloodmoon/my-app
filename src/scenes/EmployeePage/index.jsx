@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import Navbar from "../navbar/index";
 import { DataGrid } from '@mui/x-data-grid';
 import { useContext } from "react";
-import { UserContext } from "../../UserContext";
+import { UserProvider, UserContext } from "../../UserContext";
 
 const getUserData = async (email) => {
   try {
@@ -23,6 +23,7 @@ const EmployeeLogin = () => {
   const theme = useTheme();
   const [users] = useState([]);
   const {email} = useContext(UserContext);
+  console.log({email});
   const commandsColumn = [
     {
       field: 'command',
@@ -68,20 +69,22 @@ const EmployeeLogin = () => {
   };
 
   return (
-    <Box width="100%">
-      <Navbar />
-      <Box
-        width="100%"
-        backgroundColor={theme.palette.background.alt}
-        p="1rem 6%"
-        textAlign="center"
-      >
-        <Typography fontWeight="bold" fontSize="32px" color="red">
-          Digital Dream Forge
-        </Typography>
+    <UserProvider>
+      <Box width="100%">
+        <Navbar />
+        <Box
+          width="100%"
+          backgroundColor={theme.palette.background.alt}
+          p="1rem 6%"
+          textAlign="center"
+        >
+          <Typography fontWeight="bold" fontSize="32px" color="red">
+            Digital Dream Forge
+          </Typography>
+        </Box>
+        <CommandList users={users} commandsColumn={commandsColumn} />
       </Box>
-      <CommandList users={users} commandsColumn={commandsColumn} />
-    </Box>
+    </UserProvider>
   );
 };
 
