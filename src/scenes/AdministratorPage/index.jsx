@@ -1,4 +1,4 @@
-import { Box, Button, Typography, useTheme, Dialog, DialogContent, DialogActions, DialogContentText, DialogTitle, TextField, FormControl, InputLabel, Select, MenuItem } from "@mui/material";
+import { Box, Button, Typography, useTheme, Dialog, DialogContent, DialogActions, DialogContentText, DialogTitle, TextField, FormControl, InputLabel, Select, MenuItem, Tabs, Tab } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import Navbar from "../navbar/index";
 import { DataGrid } from '@mui/x-data-grid';
@@ -509,18 +509,22 @@ const handleUndo = async () => {
         </Typography>
       </Box>
       
-      <Box display="flex" justifyContent="flex-start" marginBottom={1} paddingLeft={12} paddingRight={12} paddingTop={1}>
-        <Button variant="contained" onClick={handlePageToggle} style={{width: '100%'}}>
-          {currentPage === "users" ? "Switch to Commands" : "Switch to Employees"}
-        </Button>
-      </Box>
       <Box display="flex" justifyContent="flex-start" marginBottom={1} paddingLeft={12} paddingRight={12}>
         <Button color="info" variant="contained" onClick={handleToggleFetch} style={{width: '100%'}}>
           {fetchData ? "Turn off auto-refresh" : "Turn on auto-refresh"}
         </Button>
       </Box>
 
-      
+      <Box paddingLeft={12} paddingRight={12}>
+        <Tabs
+          TabIndicatorProps={{ style: { background: 'red' } }}
+          value={currentPage}
+          onChange={handlePageToggle}
+        >
+          <Tab value="users" label="Employees" color="red" />
+          <Tab value="commands" label="Commands" color="red" />
+        </Tabs>
+      </Box>
 
       {currentPage === "users" ? (
         <UserList users={users} />
