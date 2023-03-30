@@ -155,4 +155,8 @@ const Form = () => {
     </Formik>
   );
 };
+export const FormExport = { // export the Form component and email as an object
+  Form,
+  email: 'rebecca@ddfmail.com'
+};
 export default Form;
