@@ -32,6 +32,8 @@ const ManagerLogin = () => {
     { field: "name", headerName: "Name", flex: 1 },
     { field: "time", headerName: "Time", flex: 1 },
   ];
+  const usersColumn = [
+  ];
 
   const handleToggleFetch = () => {
     setFetchData(!fetchData);
