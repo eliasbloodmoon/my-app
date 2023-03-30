@@ -9,7 +9,7 @@ import { createTheme } from "@mui/material/styles";
 import { themeSettings } from "./theme";
 import AdminLogin from "./scenes/AdministratorPage";
 import EmployeeLogin from "./scenes/EmployeePage";
-import UnderConstruction3 from "./scenes/ManagerPage";
+import ManagerLogin from "./scenes/ManagerPage";
 
 function App() {
   const mode = useSelector((state) => state.mode);
@@ -36,7 +36,7 @@ function App() {
             />
             <Route
               path="/manager"
-              element={isAuth ? <UnderConstruction3 /> : <Navigate to="/" />}
+              element={isAuth ? <ManagerLogin /> : <Navigate to="/" />}
             />
           </Routes>
         </ThemeProvider>
