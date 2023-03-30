@@ -5,6 +5,7 @@ import { DataGrid } from '@mui/x-data-grid';
 import { v4 as uuidv4 } from 'uuid';
 import { saveAs } from 'file-saver';
 import { alpha } from "@mui/system";
+import { Grid } from '@mui/material';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 
@@ -510,19 +511,31 @@ const handleUndo = async () => {
           Digital Dream Forge
         </Typography>
       </Box>
-      
-      <Box display="flex" justifyContent="flex-start" marginBottom={1} paddingLeft={12} paddingRight={12}>
-        <Button color="info" variant="contained" onClick={handleToggleFetch} style={{width: '100%'}}>
-          {fetchData ? "Turn off auto-refresh" : "Turn on auto-refresh"}
-        </Button>
-      </Box>
-
-      <Box paddingLeft={12} paddingRight={12}>
-        <Tabs
-          TabIndicatorProps={{ style: { background: 'red' } }}
-          value={currentPage}
-          onChange={handlePageToggle}
-        >
+  
+      <Grid container>
+        <Grid item xs={12} sm={3} md={2}>
+          <Box display="flex" flexDirection="column" justifyContent="flex-start" marginBottom={1} paddingLeft={1} paddingRight={1} paddingTop={1}>
+            <Button color="info" variant="contained" onClick={handleToggleFetch} style={{ width: "100%", marginBottom: '1rem' }}>
+              {fetchData ? "Turn off auto-refresh" : "Turn on auto-refresh"}
+            </Button>
+            {currentPage === "users" && (
+              <Button variant="contained" onClick={handleClickOpen} style={{ marginBottom: '1rem' }}>Add Employee</Button>
+            )}
+            {currentPage === "commands" && (
+              <Button variant="contained" onClick={handleUndo} style={{ marginBottom: '1rem' }}>Undo Time Entry Delete</Button>
+            )}
+            <Button variant="contained" onClick={handleExportCsv} style={{ marginBottom: '1rem' }}>Export All as CSV</Button>
+            <Button variant="contained" onClick={handleExportPdf} style={{ marginBottom: '1rem' }}>Export All as PDF</Button>
+            
+          </Box>
+        </Grid>
+        <Grid item xs={12} sm={9} md={10}>
+          <Box paddingRight={12}>
+            <Tabs
+              TabIndicatorProps={{ style: { background: "red" } }}
+              value={currentPage}
+              onChange={handlePageToggle}
+            >
           <Tab
             value="users"
             label="Employees"
@@ -551,24 +564,6 @@ const handleUndo = async () => {
       ) : (
         <CommandList users={commands} />
       )}
-
-      {currentPage === "users" && (
-      <Box display="flex" justifyContent="flex-start" marginBottom={1} paddingLeft={12}>
-        <Button variant="contained" onClick={handleClickOpen}>Add Employee</Button>
-      </Box>
-      )}
-      <Box display="flex" justifyContent="flex-start" marginBottom={1} paddingLeft={12}>
-        <Button variant="contained" onClick={handleExportCsv}>Export All as CSV</Button>
-      </Box>
-      <Box display="flex" justifyContent="flex-start" marginBottom={1} paddingLeft={12}>
-        <Button variant="contained" onClick={handleExportPdf}>Export All as PDF</Button>
-      </Box>
-      {currentPage === "commands" && (
-      <Box display="flex" justifyContent="flex-start" marginBottom={1} paddingLeft={12}>
-        <Button variant="contained" onClick={handleUndo}>Undo Time Entry Delete</Button>
-      </Box>
-      )}
-
 
       <Dialog open={deleteUserConfirmOpen} onClose={() => setDeleteUserConfirmOpen(false)}>
       <DialogTitle>Confirm Delete</DialogTitle>
@@ -715,6 +710,8 @@ const handleUndo = async () => {
           </form>
         </DialogContent>
       </Dialog>
+      </Grid>
+    </Grid>
     </Box>
   );
 };
