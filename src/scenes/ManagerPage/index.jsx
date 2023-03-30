@@ -1,4 +1,4 @@
-import { Box, Button, Typography, useTheme, Dialog, DialogContent, DialogActions, DialogContentText, DialogTitle, TextField } from "@mui/material";
+import { Box, Button, Typography, useTheme } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import Navbar from "../navbar/index";
 import { DataGrid } from '@mui/x-data-grid';
@@ -15,13 +15,6 @@ const ManagerLogin = () => {
   const theme = useTheme();
   const [users, setUsers] = useState([]);
   const [commands, setCommands] = useState([]);
-  const [open, setOpen] = useState(false);
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [role, setRole] = useState("");  
-  const [changeOpen, setChangeOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState("users");
   const [fetchData, setFetchData] = useState(true);
   // Add a loading state to indicate that the data is being fetched
