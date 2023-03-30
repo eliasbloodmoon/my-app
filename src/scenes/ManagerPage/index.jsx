@@ -1,4 +1,4 @@
-import { Box, Button, Typography, useTheme } from "@mui/material";
+import { Box, Button, Typography, useTheme, Grid } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import Navbar from "../navbar/index";
 import { DataGrid } from '@mui/x-data-grid';
@@ -214,22 +214,27 @@ const ManagerLogin = () => {
           Digital Dream Forge
         </Typography>
       </Box>
-      <Box display="flex" justifyContent="flex-start" marginBottom={1} paddingLeft={12} paddingRight={12}>
-        <Button color="info" variant="contained" onClick={handleToggleFetch} style={{width: '100%'}}>
-          {fetchData ? "Turn off auto-refresh" : "Turn on auto-refresh"}
-        </Button>
-      </Box>
-      {currentPage === "commands" ? (
-        <UserList users={users} />
-      ) : (
-        <CommandList users={commands} />
-      )}
-      <Box display="flex" justifyContent="flex-start" marginBottom={1} paddingLeft={12}>
-        <Button variant="contained" onClick={handleExportCsv}>Export All as CSV</Button>
-      </Box>
-      <Box display="flex" justifyContent="flex-start" marginBottom={1} paddingLeft={12}>
-        <Button variant="contained" onClick={handleExportPdf}>Export All as PDF</Button>
-      </Box>
+
+      <Grid container>
+        <Grid item xs={12} sm={3} md={2}>
+          <Box display="flex" flexDirection="column" justifyContent="flex-start" marginBottom={1} paddingLeft={1} paddingRight={1} paddingTop={1}>
+            <Button color="info" variant="contained" onClick={handleToggleFetch} style={{ width: '100%', marginBottom: '1rem' }}>
+              {fetchData ? "Turn off auto-refresh" : "Turn on auto-refresh"}
+            </Button>
+            <Button variant="contained" onClick={handleExportCsv} style={{ marginBottom: '1rem' }}>Export All as CSV</Button>
+            <Button variant="contained" onClick={handleExportPdf} style={{ marginBottom: '1rem' }}>Export All as PDF</Button>
+          </Box>
+        </Grid>
+        <Grid item xs={12} sm={9} md={10}>
+          <Box>
+            {currentPage === "commands" ? (
+              <UserList users={users} />
+            ) : (
+              <CommandList users={commands} />
+            )}
+          </Box>
+        </Grid>
+      </Grid>
     </Box>
   );
 };
