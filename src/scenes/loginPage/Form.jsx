@@ -53,20 +53,20 @@ const Form = () => {
     if (loggedIn) {
       dispatch(
         setLogin({
-          user: loggedIn.user,
+          employee: loggedIn.employee,
           token: loggedIn.token,
         })
       );
     } 
-    const usersResponse = await fetch(`http://frontend.digitaldreamforge.chat:5000/users`);
-    const users = await usersResponse.json();
-    const user = users.find(u => u.email === values.email);
+    const employeesResponse = await fetch(`http://frontend.digitaldreamforge.chat:5000/employees`);
+    const employees = await employeesResponse.json();
+    const employee = employees.find(u => u.email === values.email);
     setEmail(values.email);
-    console.log("User data:", user);
-    console.log("Role:", user && user.role);
-    if (user && user.role === "Admin") {
+    console.log("Employee data:", employee);
+    console.log("Role:", employee && employee.role);
+    if (employee && employee.role === "Admin") {
       navigate('/admin');
-    } else if (user && user.role === "Management") {
+    } else if (employee && employee.role === "Management") {
       navigate('/manager');
     } else {
       navigate('/employee');
@@ -74,7 +74,7 @@ const Form = () => {
   };
 
   const handleFormSubmit = async (values, onSubmitProps) => {
-    const userEmail = values.email;
+    const employeeEmail = values.email;
     if (isLogin) await login(values, onSubmitProps);
   };
 

@@ -8,14 +8,14 @@ import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 
 /*
-  The register new user should be added somewhere here.
+  The register new employee should be added somewhere here.
   This is the main function. Replaced "Underconstruction"
 */
 const ManagerLogin = () => {
   const theme = useTheme();
-  const [users, setUsers] = useState([]);
+  const [employees, setEmployees] = useState([]);
   const [commands, setCommands] = useState([]);
-  const [currentPage, setCurrentPage] = useState("users");
+  const [currentPage, setCurrentPage] = useState("employees");
   const [fetchData, setFetchData] = useState(true);
   // Add a loading state to indicate that the data is being fetched
   const [loading, setLoading] = useState(true);
@@ -25,14 +25,14 @@ const ManagerLogin = () => {
     { field: "name", headerName: "Name", flex: 1 },
     { field: "time", headerName: "Time", flex: 1 },
   ];
-  const usersColumn = [
+  const employeesColumn = [
   ];
 
   const handleToggleFetch = () => {
     setFetchData(!fetchData);
   };
 
-  const CommandList = ({ users }) => {
+  const CommandList = ({ employees }) => {
     const [pageSize, setPageSize] = useState(5);
   
     const handlePageSizeChange = (params) => {
@@ -43,7 +43,7 @@ const ManagerLogin = () => {
     return(
     <Box display="flex" flexDirection="column" marginTop={1}>
       <DataGrid
-        rows={users}
+        rows={employees}
         columns={commandsColumn}
         pageSize={pageSize}
         rowsPerPageOptions={[5, 10, 20]}
@@ -57,8 +57,8 @@ const ManagerLogin = () => {
   );
     };
   
-  //Layout of the UserList
-  const UserList = ({ users }) => {
+  //Layout of the EmployeeList
+  const EmployeeList = ({ employees }) => {
     const [pageSize, setPageSize] = useState(5);
   
     const handlePageSizeChange = (params) => {
@@ -68,8 +68,8 @@ const ManagerLogin = () => {
     return(
     <Box display="flex" flexDirection="column" marginTop={1}>
       <DataGrid
-        rows={users}
-        columns={usersColumn}
+        rows={employees}
+        columns={employeesColumn}
         pageSize={pageSize}
         rowsPerPageOptions={[5, 10, 20]}
         autoHeight
@@ -84,7 +84,7 @@ const ManagerLogin = () => {
   
 
   const handleExportCsv = () => {
-    const rows = currentPage === 'commands' ? users : commands;
+    const rows = currentPage === 'commands' ? employees : commands;
   
     // Get the current date and time
     const currentDate = new Date();
@@ -92,7 +92,7 @@ const ManagerLogin = () => {
     const timeString = currentDate.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
   
     // Get the columns for the current page
-    const columns = currentPage === 'commands' ? usersColumn : commandsColumn;
+    const columns = currentPage === 'commands' ? employeesColumn : commandsColumn;
   
     // Create the header rows
     const headerRows = [
@@ -116,10 +116,10 @@ const ManagerLogin = () => {
   };
 
   const handleExportPdf = async () => {
-    const rows = currentPage === 'commands' ? users : commands;
+    const rows = currentPage === 'commands' ? employees : commands;
 
     // Get the columns for the current page
-    const columns = currentPage === 'commands' ? usersColumn : commandsColumn;
+    const columns = currentPage === 'commands' ? employeesColumn : commandsColumn;
 
     // Create a new instance of jsPDF
     const doc = new jsPDF({
@@ -151,22 +151,22 @@ const ManagerLogin = () => {
     saveAs(blob, `${currentPage}_${new Date().toLocaleString()}.pdf`);
 };
 
-  //This is where the UserList displays from.
-  //It makes a GET request to the /users route from the backend
+  //This is where the EmployeeList displays from.
+  //It makes a GET request to the /employees route from the backend
   
-  const fetchUserData = async () => {
+  const fetchEmployeeData = async () => {
     try {
-      const [usersResponse, commandsResponse] = await Promise.all([
-        fetch('http://frontend.digitaldreamforge.chat:5000/users'),
+      const [employeesResponse, commandsResponse] = await Promise.all([
+        fetch('http://frontend.digitaldreamforge.chat:5000/employees'),
         fetch('http://frontend.digitaldreamforge.chat:5000/api/database')
       ]);
-      const [usersData, commandsData] = await Promise.all([
-        usersResponse.json(),
+      const [employeesData, commandsData] = await Promise.all([
+        employeesResponse.json(),
         commandsResponse.json()
       ]);
-      const usersWithIds = usersData.map(user => ({ ...user, id: uuidv4() }));
+      const employeesWithIds = employeesData.map(employee => ({ ...employee, id: uuidv4() }));
       const commandsWithIds = commandsData.map(command => ({ ...command, id: uuidv4() }));
-      setUsers(usersWithIds);
+      setEmployees(employeesWithIds);
       setCommands(commandsWithIds);
       //setLastUpdate(Date.now()); // Update the lastUpdate state variable
     } catch (error) {
@@ -174,16 +174,16 @@ const ManagerLogin = () => {
     }
   };
   
-  // Call the fetchUserData function once when the component mounts
+  // Call the fetchEmployeeData function once when the component mounts
   useEffect(() => {
-    fetchUserData();
+    fetchEmployeeData();
   }, []);
   
-  // Call the fetchUserData function every 10 seconds
+  // Call the fetchEmployeeData function every 10 seconds
   useEffect(() => {
     if (fetchData) {
       const timer = setInterval(() => {
-        fetchUserData();
+        fetchEmployeeData();
       }, 10000);
       return () => clearInterval(timer); // Clear the timer when the component unmounts
     }
@@ -191,10 +191,10 @@ const ManagerLogin = () => {
   
   // Modify the useEffect hook to set loading to false when the data is fetched
   useEffect(() => {
-    if (users.length > 0 && commands.length > 0) {
+    if (employees.length > 0 && commands.length > 0) {
       setLoading(false);
     }
-  }, [users, commands]);
+  }, [employees, commands]);
   
   // Render a loading message while the data is being fetched
   if (loading) {
@@ -228,9 +228,9 @@ const ManagerLogin = () => {
         <Grid item xs={12} sm={9} md={10}>
           <Box>
             {currentPage === "commands" ? (
-              <UserList users={users} />
+              <EmployeeList employees={employees} />
             ) : (
-              <CommandList users={commands} />
+              <CommandList employees={commands} />
             )}
           </Box>
         </Grid>

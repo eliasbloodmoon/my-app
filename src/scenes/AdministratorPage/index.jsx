@@ -10,12 +10,12 @@ import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 
 /*
-  The register new user should be added somewhere here.
+  The register new employee should be added somewhere here.
   This is the main function. Replaced "Underconstruction"
 */
 const AdminLogin = () => {
   const theme = useTheme();
-  const [users, setUsers] = useState([]);
+  const [employees, setEmployees] = useState([]);
   const [commands, setCommands] = useState([]);
   const [open, setOpen] = useState(false);
   const [firstName, setFirstName] = useState("");
@@ -24,17 +24,17 @@ const AdminLogin = () => {
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("");  
   const [changeOpen, setChangeOpen] = useState(false);
-  const [currentPage, setCurrentPage] = useState("users");
+  const [currentPage, setCurrentPage] = useState("employees");
   //const [setLastUpdate] = useState(null);
   const [loading, setLoading] = useState(true);
   const [deleteCommandConfirmOpen, setDeleteCommandConfirmOpen] = useState(false);
-  const [deleteUserConfirmOpen, setDeleteUserConfirmOpen] = useState(false);
+  const [deleteEmployeeConfirmOpen, setDeleteEmployeeConfirmOpen] = useState(false);
   const [deleteCommandId, setDeleteCommandId] = useState(null);
-  const [deleteUserId, setDeleteUserId] = useState(null);
+  const [deleteEmployeeId, setDeleteEmployeeId] = useState(null);
   const [editCommandOpen, setCommandEditOpen] = useState(false);
-  const [editUserOpen, setUserEditOpen] = useState(false);
+  const [editEmployeeOpen, setEmployeeEditOpen] = useState(false);
   const [editCommand, setEditCommand] = useState({ id: "", time: "", name: "", command: "" });
-  const [editUser, setEditUser] = useState({ id: "", firstName: "", lastName: "", email: "", password: "", role: ""});
+  const [editEmployee, setEditEmployee] = useState({ id: "", firstName: "", lastName: "", email: "", password: "", role: ""});
   const [lastDeletedItem, setLastDeletedItem] = useState(null);
   const [fetchData, setFetchData] = useState(true);
 
@@ -79,7 +79,7 @@ const AdminLogin = () => {
     },
   ];
 
-  const usersColumn = [
+  const employeesColumn = [
     { field: "firstName", headerName: "First Name", flex: 1 },
     { field: "lastName", headerName: "Last Name", flex: 1 },
     { field: "email", headerName: "Email", flex: 1 },
@@ -96,7 +96,7 @@ const AdminLogin = () => {
         <Button
           variant="outlined"
           color="info"
-          onClick={() => handleEditUser(params.row.id)}
+          onClick={() => handleEditEmployee(params.row.id)}
         >
           Edit
         </Button>
@@ -113,7 +113,7 @@ const AdminLogin = () => {
         <Button
           variant="outlined"
           color="error"
-          onClick={() => handleOpenDeleteUserConfirm(params.row.id)}
+          onClick={() => handleOpenDeleteEmployeeConfirm(params.row.id)}
         >
           Delete
         </Button>
@@ -133,12 +133,12 @@ const AdminLogin = () => {
     setFetchData(!fetchData);
   };
 
-  const handleEditUser = (id) => {
-    const userToEdit = users.find((user) => user.id === id);
+  const handleEditEmployee = (id) => {
+    const employeeToEdit = employees.find((employee) => employee.id === id);
   
-    if (userToEdit) {
-      setEditUser(userToEdit);
-      setUserEditOpen(true);
+    if (employeeToEdit) {
+      setEditEmployee(employeeToEdit);
+      setEmployeeEditOpen(true);
     }
   };
 
@@ -151,33 +151,33 @@ const AdminLogin = () => {
     }
   };
 
-  const handleEditUserSubmit = async (e) => {
+  const handleEditEmployeeSubmit = async (e) => {
     e.preventDefault();
   
-    if (!editUser.id) return;
+    if (!editEmployee.id) return;
   
     try {
-      await fetch(`http://frontend.digitaldreamforge.chat:5000/users/${editUser._id}`, {
+      await fetch(`http://frontend.digitaldreamforge.chat:5000/employees/${editEmployee._id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          firstName: editUser.firstName,
-          lastName: editUser.lastName,
-          email: editUser.email,
-          password: editUser.password,
-          role: editUser.role,
+          firstName: editEmployee.firstName,
+          lastName: editEmployee.lastName,
+          email: editEmployee.email,
+          password: editEmployee.password,
+          role: editEmployee.role,
         }),
       });
   
       // Update the local state with the edited command
-      setUsers(
-        users.map((user) => (user.id === editUser.id ? editUser : user))
+      setEmployees(
+        employees.map((employee) => (employee.id === editEmployee.id ? editEmployee : employee))
       );
   
       // Close the edit dialog
-      setUserEditOpen(false);
+      setEmployeeEditOpen(false);
     } catch (error) {
       console.error(error);
     }
@@ -218,34 +218,34 @@ const AdminLogin = () => {
     setDeleteCommandConfirmOpen(true);
   };
 
-  const handleOpenDeleteUserConfirm = (id) => {
-    setDeleteUserId(id);
-    setDeleteUserConfirmOpen(true);
+  const handleOpenDeleteEmployeeConfirm = (id) => {
+    setDeleteEmployeeId(id);
+    setDeleteEmployeeConfirmOpen(true);
   };
   
 
-  const handleDeleteUser = async () => {
-    if (!deleteUserId) return;
+  const handleDeleteEmployee = async () => {
+    if (!deleteEmployeeId) return;
   
     try {
-      const userToDelete = users.find((user) => user.id === deleteUserId);
+      const employeeToDelete = employees.find((employee) => employee.id === deleteEmployeeId);
   
-      if (!userToDelete) {
+      if (!employeeToDelete) {
         throw new Error("Command not found");
       }
   
-      await fetch(`http://frontend.digitaldreamforge.chat:5000/users/${userToDelete._id}`, {
+      await fetch(`http://frontend.digitaldreamforge.chat:5000/employees/${employeeToDelete._id}`, {
         method: "DELETE",
       });
   
       // Remove the deleted command from the local state
-      setUsers(users.filter((user) => user.id !== deleteUserId));
-      setDeleteUserId(null);
+      setEmployees(employees.filter((employee) => employee.id !== deleteEmployeeId));
+      setDeleteEmployeeId(null);
     } catch (error) {
       console.error(error);
     }
   
-    setDeleteUserConfirmOpen(false);
+    setDeleteEmployeeConfirmOpen(false);
   };
 
   const handleDeleteCommand = async () => {
@@ -275,7 +275,7 @@ const AdminLogin = () => {
     setDeleteCommandConfirmOpen(false);
   };
 
-  const CommandList = ({ users }) => {
+  const CommandList = ({ employees }) => {
     const [pageSize, setPageSize] = useState(5);
   
     const handlePageSizeChange = (params) => {
@@ -285,7 +285,7 @@ const AdminLogin = () => {
     return(
     <Box display="flex" flexDirection="column" marginTop={1}>
       <DataGrid
-        rows={users}
+        rows={employees}
         columns={commandsColumn}
         pageSize={pageSize}
         rowsPerPageOptions={[5, 10, 20]}
@@ -299,8 +299,8 @@ const AdminLogin = () => {
   );
     };
   
-  //Layout of the UserList
-  const UserList = ({ users }) => {
+  //Layout of the EmployeeList
+  const EmployeeList = ({ employees }) => {
     const [pageSize, setPageSize] = useState(5);
   
     const handlePageSizeChange = (params) => {
@@ -310,8 +310,8 @@ const AdminLogin = () => {
     return(
     <Box display="flex" flexDirection="column" marginTop={1}>
       <DataGrid
-        rows={users}
-        columns={usersColumn}
+        rows={employees}
+        columns={employeesColumn}
         pageSize={pageSize}
         rowsPerPageOptions={[5, 10, 20]}
         autoHeight
@@ -326,7 +326,7 @@ const AdminLogin = () => {
   
 
   const handleExportCsv = () => {
-    const rows = currentPage === 'users' ? users : commands;
+    const rows = currentPage === 'employees' ? employees : commands;
   
     // Get the current date and time
     const currentDate = new Date();
@@ -334,7 +334,7 @@ const AdminLogin = () => {
     const timeString = currentDate.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
   
     // Get the columns for the current page
-    const columns = currentPage === 'users' ? usersColumn : commandsColumn;
+    const columns = currentPage === 'employees' ? employeesColumn : commandsColumn;
   
     // Create the header rows
     const headerRows = [
@@ -358,10 +358,10 @@ const AdminLogin = () => {
   };
 
   const handleExportPdf = async () => {
-    const rows = currentPage === 'users' ? users : commands;
+    const rows = currentPage === 'employees' ? employees : commands;
 
     // Get the columns for the current page
-    const columns = currentPage === 'users' ? usersColumn : commandsColumn;
+    const columns = currentPage === 'employees' ? employeesColumn : commandsColumn;
 
     // Create a new instance of jsPDF
     const doc = new jsPDF({
@@ -420,7 +420,7 @@ const handleUndo = async () => {
 
   const handleRegisterSubmit = async () => {
     try{
-      const savedUserResponse = await fetch (
+      const savedEmployeeResponse = await fetch (
         "http://frontend.digitaldreamforge.chat:5000/auth/register",
         {
           method: "POST",
@@ -435,34 +435,34 @@ const handleUndo = async () => {
         }
       );
       console.log(role);
-      const savedUser = await savedUserResponse.json();
-      console.log(savedUser);
-      if (savedUser) {setOpen(false);}
+      const savedEmployee = await savedEmployeeResponse.json();
+      console.log(savedEmployee);
+      if (savedEmployee) {setOpen(false);}
     } catch (error) {
       console.error(error);
     }
   };
 
   const handlePageToggle = () => {
-    setCurrentPage(currentPage === "users" ? "commands" : "users");
+    setCurrentPage(currentPage === "employees" ? "commands" : "employees");
   };
 
-  //This is where the UserList displays from.
-  //It makes a GET request to the /users route from the backend
+  //This is where the EmployeeList displays from.
+  //It makes a GET request to the /employees route from the backend
   
-  const fetchUserData = async () => {
+  const fetchEmployeeData = async () => {
     try {
-      const [usersResponse, commandsResponse] = await Promise.all([
-        fetch('http://frontend.digitaldreamforge.chat:5000/users'),
+      const [employeesResponse, commandsResponse] = await Promise.all([
+        fetch('http://frontend.digitaldreamforge.chat:5000/employees'),
         fetch('http://frontend.digitaldreamforge.chat:5000/api/database')
       ]);
-      const [usersData, commandsData] = await Promise.all([
-        usersResponse.json(),
+      const [employeesData, commandsData] = await Promise.all([
+        employeesResponse.json(),
         commandsResponse.json()
       ]);
-      const usersWithIds = usersData.map(user => ({ ...user, id: uuidv4() }));
+      const employeesWithIds = employeesData.map(employee => ({ ...employee, id: uuidv4() }));
       const commandsWithIds = commandsData.map(command => ({ ...command, id: uuidv4() }));
-      setUsers(usersWithIds);
+      setEmployees(employeesWithIds);
       setCommands(commandsWithIds);
       //setLastUpdate(Date.now()); // Update the lastUpdate state variable
     } catch (error) {
@@ -470,16 +470,16 @@ const handleUndo = async () => {
     }
   };
   
-  // Call the fetchUserData function once when the component mounts
+  // Call the fetchEmployeeData function once when the component mounts
   useEffect(() => {
-    fetchUserData();
+    fetchEmployeeData();
   }, []);
   
-  // Call the fetchUserData function every 10 seconds
+  // Call the fetchEmployeeData function every 10 seconds
   useEffect(() => {
     if (fetchData) {
       const timer = setInterval(() => {
-        fetchUserData();
+        fetchEmployeeData();
       }, 10000);
       return () => clearInterval(timer); // Clear the timer when the component unmounts
     }
@@ -488,10 +488,10 @@ const handleUndo = async () => {
   
   // Modify the useEffect hook to set loading to false when the data is fetched
   useEffect(() => {
-    if (users.length > 0 && commands.length > 0) {
+    if (employees.length > 0 && commands.length > 0) {
       setLoading(false);
     }
-  }, [users, commands]);
+  }, [employees, commands]);
   
   // Render a loading message while the data is being fetched
   if (loading) {
@@ -518,7 +518,7 @@ const handleUndo = async () => {
             <Button color="info" variant="contained" onClick={handleToggleFetch} style={{ width: "100%", marginBottom: '1rem' }}>
               {fetchData ? "Turn off auto-refresh" : "Turn on auto-refresh"}
             </Button>
-            {currentPage === "users" && (
+            {currentPage === "employees" && (
               <Button variant="contained" onClick={handleClickOpen} style={{ marginBottom: '1rem' }}>Add Employee</Button>
             )}
             {currentPage === "commands" && (
@@ -537,7 +537,7 @@ const handleUndo = async () => {
               onChange={handlePageToggle}
             >
           <Tab
-            value="users"
+            value="employees"
             label="Employees"
             sx={{
               color: theme.palette.mode === 'dark' ? theme.palette.common.white : theme.palette.common.black,
@@ -559,24 +559,24 @@ const handleUndo = async () => {
         </Tabs>
       </Box>
 
-      {currentPage === "users" ? (
-        <UserList users={users} />
+      {currentPage === "employees" ? (
+        <EmployeeList employees={employees} />
       ) : (
-        <CommandList users={commands} />
+        <CommandList employees={commands} />
       )}
 
-      <Dialog open={deleteUserConfirmOpen} onClose={() => setDeleteUserConfirmOpen(false)}>
+      <Dialog open={deleteEmployeeConfirmOpen} onClose={() => setDeleteEmployeeConfirmOpen(false)}>
       <DialogTitle>Confirm Delete</DialogTitle>
       <DialogContent>
         <DialogContentText>
-          Are you sure you want to delete this user?
+          Are you sure you want to delete this employee?
         </DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={() => setDeleteUserConfirmOpen(false)} color="info">
+        <Button onClick={() => setDeleteEmployeeConfirmOpen(false)} color="info">
           Cancel
         </Button>
-        <Button onClick={handleDeleteUser} autoFocus color="error">
+        <Button onClick={handleDeleteEmployee} autoFocus color="error">
           Confirm
         </Button>
       </DialogActions>
@@ -636,45 +636,45 @@ const handleUndo = async () => {
         </DialogContent>
       </Dialog>
 
-      <Dialog open={editUserOpen} onClose={() => setUserEditOpen(false)}>
+      <Dialog open={editEmployeeOpen} onClose={() => setEmployeeEditOpen(false)}>
         <DialogTitle>Edit Employee</DialogTitle>
         <DialogContent>
-          <form onSubmit={handleEditUserSubmit}>
+          <form onSubmit={handleEditEmployeeSubmit}>
             <Box display="flex" flexDirection="column" alignItems="center" marginBottom={2}>
               <TextField
                 label="First Name"
                 variant="outlined"
                 value={editCommand.firstName}
-                onChange={(e) => setEditUser({ ...editUser, firstName: e.target.value })}
+                onChange={(e) => setEditEmployee({ ...editEmployee, firstName: e.target.value })}
                 margin="normal"
               />
               <TextField
                 label="Last Name"
                 variant="outlined"
                 value={editCommand.lastName}
-                onChange={(e) => setEditUser({ ...editUser, lastName: e.target.value })}
+                onChange={(e) => setEditEmployee({ ...editEmployee, lastName: e.target.value })}
                 margin="normal"
               />
               <TextField
                 label="Email"
                 variant="outlined"
                 value={editCommand.email}
-                onChange={(e) => setEditUser({ ...editUser, email: e.target.value })}
+                onChange={(e) => setEditEmployee({ ...editEmployee, email: e.target.value })}
                 margin="normal"
               />
               <TextField
                 label="Password"
                 variant="outlined"
                 value={editCommand.password}
-                onChange={(e) => setEditUser({ ...editUser, password: e.target.value })}
+                onChange={(e) => setEditEmployee({ ...editEmployee, password: e.target.value })}
                 margin="normal"
               />
               <FormControl variant="outlined" margin="normal" required>
                 <InputLabel id="role-label">Role</InputLabel>
                 <Select
                   labelId="role-label"
-                  value={editUser.role}
-                  onChange={(e) => setEditUser({ ...editUser, role: e.target.value })}
+                  value={editEmployee.role}
+                  onChange={(e) => setEditEmployee({ ...editEmployee, role: e.target.value })}
                   label="Role"
                 >
                   <MenuItem value="Admin">Admin</MenuItem>

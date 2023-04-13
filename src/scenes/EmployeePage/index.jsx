@@ -6,50 +6,50 @@ import { useContext, useCallback, useEffect } from "react";
 import { UserProvider, UserContext } from "../../UserContext";
 import { v4 as uuidv4 } from 'uuid';
 
-const getUserData = async (email) => {
-  try {
-    const usersResponse = await fetch(`http://frontend.digitaldreamforge.chat:5000/users?email=${email}`);
-    const users = await usersResponse.json();
-    const user = users[0];
-    const name = "\"" + user.first_name + " " + user.last_name + "\"";
-    const databaseResponse = await fetch(`http://frontend.digitaldreamforge.chat:5000/api/database?name=${name}`);
-    const databaseData = await databaseResponse.json();
-    console.log(databaseData);
-  } catch (error) {
-    console.error(error);
-  }
-};
+// const getUserData = async (email) => {
+//   try {
+//     const employeesResponse = await fetch(`http://frontend.digitaldreamforge.chat:5000/employees?email=${email}`);
+//     const employees = await employeesResponse.json();
+//     const employee = employees[0];
+//     const name = "\"" + employee.first_name + " " + employee.last_name + "\"";
+//     const databaseResponse = await fetch(`http://frontend.digitaldreamforge.chat:5000/api/database?name=${name}`);
+//     const databaseData = await databaseResponse.json();
+//     console.log(databaseData);
+//   } catch (error) {
+//     console.error(error);
+//   }
+// };
 
 const EmployeeLogin = () => {
   const theme = useTheme();
-  const [users, setUsers] = useState([]);
-  const [employeeEmail, setEmployeeEmail] = useState("");
+  const [employees, setEmployees] = useState([]);
+  const [employeesEmail, setEmployeeEmail] = useState("");
   const [setIsLoading] = useState(true);
-  const { email: userEmail } = useContext(UserContext);
+  const { email: employeeEmail } = useContext(UserContext);
   const [email, setEmail] = useState('');
 
   useEffect(() => {
     const savedEmail = localStorage.getItem('email');
     if (savedEmail) {
       setEmail(savedEmail);
-    } else if (userEmail) {
-      setEmail(userEmail);
-      localStorage.setItem('email', userEmail);
+    } else if (employeeEmail) {
+      setEmail(employeeEmail);
+      localStorage.setItem('email', employeeEmail);
     }
-  }, [userEmail]);
+  }, [employeeEmail]);
 
   useEffect(() => {
-    if (userEmail && userEmail !== email) {
-      setEmail(userEmail);
-      localStorage.setItem('email', userEmail);
+    if (employeeEmail && employeeEmail !== email) {
+      setEmail(employeeEmail);
+      localStorage.setItem('email', employeeEmail);
     }
-  }, [userEmail, email]);
+  }, [employeeEmail, email]);
 
-  useEffect(() => {
-    if (email) {
-      getUserData(email);
-    }
-  }, [email]);
+  // useEffect(() => {
+  //   if (email) {
+  //     getUserData(email);
+  //   }
+  // }, [email]);
 
   const commandsColumn = [
     {
@@ -98,45 +98,45 @@ const EmployeeLogin = () => {
 
     try {
       const commandsResponse = await fetch('http://frontend.digitaldreamforge.chat:5000/api/database');
-      const usersResponse = await fetch('http://frontend.digitaldreamforge.chat:5000/users/');
+      const employeesResponse = await fetch('http://frontend.digitaldreamforge.chat:5000/employees/');
   
       let commandsData = await commandsResponse.json();
-      let usersData = await usersResponse.json();
+      let employeesData = await employeesResponse.json();
   
-      // Group commands by user email
+      // Group commands by employee email
       const groupedCommands = commandsData.reduce((acc, curr) => {
-        const userEmail = usersData.find(user => user.firstName + ' ' + user.lastName === curr.name)?.email;
-        if (userEmail) {
-          acc[userEmail] = acc[userEmail] || [];
-          acc[userEmail].push(curr);
+        const employeeEmail = employeesData.find(employee => employee.firstName + ' ' + employee.lastName === curr.name)?.email;
+        if (employeeEmail) {
+          acc[employeeEmail] = acc[employeeEmail] || [];
+          acc[employeeEmail].push(curr);
         }
         return acc;
       }, {});
   
       let mergedData = [];
-      for (let i = 0; i < usersData.length; i++) {
-        const user = usersData[i];
-        if (groupedCommands[user.email]) {
+      for (let i = 0; i < employeesData.length; i++) {
+        const employee = employeesData[i];
+        if (groupedCommands[employee.email]) {
           mergedData.push(
-            ...groupedCommands[user.email].map(command => ({
+            ...groupedCommands[employee.email].map(command => ({
               ...command,
-              ...user,
+              ...employee,
             }))
           );
         }
       }
   
       if (email) {
-        mergedData = mergedData.filter(user => user.email === email);
+        mergedData = mergedData.filter(employee => employee.email === email);
       }
   
-      const usersWithIds = mergedData.map(user => ({ ...user, id: uuidv4() }));
-      setUsers(usersWithIds);
+      const employeesWithIds = mergedData.map(employee => ({ ...employee, id: uuidv4() }));
+      setEmployees(employeesWithIds);
   
       // Set employee email
-      const loggedInUser = mergedData.find(user => user.email === employeeEmail);
-      if (loggedInUser) {
-        setEmployeeEmail(loggedInUser.email);
+      const loggedInEmployee = mergedData.find(employee => employee.email === employeesEmail);
+      if (loggedInEmployee) {
+        setEmployeeEmail(loggedInEmployee.email);
       } else {
         setEmployeeEmail("");
       }
@@ -144,13 +144,13 @@ const EmployeeLogin = () => {
     } catch (error) {
       console.error(error);
     }
-  }, [employeeEmail, email, setIsLoading]);
+  }, [employeesEmail, email, setIsLoading]);
 
   useEffect(() => {
     fetchCommandsData();
   }, [fetchCommandsData, email]);
 
-  const CommandList = ({ users, employeeEmail, isLoading }) => {
+  const CommandList = ({ employees, employeesEmail, isLoading }) => {
     const [pageSize, setPageSize] = useState(5);
   
     const handlePageSizeChange = (params) => {
@@ -166,7 +166,7 @@ const EmployeeLogin = () => {
         </Box>
           <Box display="flex" justifyContent="center">
           <DataGrid
-            rows={users}
+            rows={employees}
             columns={commandsColumn}
             pageSize={pageSize}
             rowsPerPageOptions={[5, 10, 20]}
@@ -194,7 +194,7 @@ const EmployeeLogin = () => {
             Digital Dream Forge
           </Typography>
         </Box>
-        <CommandList users={users} commandsColumn={commandsColumn} />
+        <CommandList employees={employees} commandsColumn={commandsColumn} />
       </Box>
     </UserProvider>
   );
