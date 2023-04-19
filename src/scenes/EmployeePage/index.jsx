@@ -5,26 +5,14 @@ import { DataGrid } from '@mui/x-data-grid';
 import { useContext, useCallback, useEffect } from "react";
 import { UserProvider, UserContext } from "../../UserContext";
 import { v4 as uuidv4 } from 'uuid';
-
-// const getUserData = async (email) => {
-//   try {
-//     const employeesResponse = await fetch(`http://frontend.digitaldreamforge.chat:5000/employees?email=${email}`);
-//     const employees = await employeesResponse.json();
-//     const employee = employees[0];
-//     const name = "\"" + employee.first_name + " " + employee.last_name + "\"";
-//     const databaseResponse = await fetch(`http://frontend.digitaldreamforge.chat:5000/api/database?name=${name}`);
-//     const databaseData = await databaseResponse.json();
-//     console.log(databaseData);
-//   } catch (error) {
-//     console.error(error);
-//   }
-// };
+import { getRowIdFromRowModel } from "@mui/x-data-grid/hooks/features/rows/gridRowsUtils";
 
 const EmployeeLogin = () => {
   const theme = useTheme();
   const [employees, setEmployees] = useState([]);
   const [employeesEmail, setEmployeeEmail] = useState("");
-  const [setIsLoading] = useState(true);
+  //const [setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true); // updated
   const { email: employeeEmail } = useContext(UserContext);
   const [email, setEmail] = useState('');
 
@@ -44,12 +32,6 @@ const EmployeeLogin = () => {
       localStorage.setItem('email', employeeEmail);
     }
   }, [employeeEmail, email]);
-
-  // useEffect(() => {
-  //   if (email) {
-  //     getUserData(email);
-  //   }
-  // }, [email]);
 
   const commandsColumn = [
     {
@@ -94,57 +76,30 @@ const EmployeeLogin = () => {
   ];
 
   const fetchCommandsData = useCallback(async () => {
+    
     if (!email) return;
 
     try {
-      const commandsResponse = await fetch('http://frontend.digitaldreamforge.chat:5000/api/database');
-      const employeesResponse = await fetch('http://frontend.digitaldreamforge.chat:5000/employees/');
-  
-      let commandsData = await commandsResponse.json();
-      let employeesData = await employeesResponse.json();
-  
-      // Group commands by employee email
-      const groupedCommands = commandsData.reduce((acc, curr) => {
-        const employeeEmail = employeesData.find(employee => employee.firstName + ' ' + employee.lastName === curr.name)?.email;
-        if (employeeEmail) {
-          acc[employeeEmail] = acc[employeeEmail] || [];
-          acc[employeeEmail].push(curr);
-        }
-        return acc;
-      }, {});
-  
-      let mergedData = [];
-      for (let i = 0; i < employeesData.length; i++) {
-        const employee = employeesData[i];
-        if (groupedCommands[employee.email]) {
-          mergedData.push(
-            ...groupedCommands[employee.email].map(command => ({
-              ...command,
-              ...employee,
-            }))
-          );
-        }
-      }
-  
-      if (email) {
-        mergedData = mergedData.filter(employee => employee.email === email);
-      }
-  
-      const employeesWithIds = mergedData.map(employee => ({ ...employee, id: uuidv4() }));
-      setEmployees(employeesWithIds);
-  
+      setIsLoading(true);
+      const response = await fetch(`http://frontend.digitaldreamforge.chat:5000/api/employee?email=${email}`);
+      const data = await response.json();
+
+      // Add the employee to the employees array
+      setEmployees([{ id: uuidv4(), ...data.employee, ...data.rocket }]);
+      
       // Set employee email
-      const loggedInEmployee = mergedData.find(employee => employee.email === employeesEmail);
+      const loggedInEmployee = employees.find(employee => employee.email === data.email);
       if (loggedInEmployee) {
         setEmployeeEmail(loggedInEmployee.email);
       } else {
         setEmployeeEmail("");
       }
-      setIsLoading(false);
     } catch (error) {
       console.error(error);
+    } finally {
+      setIsLoading(false);
     }
-  }, [employeesEmail, email, setIsLoading]);
+  }, [email]);
 
   useEffect(() => {
     fetchCommandsData();
@@ -172,6 +127,7 @@ const EmployeeLogin = () => {
             rowsPerPageOptions={[5, 10, 20]}
             autoHeight
             rowHeight={45}
+            rowId="id"
             columnBuffer={2}
             onPageSizeChange={handlePageSizeChange}
           />
