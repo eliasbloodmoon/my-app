@@ -11,7 +11,6 @@ const EmployeeLogin = () => {
   const theme = useTheme();
   const [employees, setEmployees] = useState([]);
   const [employeesEmail, setEmployeeEmail] = useState("");
-  //const [setIsLoading] = useState(true);
   const [isLoading, setIsLoading] = useState(true); // updated
   const { email: employeeEmail } = useContext(UserContext);
   const [email, setEmail] = useState('');
