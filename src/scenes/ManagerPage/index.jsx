@@ -22,7 +22,8 @@ const ManagerLogin = () => {
   //Columns for the ComandList Command Name Time
   const commandsColumn = [
     { field: "command", headerName: "Command", flex: 1 },
-    { field: "name", headerName: "Name", flex: 1 },
+    { field: "firstName", headerName: "First Name", flex: 1 },
+    { field: "lastName", headerName: "Last Name", flex: 1 },
     { field: "time", headerName: "Time", flex: 1 },
   ];
   const employeesColumn = [

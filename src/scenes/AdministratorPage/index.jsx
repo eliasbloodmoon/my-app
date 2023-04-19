@@ -33,7 +33,7 @@ const AdminLogin = () => {
   const [deleteEmployeeId, setDeleteEmployeeId] = useState(null);
   const [editCommandOpen, setCommandEditOpen] = useState(false);
   const [editEmployeeOpen, setEmployeeEditOpen] = useState(false);
-  const [editCommand, setEditCommand] = useState({ id: "", time: "", name: "", command: "" });
+  const [editCommand, setEditCommand] = useState({ id: "", time: "", firstName: "", lastName: "", command: "" });
   const [editEmployee, setEditEmployee] = useState({ id: "", firstName: "", lastName: "", email: "", password: "", role: ""});
   const [lastDeletedItem, setLastDeletedItem] = useState(null);
   const [fetchData, setFetchData] = useState(true);
@@ -41,7 +41,8 @@ const AdminLogin = () => {
   //Columns for the ComandList Command Name Time
   const commandsColumn = [
     { field: "command", headerName: "Command", flex: 1 },
-    { field: "name", headerName: "Name", flex: 1 },
+    { field: "firstName", headerName: "First Name", flex: 1 },
+    { field: "lastName", headerName: "Last Name", flex: 1 },
     { field: "time", headerName: "Time", flex: 1 },
     {
       field: "edit",
@@ -196,7 +197,8 @@ const AdminLogin = () => {
         },
         body: JSON.stringify({
           time: editCommand.time,
-          name: editCommand.name,
+          firstName: editCommand.firstName,
+          lastName: editCommand.lastName,
           command: editCommand.command,
         }),
       });
@@ -613,10 +615,18 @@ const handleUndo = async () => {
                 required
               />
               <TextField
-                label="Name"
+                label="First Name"
                 variant="outlined"
-                value={editCommand.name}
-                onChange={(e) => setEditCommand({ ...editCommand, name: e.target.value })}
+                value={editCommand.firstName}
+                onChange={(e) => setEditCommand({ ...editCommand, firstName: e.target.value })}
+                margin="normal"
+                required
+              />
+              <TextField
+                label="Last Name"
+                variant="outlined"
+                value={editCommand.lastName}
+                onChange={(e) => setEditCommand({ ...editCommand, lastName: e.target.value })}
                 margin="normal"
                 required
               />
