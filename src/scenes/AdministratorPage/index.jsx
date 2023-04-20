@@ -1,4 +1,6 @@
 import { Box, Button, Typography, useTheme, Dialog, DialogContent, DialogActions, DialogContentText, DialogTitle, TextField, FormControl, InputLabel, Select, MenuItem, Tabs, Tab } from "@mui/material";
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
 import React, { useEffect, useState } from "react";
 import Navbar from "../navbar/index";
 import { DataGrid } from '@mui/x-data-grid';
@@ -37,6 +39,7 @@ const AdminLogin = () => {
   const [editEmployee, setEditEmployee] = useState({ id: "", firstName: "", lastName: "", email: "", password: "", role: ""});
   const [lastDeletedItem, setLastDeletedItem] = useState(null);
   const [fetchData, setFetchData] = useState(true);
+  const [passwordWarningOpen, setPasswordWarningOpen] = useState(false);
 
   //Columns for the ComandList Command Name Time
   const commandsColumn = [
@@ -152,10 +155,19 @@ const AdminLogin = () => {
     }
   };
 
+  const handleClosePasswordWarning = () => {
+    setPasswordWarningOpen(false);
+  };
+
   const handleEditEmployeeSubmit = async (e) => {
     e.preventDefault();
   
     if (!editEmployee.id) return;
+
+    if (editEmployee.password.length < 8) {
+      setPasswordWarningOpen(true);
+      return;
+    }
   
     try {
       await fetch(`http://frontend.digitaldreamforge.chat:5000/employees/${editEmployee._id}`, {
@@ -179,6 +191,8 @@ const AdminLogin = () => {
   
       // Close the edit dialog
       setEmployeeEditOpen(false);
+
+      refreshDataGrid();
     } catch (error) {
       console.error(error);
     }
@@ -210,6 +224,8 @@ const AdminLogin = () => {
   
       // Close the edit dialog
       setCommandEditOpen(false);
+
+      refreshDataGrid();
     } catch (error) {
       console.error(error);
     }
@@ -248,6 +264,8 @@ const AdminLogin = () => {
     }
   
     setDeleteEmployeeConfirmOpen(false);
+
+    refreshDataGrid();
   };
 
   const handleDeleteCommand = async () => {
@@ -275,6 +293,8 @@ const AdminLogin = () => {
     }
     
     setDeleteCommandConfirmOpen(false);
+
+    refreshDataGrid();
   };
 
   const CommandList = ({ employees }) => {
@@ -449,6 +469,10 @@ const handleUndo = async () => {
     setCurrentPage(currentPage === "employees" ? "commands" : "employees");
   };
 
+  const refreshDataGrid = () => {
+    fetchEmployeeData();
+  };
+
   //This is where the EmployeeList displays from.
   //It makes a GET request to the /employees route from the backend
   
@@ -513,6 +537,17 @@ const handleUndo = async () => {
           Digital Dream Forge
         </Typography>
       </Box>
+
+      <Snackbar
+        open={passwordWarningOpen}
+        autoHideDuration={5000}
+        onClose={handleClosePasswordWarning}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      >
+        <Alert onClose={handleClosePasswordWarning} severity="warning" variant="filled">
+          Password must be at least 8 characters long!
+        </Alert>
+      </Snackbar>
   
       <Grid container>
         <Grid item xs={12} sm={3} md={2}>
