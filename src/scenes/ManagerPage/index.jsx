@@ -36,8 +36,8 @@ const ManagerLogin = () => {
   const CommandList = ({ employees }) => {
     const [pageSize, setPageSize] = useState(5);
   
-    const handlePageSizeChange = (params) => {
-      setPageSize(params.pageSize);
+    const handlePageSizeChange = (newPageSize) => {
+      setPageSize(newPageSize);
     };
 
   
@@ -53,6 +53,7 @@ const ManagerLogin = () => {
         rowId="id"
         columnBuffer={2}
         onPageSizeChange={handlePageSizeChange}
+        setPageSize={setPageSize}
       />
     </Box>
   );
@@ -62,8 +63,8 @@ const ManagerLogin = () => {
   const EmployeeList = ({ employees }) => {
     const [pageSize, setPageSize] = useState(5);
   
-    const handlePageSizeChange = (params) => {
-      setPageSize(params.pageSize);
+    const handlePageSizeChange = (newPageSize) => {
+      setPageSize(newPageSize);
     };
   
     return(
@@ -78,6 +79,7 @@ const ManagerLogin = () => {
         rowId="id"
         columnBuffer={2}
         onPageSizeChange={handlePageSizeChange}
+        setPageSize={setPageSize}
       />
     </Box>
     );

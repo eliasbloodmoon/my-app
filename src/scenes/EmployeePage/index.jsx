@@ -126,8 +126,8 @@ const EmployeeLogin = () => {
   const CommandList = ({ employees, employeesEmail, isLoading }) => {
     const [pageSize, setPageSize] = useState(5);
   
-    const handlePageSizeChange = (params) => {
-      setPageSize(params.pageSize);
+    const handlePageSizeChange = (newPageSize) => {
+      setPageSize(newPageSize);
     };
   
     return (
@@ -148,6 +148,7 @@ const EmployeeLogin = () => {
             rowId="id"
             columnBuffer={2}
             onPageSizeChange={handlePageSizeChange}
+            setPageSize={setPageSize}
           />
           </Box>
           </Box>

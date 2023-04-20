@@ -300,8 +300,8 @@ const AdminLogin = () => {
   const CommandList = ({ employees }) => {
     const [pageSize, setPageSize] = useState(5);
   
-    const handlePageSizeChange = (params) => {
-      setPageSize(params.pageSize);
+    const handlePageSizeChange = (newPageSize) => {
+      setPageSize(newPageSize);
     };
   
     return(
@@ -316,6 +316,7 @@ const AdminLogin = () => {
         rowId="id"
         columnBuffer={2}
         onPageSizeChange={handlePageSizeChange}
+        setPageSize={setPageSize}
       />
     </Box>
   );
@@ -325,8 +326,8 @@ const AdminLogin = () => {
   const EmployeeList = ({ employees }) => {
     const [pageSize, setPageSize] = useState(5);
   
-    const handlePageSizeChange = (params) => {
-      setPageSize(params.pageSize);
+    const handlePageSizeChange = (newPageSize) => {
+      setPageSize(newPageSize);
     };
   
     return(
@@ -341,6 +342,7 @@ const AdminLogin = () => {
         rowId="id"
         columnBuffer={2}
         onPageSizeChange={handlePageSizeChange}
+        setPageSize={setPageSize}
       />
     </Box>
     );
@@ -460,6 +462,7 @@ const handleUndo = async () => {
       const savedEmployee = await savedEmployeeResponse.json();
       console.log(savedEmployee);
       if (savedEmployee) {setOpen(false);}
+      refreshDataGrid();
     } catch (error) {
       console.error(error);
     }
