@@ -57,13 +57,11 @@ const Form = () => {
           token: loggedIn.token,
         })
       );
-    } 
+    }
     const employeesResponse = await fetch(`http://frontend.digitaldreamforge.chat:5000/employees`);
     const employees = await employeesResponse.json();
     const employee = employees.find(u => u.email === values.email);
     setEmail(values.email);
-    console.log("Employee data:", employee);
-    console.log("Role:", employee && employee.role);
     if (employee && employee.role === "Admin") {
       navigate('/admin');
     } else if (employee && employee.role === "Management") {

@@ -75,19 +75,38 @@ const EmployeeLogin = () => {
   ];
 
   const fetchCommandsData = useCallback(async () => {
-    
     if (!email) return;
-
+  
     try {
       setIsLoading(true);
-      const response = await fetch(`http://frontend.digitaldreamforge.chat:5000/api/employee?email=${email}`);
+      const response = await fetch(
+        `http://frontend.digitaldreamforge.chat:5000/api/employee?email=${email}`
+      );
       const data = await response.json();
-
-      // Add the employee to the employees array
-      setEmployees([{ id: uuidv4(), ...data.employee, ...data.rocket }]);
-      
+      console.log(data);
+  
+      // Create a new row for each entry in the rockets array
+      const rocketsData = data.rockets.map(rocket => {
+        return {
+          id: uuidv4(),
+          firstName: data.employee.firstName,
+          lastName: data.employee.lastName,
+          email: data.employee.email,
+          command: rocket.command,
+          time: rocket.time
+        };
+      });
+  
+      // Add the rocket data to the employees array
+      setEmployees(prevEmployees => [
+        ...prevEmployees,
+        ...rocketsData
+      ]);
+  
       // Set employee email
-      const loggedInEmployee = employees.find(employee => employee.email === data.email);
+      const loggedInEmployee = employees.find(
+        employee => employee.email === employee.email
+      );
       if (loggedInEmployee) {
         setEmployeeEmail(loggedInEmployee.email);
       } else {
