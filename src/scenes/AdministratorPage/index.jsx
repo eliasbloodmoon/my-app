@@ -711,7 +711,7 @@ const handleUndo = async () => {
                 margin="normal"
               />
               <TextField
-                label="Password"
+                label="Password (minimum 8)"
                 variant="outlined"
                 value={editCommand.password}
                 onChange={(e) => setEditEmployee({ ...editEmployee, password: e.target.value })}
@@ -741,19 +741,19 @@ const handleUndo = async () => {
       <Dialog open={open} onClose={handleClose} paddingTop={1}>  
         <DialogTitle>Add Employee</DialogTitle>
         <DialogContent>
-        <form onSubmit={handleRegisterSubmit}>
+          <form onSubmit={handleRegisterSubmit}>
             <Box display="flex" flexDirection="column" alignItems="center" marginBottom={2}>
               <TextField label="First name" variant="outlined" value={firstName} onChange={(e) => setFirstName(e.target.value)} margin="normal" required />
               <TextField label="Last name" variant="outlined" value={lastName} onChange={(e) => setLastName(e.target.value)} margin="normal" required />
               <TextField label="Email" variant="outlined" value={email} onChange={(e) => setEmail(e.target.value)} margin="normal" required />
-              <TextField label="Password" variant="outlined" value={password} onChange={(e) => setPassword(e.target.value)} margin="normal" required />
+              <TextField label="Password (minimum 8)" variant="outlined" value={password} onChange={(e) => setPassword(e.target.value)} margin="normal" required />
               <select id="role" name="role" size="1" value={role} onChange={(e) => setRole(e.target.value)}>
                 <option value= "">Select a role</option>
                 <option value= "Admin">Admin</option>
                 <option value= "Management">Management</option>
                 <option value= "Employee">Employee</option>
               </select>
-              <Button variant="contained" type="submit">Submit</Button>
+              <Button variant="contained" type="submit" disabled={password.length < 8}>Submit</Button>
             </Box>
           </form>
         </DialogContent>
