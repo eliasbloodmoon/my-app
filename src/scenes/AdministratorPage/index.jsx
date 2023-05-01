@@ -1,3 +1,6 @@
+// Administrator Page is the functions and features involving the Admin Page on the Front end. 
+
+// Import various components and libraries from Material-UI and React
 import { Box, Button, Typography, useTheme, Dialog, DialogContent, DialogActions, DialogContentText, DialogTitle, TextField, FormControl, InputLabel, Select, MenuItem, Tabs, Tab } from "@mui/material";
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
@@ -11,11 +14,10 @@ import { Grid } from '@mui/material';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 
-/*
-  The register new employee should be added somewhere here.
-  This is the main function. Replaced "Underconstruction"
-*/
-const AdminLogin = () => {
+// Define functional component called AdminLogin
+  const AdminLogin = () => {
+
+  // Initialize state variables using useState hook
   const theme = useTheme();
   const [employees, setEmployees] = useState([]);
   const [commands, setCommands] = useState([]);
@@ -27,7 +29,6 @@ const AdminLogin = () => {
   const [role, setRole] = useState("");  
   const [changeOpen, setChangeOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState("employees");
-  //const [setLastUpdate] = useState(null);
   const [loading, setLoading] = useState(true);
   const [deleteCommandConfirmOpen, setDeleteCommandConfirmOpen] = useState(false);
   const [deleteEmployeeConfirmOpen, setDeleteEmployeeConfirmOpen] = useState(false);
@@ -41,12 +42,12 @@ const AdminLogin = () => {
   const [fetchData, setFetchData] = useState(true);
   const [passwordWarningOpen, setPasswordWarningOpen] = useState(false);
 
-  //Columns for the ComandList Command Name Time
+  // This array defines the columns for a table displaying commands.
   const commandsColumn = [
-    { field: "command", headerName: "Command", flex: 1 },
-    { field: "firstName", headerName: "First Name", flex: 1 },
-    { field: "lastName", headerName: "Last Name", flex: 1 },
-    { field: "time", headerName: "Time", flex: 1 },
+    { field: "command", headerName: "Command", flex: 1 },  // Column for the command name
+    { field: "firstName", headerName: "First Name", flex: 1 }, // Column for the user's first name
+    { field: "lastName", headerName: "Last Name", flex: 1 }, // Column for the user's last name
+    { field: "time", headerName: "Time", flex: 1 }, // Column for the time and date the command was executed
     {
       field: "edit",
       headerName: "Edit",
@@ -54,7 +55,7 @@ const AdminLogin = () => {
       filterable: false,
       width: 100,
       disableColumnMenu: true,
-      renderCell: (params) => (
+      renderCell: (params) => ( // Button to edit a command
         <Button
           variant="outlined"
           color="info"
@@ -71,7 +72,7 @@ const AdminLogin = () => {
       filterable: false,
       width: 100,
       disableColumnMenu: true,
-      renderCell: (params) => (
+      renderCell: (params) => ( // Button to delete a command
         <Button
           variant="outlined"
           color="error"
@@ -83,12 +84,13 @@ const AdminLogin = () => {
     },
   ];
 
+  // This array defines the columns for a table displaying employees.
   const employeesColumn = [
-    { field: "firstName", headerName: "First Name", flex: 1 },
-    { field: "lastName", headerName: "Last Name", flex: 1 },
-    { field: "email", headerName: "Email", flex: 1 },
-    { field: "password", headerName: "Password", flex: 1 },
-    { field: "role", headerName: "Role", flex: 1 },
+    { field: "firstName", headerName: "First Name", flex: 1 }, // Column for the employee's first name
+    { field: "lastName", headerName: "Last Name", flex: 1 }, // Column for the employee's last name
+    { field: "email", headerName: "Email", flex: 1 }, // Column for the employee's email address
+    { field: "password", headerName: "Password", flex: 1 }, // Column for the employee's password
+    { field: "role", headerName: "Role", flex: 1 }, // Column for the employee's role
     {
       field: "edit",
       headerName: "Edit",
@@ -96,7 +98,7 @@ const AdminLogin = () => {
       filterable: false,
       width: 100,
       disableColumnMenu: true,
-      renderCell: (params) => (
+      renderCell: (params) => ( // Button to edit an employee
         <Button
           variant="outlined"
           color="info"
@@ -113,7 +115,7 @@ const AdminLogin = () => {
       filterable: false,
       width: 100,
       disableColumnMenu: true,
-      renderCell: (params) => (
+      renderCell: (params) => ( // Button to delete an employee
         <Button
           variant="outlined"
           color="error"
@@ -125,51 +127,64 @@ const AdminLogin = () => {
     },
   ];
 
+  // This function opens the dialog box for adding a new employee
   const handleClickOpen = () => {
     setOpen(true);
   };
 
+  // This function closes the dialog box for adding a new employee
   const handleClose = () => {
     setOpen(false);
   };
   
+  // This function toggles the state of 'fetchData' to trigger a fetch of updated data
   const handleToggleFetch = () => {
     setFetchData(!fetchData);
   };
 
+  // This function sets the employee to be edited and opens the dialog box for editing an employee
   const handleEditEmployee = (id) => {
+    // Find the employee object to be edited from the employees array based on its id
     const employeeToEdit = employees.find((employee) => employee.id === id);
-  
+    
+   // Set the employee to be edited in state 
     if (employeeToEdit) {
       setEditEmployee(employeeToEdit);
+      // Open the dialog box for editing an employee
       setEmployeeEditOpen(true);
     }
   };
 
+  // This function sets the command to be edited and opens the dialog box for editing a command
   const handleEditCommand = (id) => {
+    // Find the command object to be edited from the commands array based on its id
     const commandToEdit = commands.find((command) => command.id === id);
   
     if (commandToEdit) {
+      // Set the command to be edited in state
       setEditCommand(commandToEdit);
+      // Open the dialog box for editing a command
       setCommandEditOpen(true);
     }
   };
-
+  // This function closes the password warning dialog box
   const handleClosePasswordWarning = () => {
     setPasswordWarningOpen(false);
   };
 
+  // This function submits the edited employee information and updates it in the database
   const handleEditEmployeeSubmit = async (e) => {
     e.preventDefault();
-  
+    // If there is no employee id, return
     if (!editEmployee.id) return;
-
+    // If the employee's password is less than 8 characters, show a warning dialog box and return
     if (editEmployee.password.length < 8) {
       setPasswordWarningOpen(true);
       return;
     }
   
     try {
+      // Send PUT request to update the employee record on the server
       await fetch(`http://frontend.digitaldreamforge.chat:5000/employees/${editEmployee._id}`, {
         method: "PUT",
         headers: {
@@ -191,19 +206,22 @@ const AdminLogin = () => {
   
       // Close the edit dialog
       setEmployeeEditOpen(false);
-
+      
+      // Refresh the data grid to reflect the changes
       refreshDataGrid();
     } catch (error) {
       console.error(error);
     }
   };
-
+  // Function to handle the submission of editing a command record
   const handleEditCommandSubmit = async (e) => {
     e.preventDefault();
-  
+
+    // If no command ID, return
     if (!editCommand.id) return;
   
     try {
+      // Send PUT request to update the command record on the server
       await fetch(`http://frontend.digitaldreamforge.chat:5000/api/database/${editCommand._id}`, {
         method: "PUT",
         headers: {
@@ -224,34 +242,38 @@ const AdminLogin = () => {
   
       // Close the edit dialog
       setCommandEditOpen(false);
-
+      
+      // Refresh the data grid to reflect the changes
       refreshDataGrid();
     } catch (error) {
       console.error(error);
     }
   };
 
+  // Handler to set the ID of the command to be deleted and open the delete confirmation dialog
   const handleOpenDeleteCommandConfirm = (id) => {
     setDeleteCommandId(id);
     setDeleteCommandConfirmOpen(true);
   };
 
+  // Handler to set the ID of the employee to be deleted and open the delete confirmation dialog
   const handleOpenDeleteEmployeeConfirm = (id) => {
     setDeleteEmployeeId(id);
     setDeleteEmployeeConfirmOpen(true);
   };
   
-
+  // Handler to delete the selected employee
   const handleDeleteEmployee = async () => {
     if (!deleteEmployeeId) return;
   
     try {
+       // Find the employee to delete
       const employeeToDelete = employees.find((employee) => employee.id === deleteEmployeeId);
-  
+       // Throw an error if the employee is not found
       if (!employeeToDelete) {
         throw new Error("Command not found");
       }
-  
+       // Send a DELETE request to the server to delete the employee
       await fetch(`http://frontend.digitaldreamforge.chat:5000/employees/${employeeToDelete._id}`, {
         method: "DELETE",
       });
@@ -262,25 +284,26 @@ const AdminLogin = () => {
     } catch (error) {
       console.error(error);
     }
-  
+    // Close the delete confirmation dialog and refresh the data grid
     setDeleteEmployeeConfirmOpen(false);
 
     refreshDataGrid();
   };
-
+  // Handler to delete the selected command
   const handleDeleteCommand = async () => {
     if (!deleteCommandId) return;
     
     try {
+      // Find the command to delete
       const commandToDelete = commands.find((command) => command.id === deleteCommandId);
-    
+      // Throw an error if the command is not found
       if (!commandToDelete) {
         throw new Error("Command not found");
       }
   
       // Save the deleted command so it can be undone
       setLastDeletedItem(commandToDelete);
-    
+      // Send a DELETE request to the server to delete the command
       await fetch(`http://frontend.digitaldreamforge.chat:5000/api/database/${commandToDelete._id}`, {
         method: "DELETE",
       });
@@ -291,15 +314,16 @@ const AdminLogin = () => {
     } catch (error) {
       console.error(error);
     }
-    
+     // Close the delete confirmation dialog and refresh the data grid
     setDeleteCommandConfirmOpen(false);
 
     refreshDataGrid();
   };
-
+  // Component for the list of commands
   const CommandList = ({ employees }) => {
+    // Set the initial page size to 5
     const [pageSize, setPageSize] = useState(5);
-  
+    // Handler to change the page size
     const handlePageSizeChange = (newPageSize) => {
       setPageSize(newPageSize);
     };
@@ -325,7 +349,7 @@ const AdminLogin = () => {
   //Layout of the EmployeeList
   const EmployeeList = ({ employees }) => {
     const [pageSize, setPageSize] = useState(5);
-  
+   //Handler for changing the page size of the grid`
     const handlePageSizeChange = (newPageSize) => {
       setPageSize(newPageSize);
     };
@@ -417,13 +441,14 @@ const AdminLogin = () => {
     saveAs(blob, `${currentPage}_${new Date().toLocaleString()}.pdf`);
 };
 
+// Function to undo the last deleted item
 const handleUndo = async () => {
   
   try {
     if (!lastDeletedItem) {
       throw new Error("No item to undo");
     }
-
+    // Restore the deleted item to the database
     await fetch(`http://frontend.digitaldreamforge.chat:5000/api/database`, {
       method: "POST",
       headers: {
@@ -441,7 +466,7 @@ const handleUndo = async () => {
     console.error(error);
   }
 };
-
+  // Function to submit the employee registration form
   const handleRegisterSubmit = async () => {
     try{
       const savedEmployeeResponse = await fetch (
@@ -459,41 +484,45 @@ const handleUndo = async () => {
         }
       );
       console.log(role);
+      // Parse the response JSON and log the saved employee
       const savedEmployee = await savedEmployeeResponse.json();
       console.log(savedEmployee);
+      // Close the registration dialog and refresh the data grid
       if (savedEmployee) {setOpen(false);}
       refreshDataGrid();
     } catch (error) {
       console.error(error);
     }
   };
-
+  // Function to toggle between employee and command pages
   const handlePageToggle = () => {
     setCurrentPage(currentPage === "employees" ? "commands" : "employees");
   };
-
+  // Function to refresh the data grid with new data
   const refreshDataGrid = () => {
     fetchEmployeeData();
   };
-
-  //This is where the EmployeeList displays from.
-  //It makes a GET request to the /employees route from the backend
   
+  // Asynchronously fetch employee and command data from backend API
   const fetchEmployeeData = async () => {
     try {
+      // Make API calls for employee and command data
       const [employeesResponse, commandsResponse] = await Promise.all([
         fetch('http://frontend.digitaldreamforge.chat:5000/employees'),
         fetch('http://frontend.digitaldreamforge.chat:5000/api/database')
       ]);
+      // Parse employee and command data as JSON
       const [employeesData, commandsData] = await Promise.all([
         employeesResponse.json(),
         commandsResponse.json()
       ]);
+      // Add UUIDs to employees and commands data and update state
       const employeesWithIds = employeesData.map(employee => ({ ...employee, id: uuidv4() }));
       const commandsWithIds = commandsData.map(command => ({ ...command, id: uuidv4() }));
       setEmployees(employeesWithIds);
       setCommands(commandsWithIds);
-      //setLastUpdate(Date.now()); // Update the lastUpdate state variable
+      //setLastUpdate(Date.now()); 
+      // Update the lastUpdate state variable
     } catch (error) {
       console.error(error);
     }
