@@ -1,3 +1,5 @@
+// EmployeePage is the functions and features involving the Employee Page on the Front end. 
+
 import { Box, Typography, useTheme } from "@mui/material";
 import React, { useState } from "react";
 import Navbar from "../navbar/index";
@@ -9,12 +11,15 @@ import { getRowIdFromRowModel } from "@mui/x-data-grid/hooks/features/rows/gridR
 
 const EmployeeLogin = () => {
   const theme = useTheme();
+
+  // Initialize state variables
   const [employees, setEmployees] = useState([]);
   const [employeesEmail, setEmployeeEmail] = useState("");
   const [isLoading, setIsLoading] = useState(true); // updated
   const { email: employeeEmail } = useContext(UserContext);
   const [email, setEmail] = useState('');
 
+  // Load the employee email from local storage or context
   useEffect(() => {
     const savedEmail = localStorage.getItem('email');
     if (savedEmail) {
@@ -25,6 +30,7 @@ const EmployeeLogin = () => {
     }
   }, [employeeEmail]);
 
+  // Update the email state variable if it changes in context
   useEffect(() => {
     if (employeeEmail && employeeEmail !== email) {
       setEmail(employeeEmail);
@@ -32,6 +38,7 @@ const EmployeeLogin = () => {
     }
   }, [employeeEmail, email]);
 
+  // Define columns for the commands table
   const commandsColumn = [
     {
       field: 'firstName',
@@ -73,10 +80,12 @@ const EmployeeLogin = () => {
       resizable: false,
     },
   ];
-
+  // Fetch employee commands data from the server
   const fetchCommandsData = useCallback(async () => {
     if (!email) return;
-  
+    
+    
+// Try to fetch data using the employee's email as a query parameter
     try {
       setIsLoading(true);
       const response = await fetch(
@@ -103,7 +112,7 @@ const EmployeeLogin = () => {
         ...rocketsData
       ]);
   
-      // Set employee email
+      // Set the employee email based on the found employee
       const loggedInEmployee = employees.find(
         employee => employee.email === employee.email
       );
@@ -115,17 +124,18 @@ const EmployeeLogin = () => {
     } catch (error) {
       console.error(error);
     } finally {
+      // Set isLoading to false after fetching data
       setIsLoading(false);
     }
   }, [email]);
-
+// Fetch data when the component is mounted and email or fetchCommandsData
   useEffect(() => {
     fetchCommandsData();
   }, [fetchCommandsData, email]);
-
+  // Component that renders a list of commands
   const CommandList = ({ employees, employeesEmail, isLoading }) => {
     const [pageSize, setPageSize] = useState(5);
-  
+    // Handler for changing the page size of the list
     const handlePageSizeChange = (newPageSize) => {
       setPageSize(newPageSize);
     };
