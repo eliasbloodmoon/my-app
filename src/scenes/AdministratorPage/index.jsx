@@ -557,239 +557,288 @@ const handleUndo = async () => {
   }
 
   return (
-    <Box width="100%">
-      <Navbar />
-      <Box
-        width="100%"
-        backgroundColor={theme.palette.background.alt}
-        p="1rem 6%"
-        textAlign="center"
-      >
-        <Typography fontWeight="bold" fontSize="32px" color="red">
-          Digital Dream Forge
-        </Typography>
-      </Box>
+    // top-level Box component that occupies the full width of the screen
+  <Box width="100%">
 
-      <Snackbar
-        open={passwordWarningOpen}
-        autoHideDuration={5000}
-        onClose={handleClosePasswordWarning}
-        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-      >
-        <Alert onClose={handleClosePasswordWarning} severity="warning" variant="filled">
-          Password must be at least 8 characters long!
-        </Alert>
-      </Snackbar>
-  
-      <Grid container>
-        <Grid item xs={12} sm={3} md={2}>
-          <Box display="flex" flexDirection="column" justifyContent="flex-start" marginBottom={1} paddingLeft={1} paddingRight={1} paddingTop={1}>
-            <Button color="info" variant="contained" onClick={handleToggleFetch} style={{ width: "100%", marginBottom: '1rem' }}>
-              {fetchData ? "Turn off auto-refresh" : "Turn on auto-refresh"}
-            </Button>
-            {currentPage === "employees" && (
-              <Button variant="contained" onClick={handleClickOpen} style={{ marginBottom: '1rem' }}>Add Employee</Button>
-            )}
-            {currentPage === "commands" && (
-              <Button variant="contained" onClick={handleUndo} style={{ marginBottom: '1rem' }}>Undo Time Entry Delete</Button>
-            )}
-            <Button variant="contained" onClick={handleExportCsv} style={{ marginBottom: '1rem' }}>Export All as CSV</Button>
-            <Button variant="contained" onClick={handleExportPdf} style={{ marginBottom: '1rem' }}>Export All as PDF</Button>
-            
-          </Box>
-        </Grid>
-        <Grid item xs={12} sm={9} md={10}>
-          <Box paddingRight={12}>
-            <Tabs
-              TabIndicatorProps={{ style: { background: "red" } }}
-              value={currentPage}
-              onChange={handlePageToggle}
-            >
+  <Navbar />
+
+  {/* Title displayed in a Box with a red background */}
+  <Box
+    width="100%"
+    backgroundColor={theme.palette.background.alt}
+    p="1rem 6%"
+    textAlign="center"
+  >
+    <Typography fontWeight="bold" fontSize="32px" color="red">
+      Digital Dream Forge
+    </Typography>
+  </Box>
+
+  {/* Snackbar component that displays a warning message if the password entered is less than 8 characters long */}
+  <Snackbar
+    open={passwordWarningOpen}
+    autoHideDuration={5000}
+    onClose={handleClosePasswordWarning}
+    anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+  >
+    <Alert onClose={handleClosePasswordWarning} severity="warning" variant="filled">
+      Password must be at least 8 characters long!
+    </Alert>
+  </Snackbar>
+
+  {/* Grid container with two Grid items */}
+  <Grid container>
+    {/* left Grid item containing Buttons */}
+    <Grid item xs={12} sm={3} md={2}>
+      <Box display="flex" flexDirection="column" justifyContent="flex-start" marginBottom={1} paddingLeft={1} paddingRight={1} paddingTop={1}>
+        <Button color="info" variant="contained" onClick={handleToggleFetch} style={{ width: "100%", marginBottom: '1rem' }}>
+          {/* Toggles auto-refresh on or off depending on fetchData state */}
+          {fetchData ? "Turn off auto-refresh" : "Turn on auto-refresh"}
+        </Button>
+
+        {/* Add Employee button displayed only when current page is "employees" */}
+        {currentPage === "employees" && (
+          <Button variant="contained" onClick={handleClickOpen} style={{ marginBottom: '1rem' }}>Add Employee</Button>
+        )}
+
+        {/* Undo Time Entry Delete button displayed only when current page is "commands" */}
+        {currentPage === "commands" && (
+          <Button variant="contained" onClick={handleUndo} style={{ marginBottom: '1rem' }}>Undo Time Entry Delete</Button>
+        )}
+
+        <Button variant="contained" onClick={handleExportCsv} style={{ marginBottom: '1rem' }}>Export All as CSV</Button>
+        <Button variant="contained" onClick={handleExportPdf} style={{ marginBottom: '1rem' }}>Export All as PDF</Button>
+      </Box>
+    </Grid>
+
+    {/* right Grid item containing Tabs component and corresponding list component */}
+    <Grid item xs={12} sm={9} md={10}>
+      <Box paddingRight={12}>
+        {/* Tabs component to switch between "employees" and "commands" pages */}
+        <Tabs
+          // TabIndicatorProps specifies the style for the tab indicator (in this case, a red background)
+          TabIndicatorProps={{ style: { background: "red" } }}
+          // value specifies which tab is currently selected (either "employees" or "commands")
+          value={currentPage}
+          // onChange specifies the function to call when the user switches tabs
+          onChange={handlePageToggle}
+        >
+          {/* The first tab is for displaying the employee list */}
           <Tab
             value="employees"
             label="Employees"
+            // The sx prop sets custom styles for the tab, depending on the theme and whether it is selected
             sx={{
               color: theme.palette.mode === 'dark' ? theme.palette.common.white : theme.palette.common.black,
               '&.Mui-selected': {
+                // If the theme is dark, use a semi-transparent white background; otherwise, use a semi-transparent primary color
                 backgroundColor: theme.palette.mode === 'dark' ? alpha(theme.palette.common.white, 0.3) : alpha(theme.palette.primary.main, 0.08),
               },
             }}
           />
+
+          {/* The second tab is for displaying the list of commands */}
           <Tab
             value="commands"
             label="Commands"
+            // The sx prop sets custom styles for the tab, depending on the theme and whether it is selected
             sx={{
               color: theme.palette.mode === 'dark' ? theme.palette.common.white : theme.palette.common.black,
               '&.Mui-selected': {
+                // If the theme is dark, use a semi-transparent white background; otherwise, use a semi-transparent primary color
                 backgroundColor: theme.palette.mode === 'dark' ? alpha(theme.palette.common.white, 0.3) : alpha(theme.palette.primary.main, 0.08),
               },
             }}
           />
-        </Tabs>
-      </Box>
+          </Tabs>
+  </Box>
 
-      {currentPage === "employees" ? (
-        <EmployeeList employees={employees} />
-      ) : (
-        <CommandList employees={commands} />
-      )}
+  {/* Depending on the currently selected tab, either the EmployeeList or CommandList component is displayed */}
+  {currentPage === "employees" ? (
+    <EmployeeList employees={employees} />
+  ) : (
+    <CommandList employees={commands} />
+  )}
 
-      <Dialog open={deleteEmployeeConfirmOpen} onClose={() => setDeleteEmployeeConfirmOpen(false)}>
-      <DialogTitle>Confirm Delete</DialogTitle>
-      <DialogContent>
-        <DialogContentText>
-          Are you sure you want to delete this employee?
-        </DialogContentText>
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={() => setDeleteEmployeeConfirmOpen(false)} color="info">
-          Cancel
-        </Button>
-        <Button onClick={handleDeleteEmployee} autoFocus color="error">
-          Confirm
-        </Button>
-      </DialogActions>
-      </Dialog>
+  {/* Dialog component for confirming employee deletion */}
+  <Dialog open={deleteEmployeeConfirmOpen} onClose={() => setDeleteEmployeeConfirmOpen(false)}>
+    <DialogTitle>Confirm Delete</DialogTitle>
+    <DialogContent>
+      <DialogContentText>
+        Are you sure you want to delete this employee?
+      </DialogContentText>
+    </DialogContent>
+    <DialogActions>
+      {/* Button to cancel employee deletion */}
+      <Button onClick={() => setDeleteEmployeeConfirmOpen(false)} color="info">
+        Cancel
+      </Button>
+      {/* Button to confirm employee deletion */}
+      <Button onClick={handleDeleteEmployee} autoFocus color="error">
+        Confirm
+      </Button>
+    </DialogActions>
+  </Dialog>
 
-      <Dialog open={deleteCommandConfirmOpen} onClose={() => setDeleteCommandConfirmOpen(false)}>
-      <DialogTitle>Confirm Delete</DialogTitle>
-      <DialogContent>
-        <DialogContentText>
-          Are you sure you want to delete this entry?
-        </DialogContentText>
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={() => setDeleteCommandConfirmOpen(false)} color="info">
-          Cancel
-        </Button>
-        <Button onClick={handleDeleteCommand} autoFocus color="error">
-          Confirm
-        </Button>
-      </DialogActions>
-      </Dialog>
+  {/* Dialog component for confirming command deletion */}
+  <Dialog open={deleteCommandConfirmOpen} onClose={() => setDeleteCommandConfirmOpen(false)}>
+    <DialogTitle>Confirm Delete</DialogTitle>
+    <DialogContent>
+      <DialogContentText>
+        Are you sure you want to delete this entry?
+      </DialogContentText>
+    </DialogContent>
+    <DialogActions>
+      {/* Button to cancel command deletion */}
+      <Button onClick={() => setDeleteCommandConfirmOpen(false)} color="info">
+        Cancel
+      </Button>
+      {/* Button to confirm command deletion */}
+      <Button onClick={handleDeleteCommand} autoFocus color="error">
+        Confirm
+      </Button>
+    </DialogActions>
+  </Dialog>
+    <Dialog open={editCommandOpen} onClose={() => setCommandEditOpen(false)}>
+    {/* Title of the dialog box */}
+    <DialogTitle>Edit Command</DialogTitle>
+    <DialogContent>
+      {/* Form to submit the edited command */}
+      <form onSubmit={handleEditCommandSubmit}>
+        {/* Container for the form elements */}
+        <Box display="flex" flexDirection="column" alignItems="center" marginBottom={2}>
+          {/* Input field for the time */}
+          <TextField
+            label="Time"
+            variant="outlined"
+            value={editCommand.time}
+            onChange={(e) => setEditCommand({ ...editCommand, time: e.target.value })}
+            margin="normal"
+            required
+          />
+          {/* Input field for the first name */}
+          <TextField
+            label="First Name"
+            variant="outlined"
+            value={editCommand.firstName}
+            onChange={(e) => setEditCommand({ ...editCommand, firstName: e.target.value })}
+            margin="normal"
+            required
+          />
+          {/* Input field for the last name */}
+          <TextField
+            label="Last Name"
+            variant="outlined"
+            value={editCommand.lastName}
+            onChange={(e) => setEditCommand({ ...editCommand, lastName: e.target.value })}
+            margin="normal"
+            required
+          />
+          {/* Input field for the command */}
+          <TextField
+            label="Command"
+            variant="outlined"
+            value={editCommand.command}
+            onChange={(e) => setEditCommand({ ...editCommand, command: e.target.value })}
+            margin="normal"
+            required
+          />
+          {/* Button to save the edited command */}
+          <Button variant="contained" type="submit">
+            Save
+          </Button>
+        </Box>
+      </form>
+    </DialogContent>
+  </Dialog>
 
-      <Dialog open={editCommandOpen} onClose={() => setCommandEditOpen(false)}>
-        <DialogTitle>Edit Command</DialogTitle>
-        <DialogContent>
-          <form onSubmit={handleEditCommandSubmit}>
-            <Box display="flex" flexDirection="column" alignItems="center" marginBottom={2}>
-              <TextField
-                label="Time"
-                variant="outlined"
-                value={editCommand.time}
-                onChange={(e) => setEditCommand({ ...editCommand, time: e.target.value })}
-                margin="normal"
-                required
-              />
-              <TextField
-                label="First Name"
-                variant="outlined"
-                value={editCommand.firstName}
-                onChange={(e) => setEditCommand({ ...editCommand, firstName: e.target.value })}
-                margin="normal"
-                required
-              />
-              <TextField
-                label="Last Name"
-                variant="outlined"
-                value={editCommand.lastName}
-                onChange={(e) => setEditCommand({ ...editCommand, lastName: e.target.value })}
-                margin="normal"
-                required
-              />
-              <TextField
-                label="Command"
-                variant="outlined"
-                value={editCommand.command}
-                onChange={(e) => setEditCommand({ ...editCommand, command: e.target.value })}
-                margin="normal"
-                required
-              />
-              <Button variant="contained" type="submit">
-                Save
-              </Button>
-            </Box>
-          </form>
-        </DialogContent>
-      </Dialog>
-
-      <Dialog open={editEmployeeOpen} onClose={() => setEmployeeEditOpen(false)}>
-        <DialogTitle>Edit Employee</DialogTitle>
-        <DialogContent>
-          <form onSubmit={handleEditEmployeeSubmit}>
-            <Box display="flex" flexDirection="column" alignItems="center" marginBottom={2}>
-              <TextField
-                label="First Name"
-                variant="outlined"
-                value={editCommand.firstName}
-                onChange={(e) => setEditEmployee({ ...editEmployee, firstName: e.target.value })}
-                margin="normal"
-              />
-              <TextField
-                label="Last Name"
-                variant="outlined"
-                value={editCommand.lastName}
-                onChange={(e) => setEditEmployee({ ...editEmployee, lastName: e.target.value })}
-                margin="normal"
-              />
-              <TextField
-                label="Email"
-                variant="outlined"
-                value={editCommand.email}
-                onChange={(e) => setEditEmployee({ ...editEmployee, email: e.target.value })}
-                margin="normal"
-              />
-              <TextField
-                label="Password (minimum 8)"
-                variant="outlined"
-                value={editCommand.password}
-                onChange={(e) => setEditEmployee({ ...editEmployee, password: e.target.value })}
-                margin="normal"
-              />
-              <FormControl variant="outlined" margin="normal" required>
-                <InputLabel id="role-label">Role</InputLabel>
-                <Select
-                  labelId="role-label"
-                  value={editEmployee.role}
-                  onChange={(e) => setEditEmployee({ ...editEmployee, role: e.target.value })}
-                  label="Role"
-                >
-                  <MenuItem value="Admin">Admin</MenuItem>
-                  <MenuItem value="Management">Management</MenuItem>
-                  <MenuItem value="Employee">Employee</MenuItem>
-                </Select>
-              </FormControl>
-              <Button variant="contained" type="submit">
-                Save
-              </Button>
-            </Box>
-          </form>
-        </DialogContent>
-      </Dialog>
-
-      <Dialog open={open} onClose={handleClose} paddingTop={1}>  
-        <DialogTitle>Add Employee</DialogTitle>
-        <DialogContent>
-          <form onSubmit={handleRegisterSubmit}>
-            <Box display="flex" flexDirection="column" alignItems="center" marginBottom={2}>
-              <TextField label="First name" variant="outlined" value={firstName} onChange={(e) => setFirstName(e.target.value)} margin="normal" required />
-              <TextField label="Last name" variant="outlined" value={lastName} onChange={(e) => setLastName(e.target.value)} margin="normal" required />
-              <TextField label="Email" variant="outlined" value={email} onChange={(e) => setEmail(e.target.value)} margin="normal" required />
-              <TextField label="Password (minimum 8)" variant="outlined" value={password} onChange={(e) => setPassword(e.target.value)} margin="normal" required />
-              <select id="role" name="role" size="1" value={role} onChange={(e) => setRole(e.target.value)}>
-                <option value= "">Select a role</option>
-                <option value= "Admin">Admin</option>
-                <option value= "Management">Management</option>
-                <option value= "Employee">Employee</option>
-              </select>
-              <Button variant="contained" type="submit" disabled={password.length < 8}>Submit</Button>
-            </Box>
-          </form>
-        </DialogContent>
-      </Dialog>
-      </Grid>
-    </Grid>
-    </Box>
+    <Dialog open={editEmployeeOpen} onClose={() => setEmployeeEditOpen(false)}>
+    {/* Edit Employee Dialog */}
+    <DialogTitle>Edit Employee</DialogTitle>
+    <DialogContent>
+      <form onSubmit={handleEditEmployeeSubmit}>
+        {/* Form for submitting edited employee */}
+        <Box display="flex" flexDirection="column" alignItems="center" marginBottom={2}>
+          {/* Input fields for employee information */}
+          <TextField
+            label="First Name"
+            variant="outlined"
+            value={editCommand.firstName}
+            onChange={(e) => setEditEmployee({ ...editEmployee, firstName: e.target.value })}
+            margin="normal"
+          />
+          <TextField
+            label="Last Name"
+            variant="outlined"
+            value={editCommand.lastName}
+            onChange={(e) => setEditEmployee({ ...editEmployee, lastName: e.target.value })}
+            margin="normal"
+          />
+          <TextField
+            label="Email"
+            variant="outlined"
+            value={editCommand.email}
+            onChange={(e) => setEditEmployee({ ...editEmployee, email: e.target.value })}
+            margin="normal"
+          />
+          <TextField
+            label="Password (minimum 8)"
+            variant="outlined"
+            value={editCommand.password}
+            onChange={(e) => setEditEmployee({ ...editEmployee, password: e.target.value })}
+            margin="normal"
+          />
+          <FormControl variant="outlined" margin="normal" required>
+            {/* Select dropdown for employee role */}
+            <InputLabel id="role-label">Role</InputLabel>
+            <Select
+              labelId="role-label"
+              value={editEmployee.role}
+              onChange={(e) => setEditEmployee({ ...editEmployee, role: e.target.value })}
+              label="Role"
+            >
+              {/* Options for employee role */}
+              <MenuItem value="Admin">Admin</MenuItem>
+              <MenuItem value="Management">Management</MenuItem>
+              <MenuItem value="Employee">Employee</MenuItem>
+            </Select>
+          </FormControl>
+          {/* Submit button for saving changes */}
+          <Button variant="contained" type="submit">
+            Save
+          </Button>
+        </Box>
+      </form>
+    </DialogContent>
+  </Dialog>
+    <Dialog open={open} onClose={handleClose} paddingTop={1}>
+    {/* Dialog title */}
+    <DialogTitle>Add Employee</DialogTitle>
+    <DialogContent>
+      {/* Form to add new employee */}
+      <form onSubmit={handleRegisterSubmit}>
+        {/* Form inputs */}
+        <Box display="flex" flexDirection="column" alignItems="center" marginBottom={2}>
+          <TextField label="First name" variant="outlined" value={firstName} onChange={(e) => setFirstName(e.target.value)} margin="normal" required />
+          <TextField label="Last name" variant="outlined" value={lastName} onChange={(e) => setLastName(e.target.value)} margin="normal" required />
+          <TextField label="Email" variant="outlined" value={email} onChange={(e) => setEmail(e.target.value)} margin="normal" required />
+          <TextField label="Password (minimum 8)" variant="outlined" value={password} onChange={(e) => setPassword(e.target.value)} margin="normal" required />
+          <select id="role" name="role" size="1" value={role} onChange={(e) => setRole(e.target.value)}>
+            {/* Dropdown menu for selecting employee role */}
+            <option value= "">Select a role</option>
+            <option value= "Admin">Admin</option>
+            <option value= "Management">Management</option>
+            <option value= "Employee">Employee</option>
+          </select>
+          {/* Submit button */}
+          <Button variant="contained" type="submit" disabled={password.length < 8}>Submit</Button>
+        </Box>
+      </form>
+    </DialogContent>
+  </Dialog>
+  </Grid>
+  </Grid>
+  </Box>
   );
 };
 export default AdminLogin;
