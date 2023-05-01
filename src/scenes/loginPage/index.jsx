@@ -1,3 +1,4 @@
+// loginPage is the functions and features involving the Login Page on the Front end. 
 
 import { Box, Typography, useTheme, useMediaQuery } from "@mui/material";
 import Form from "./Form";
