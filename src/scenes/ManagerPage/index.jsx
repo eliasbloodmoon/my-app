@@ -8,42 +8,43 @@ import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 
 /*
-  The register new user should be added somewhere here.
+  The register new employee should be added somewhere here.
   This is the main function. Replaced "Underconstruction"
 */
 const ManagerLogin = () => {
   const theme = useTheme();
-  const [users, setUsers] = useState([]);
+  const [employees, setEmployees] = useState([]);
   const [commands, setCommands] = useState([]);
-  const [currentPage, setCurrentPage] = useState("users");
+  const [currentPage, setCurrentPage] = useState("employees");
   const [fetchData, setFetchData] = useState(true);
   // Add a loading state to indicate that the data is being fetched
   const [loading, setLoading] = useState(true);
   //Columns for the ComandList Command Name Time
   const commandsColumn = [
     { field: "command", headerName: "Command", flex: 1 },
-    { field: "name", headerName: "Name", flex: 1 },
+    { field: "firstName", headerName: "First Name", flex: 1 },
+    { field: "lastName", headerName: "Last Name", flex: 1 },
     { field: "time", headerName: "Time", flex: 1 },
   ];
-  const usersColumn = [
+  const employeesColumn = [
   ];
 
   const handleToggleFetch = () => {
     setFetchData(!fetchData);
   };
 
-  const CommandList = ({ users }) => {
+  const CommandList = ({ employees }) => {
     const [pageSize, setPageSize] = useState(5);
   
-    const handlePageSizeChange = (params) => {
-      setPageSize(params.pageSize);
+    const handlePageSizeChange = (newPageSize) => {
+      setPageSize(newPageSize);
     };
 
   
     return(
     <Box display="flex" flexDirection="column" marginTop={1}>
       <DataGrid
-        rows={users}
+        rows={employees}
         columns={commandsColumn}
         pageSize={pageSize}
         rowsPerPageOptions={[5, 10, 20]}
@@ -52,24 +53,25 @@ const ManagerLogin = () => {
         rowId="id"
         columnBuffer={2}
         onPageSizeChange={handlePageSizeChange}
+        setPageSize={setPageSize}
       />
     </Box>
   );
     };
   
-  //Layout of the UserList
-  const UserList = ({ users }) => {
+  //Layout of the EmployeeList
+  const EmployeeList = ({ employees }) => {
     const [pageSize, setPageSize] = useState(5);
   
-    const handlePageSizeChange = (params) => {
-      setPageSize(params.pageSize);
+    const handlePageSizeChange = (newPageSize) => {
+      setPageSize(newPageSize);
     };
   
     return(
     <Box display="flex" flexDirection="column" marginTop={1}>
       <DataGrid
-        rows={users}
-        columns={usersColumn}
+        rows={employees}
+        columns={employeesColumn}
         pageSize={pageSize}
         rowsPerPageOptions={[5, 10, 20]}
         autoHeight
@@ -77,6 +79,7 @@ const ManagerLogin = () => {
         rowId="id"
         columnBuffer={2}
         onPageSizeChange={handlePageSizeChange}
+        setPageSize={setPageSize}
       />
     </Box>
     );
@@ -84,7 +87,7 @@ const ManagerLogin = () => {
   
 
   const handleExportCsv = () => {
-    const rows = currentPage === 'commands' ? users : commands;
+    const rows = currentPage === 'commands' ? employees : commands;
   
     // Get the current date and time
     const currentDate = new Date();
@@ -92,7 +95,7 @@ const ManagerLogin = () => {
     const timeString = currentDate.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
   
     // Get the columns for the current page
-    const columns = currentPage === 'commands' ? usersColumn : commandsColumn;
+    const columns = currentPage === 'commands' ? employeesColumn : commandsColumn;
   
     // Create the header rows
     const headerRows = [
@@ -116,10 +119,10 @@ const ManagerLogin = () => {
   };
 
   const handleExportPdf = async () => {
-    const rows = currentPage === 'commands' ? users : commands;
+    const rows = currentPage === 'commands' ? employees : commands;
 
     // Get the columns for the current page
-    const columns = currentPage === 'commands' ? usersColumn : commandsColumn;
+    const columns = currentPage === 'commands' ? employeesColumn : commandsColumn;
 
     // Create a new instance of jsPDF
     const doc = new jsPDF({
@@ -151,22 +154,22 @@ const ManagerLogin = () => {
     saveAs(blob, `${currentPage}_${new Date().toLocaleString()}.pdf`);
 };
 
-  //This is where the UserList displays from.
-  //It makes a GET request to the /users route from the backend
+  //This is where the EmployeeList displays from.
+  //It makes a GET request to the /employees route from the backend
   
-  const fetchUserData = async () => {
+  const fetchEmployeeData = async () => {
     try {
-      const [usersResponse, commandsResponse] = await Promise.all([
-        fetch('http://frontend.digitaldreamforge.chat:5000/users'),
+      const [employeesResponse, commandsResponse] = await Promise.all([
+        fetch('http://frontend.digitaldreamforge.chat:5000/employees'),
         fetch('http://frontend.digitaldreamforge.chat:5000/api/database')
       ]);
-      const [usersData, commandsData] = await Promise.all([
-        usersResponse.json(),
+      const [employeesData, commandsData] = await Promise.all([
+        employeesResponse.json(),
         commandsResponse.json()
       ]);
-      const usersWithIds = usersData.map(user => ({ ...user, id: uuidv4() }));
+      const employeesWithIds = employeesData.map(employee => ({ ...employee, id: uuidv4() }));
       const commandsWithIds = commandsData.map(command => ({ ...command, id: uuidv4() }));
-      setUsers(usersWithIds);
+      setEmployees(employeesWithIds);
       setCommands(commandsWithIds);
       //setLastUpdate(Date.now()); // Update the lastUpdate state variable
     } catch (error) {
@@ -174,16 +177,16 @@ const ManagerLogin = () => {
     }
   };
   
-  // Call the fetchUserData function once when the component mounts
+  // Call the fetchEmployeeData function once when the component mounts
   useEffect(() => {
-    fetchUserData();
+    fetchEmployeeData();
   }, []);
   
-  // Call the fetchUserData function every 10 seconds
+  // Call the fetchEmployeeData function every 10 seconds
   useEffect(() => {
     if (fetchData) {
       const timer = setInterval(() => {
-        fetchUserData();
+        fetchEmployeeData();
       }, 10000);
       return () => clearInterval(timer); // Clear the timer when the component unmounts
     }
@@ -191,10 +194,10 @@ const ManagerLogin = () => {
   
   // Modify the useEffect hook to set loading to false when the data is fetched
   useEffect(() => {
-    if (users.length > 0 && commands.length > 0) {
+    if (employees.length > 0 && commands.length > 0) {
       setLoading(false);
     }
-  }, [users, commands]);
+  }, [employees, commands]);
   
   // Render a loading message while the data is being fetched
   if (loading) {
@@ -214,23 +217,30 @@ const ManagerLogin = () => {
           Digital Dream Forge
         </Typography>
       </Box>
-
+  
+      {/* Grid container for layout */}
       <Grid container>
+        {/* Sidebar column */}
         <Grid item xs={12} sm={3} md={2}>
           <Box display="flex" flexDirection="column" justifyContent="flex-start" marginBottom={1} paddingLeft={1} paddingRight={1} paddingTop={1}>
+            {/* Button to toggle auto-refresh */}
             <Button color="info" variant="contained" onClick={handleToggleFetch} style={{ width: '100%', marginBottom: '1rem' }}>
               {fetchData ? "Turn off auto-refresh" : "Turn on auto-refresh"}
             </Button>
+            {/* Button to export data as CSV */}
             <Button variant="contained" onClick={handleExportCsv} style={{ marginBottom: '1rem' }}>Export All as CSV</Button>
+            {/* Button to export data as PDF */}
             <Button variant="contained" onClick={handleExportPdf} style={{ marginBottom: '1rem' }}>Export All as PDF</Button>
           </Box>
         </Grid>
+        {/* Main content column */}
         <Grid item xs={12} sm={9} md={10}>
           <Box>
+            {/* Ternary operator to display EmployeeList or CommandList based on currentPage */}
             {currentPage === "commands" ? (
-              <UserList users={users} />
+              <EmployeeList employees={employees} />
             ) : (
-              <CommandList users={commands} />
+              <CommandList employees={commands} />
             )}
           </Box>
         </Grid>

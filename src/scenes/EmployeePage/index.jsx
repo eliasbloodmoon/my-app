@@ -1,3 +1,5 @@
+// EmployeePage is the functions and features involving the Employee Page on the Front end. 
+
 import { Box, Typography, useTheme } from "@mui/material";
 import React, { useState } from "react";
 import Navbar from "../navbar/index";
@@ -5,52 +7,38 @@ import { DataGrid } from '@mui/x-data-grid';
 import { useContext, useCallback, useEffect } from "react";
 import { UserProvider, UserContext } from "../../UserContext";
 import { v4 as uuidv4 } from 'uuid';
-
-const getUserData = async (email) => {
-  try {
-    const usersResponse = await fetch(`http://frontend.digitaldreamforge.chat:5000/users?email=${email}`);
-    const users = await usersResponse.json();
-    const user = users[0];
-    const name = "\"" + user.first_name + " " + user.last_name + "\"";
-    const databaseResponse = await fetch(`http://frontend.digitaldreamforge.chat:5000/api/database?name=${name}`);
-    const databaseData = await databaseResponse.json();
-    console.log(databaseData);
-  } catch (error) {
-    console.error(error);
-  }
-};
+import { getRowIdFromRowModel } from "@mui/x-data-grid/hooks/features/rows/gridRowsUtils";
 
 const EmployeeLogin = () => {
   const theme = useTheme();
-  const [users, setUsers] = useState([]);
-  const [employeeEmail, setEmployeeEmail] = useState("");
-  const [setIsLoading] = useState(true);
-  const { email: userEmail } = useContext(UserContext);
+
+  // Initialize state variables
+  const [employees, setEmployees] = useState([]);
+  const [employeesEmail, setEmployeeEmail] = useState("");
+  const [isLoading, setIsLoading] = useState(true); // updated
+  const { email: employeeEmail } = useContext(UserContext);
   const [email, setEmail] = useState('');
 
+  // Load the employee email from local storage or context
   useEffect(() => {
     const savedEmail = localStorage.getItem('email');
     if (savedEmail) {
       setEmail(savedEmail);
-    } else if (userEmail) {
-      setEmail(userEmail);
-      localStorage.setItem('email', userEmail);
+    } else if (employeeEmail) {
+      setEmail(employeeEmail);
+      localStorage.setItem('email', employeeEmail);
     }
-  }, [userEmail]);
+  }, [employeeEmail]);
 
+  // Update the email state variable if it changes in context
   useEffect(() => {
-    if (userEmail && userEmail !== email) {
-      setEmail(userEmail);
-      localStorage.setItem('email', userEmail);
+    if (employeeEmail && employeeEmail !== email) {
+      setEmail(employeeEmail);
+      localStorage.setItem('email', employeeEmail);
     }
-  }, [userEmail, email]);
+  }, [employeeEmail, email]);
 
-  useEffect(() => {
-    if (email) {
-      getUserData(email);
-    }
-  }, [email]);
-
+  // Define columns for the commands table
   const commandsColumn = [
     {
       field: 'firstName',
@@ -92,98 +80,110 @@ const EmployeeLogin = () => {
       resizable: false,
     },
   ];
-
+  // Fetch employee commands data from the server
   const fetchCommandsData = useCallback(async () => {
     if (!email) return;
-
+    
+    
+// Try to fetch data using the employee's email as a query parameter
     try {
-      const commandsResponse = await fetch('http://frontend.digitaldreamforge.chat:5000/api/database');
-      const usersResponse = await fetch('http://frontend.digitaldreamforge.chat:5000/users/');
+      setIsLoading(true);
+      const response = await fetch(
+        `http://frontend.digitaldreamforge.chat:5000/api/employee?email=${email}`
+      );
+      const data = await response.json();
+      console.log(data);
   
-      let commandsData = await commandsResponse.json();
-      let usersData = await usersResponse.json();
+      // Create a new row for each entry in the rockets array
+      const rocketsData = data.rockets.map(rocket => {
+        return {
+          id: uuidv4(),
+          firstName: data.employee.firstName,
+          lastName: data.employee.lastName,
+          email: data.employee.email,
+          command: rocket.command,
+          time: rocket.time
+        };
+      });
   
-      // Group commands by user email
-      const groupedCommands = commandsData.reduce((acc, curr) => {
-        const userEmail = usersData.find(user => user.firstName + ' ' + user.lastName === curr.name)?.email;
-        if (userEmail) {
-          acc[userEmail] = acc[userEmail] || [];
-          acc[userEmail].push(curr);
-        }
-        return acc;
-      }, {});
+      // Add the rocket data to the employees array
+      setEmployees(prevEmployees => [
+        ...prevEmployees,
+        ...rocketsData
+      ]);
   
-      let mergedData = [];
-      for (let i = 0; i < usersData.length; i++) {
-        const user = usersData[i];
-        if (groupedCommands[user.email]) {
-          mergedData.push(
-            ...groupedCommands[user.email].map(command => ({
-              ...command,
-              ...user,
-            }))
-          );
-        }
-      }
-  
-      if (email) {
-        mergedData = mergedData.filter(user => user.email === email);
-      }
-  
-      const usersWithIds = mergedData.map(user => ({ ...user, id: uuidv4() }));
-      setUsers(usersWithIds);
-  
-      // Set employee email
-      const loggedInUser = mergedData.find(user => user.email === employeeEmail);
-      if (loggedInUser) {
-        setEmployeeEmail(loggedInUser.email);
+      // Set the employee email based on the found employee
+      const loggedInEmployee = employees.find(
+        employee => employee.email === employee.email
+      );
+      if (loggedInEmployee) {
+        setEmployeeEmail(loggedInEmployee.email);
       } else {
         setEmployeeEmail("");
       }
-      setIsLoading(false);
     } catch (error) {
       console.error(error);
+    } finally {
+      // Set isLoading to false after fetching data
+      setIsLoading(false);
     }
-  }, [employeeEmail, email, setIsLoading]);
-
+  }, [email]);
+// Fetch data when the component is mounted and email or fetchCommandsData
   useEffect(() => {
     fetchCommandsData();
   }, [fetchCommandsData, email]);
-
-  const CommandList = ({ users, employeeEmail, isLoading }) => {
+  // Component that renders a list of commands
+  const CommandList = ({ employees, employeesEmail, isLoading }) => {
     const [pageSize, setPageSize] = useState(5);
-  
-    const handlePageSizeChange = (params) => {
-      setPageSize(params.pageSize);
+    // Handler for changing the page size of the list
+    const handlePageSizeChange = (newPageSize) => {
+      setPageSize(newPageSize);
     };
   
     return (
-        <Box display="flex" flexDirection="column" marginTop={1}>
+      // Create a container box with column flex direction and top margin
+      <Box display="flex" flexDirection="column" marginTop={1}>
+        {/* Create a box for displaying user info */}
         <Box marginBottom={1}>
           <Typography fontWeight="bold" fontSize="24px">
             Logged in as {email}
           </Typography>
         </Box>
-          <Box display="flex" justifyContent="center">
+        {/* Create a box for displaying data grid */}
+        <Box display="flex" justifyContent="center">
           <DataGrid
-            rows={users}
+            // Set rows to employees array
+            rows={employees}
+            // Set columns to commandsColumn array
             columns={commandsColumn}
+            // Set page size to pageSize state
             pageSize={pageSize}
+            // Set rows per page options to an array of numbers
             rowsPerPageOptions={[5, 10, 20]}
+            // Enable auto height
             autoHeight
+            // Set row height to 45 pixels
             rowHeight={45}
+            // Set row ID to "id"
+            rowId="id"
+            // Set column buffer to 2
             columnBuffer={2}
+            // Handle page size change
             onPageSizeChange={handlePageSizeChange}
+            // Set page size to setPageSize function
+            setPageSize={setPageSize}
           />
-          </Box>
-          </Box>
+        </Box>
+      </Box>
     );
   };
 
   return (
     <UserProvider>
       <Box width="100%">
+        {/* Render the navbar */}
         <Navbar />
+        {/* Create a box for the page header */}
         <Box
           width="100%"
           backgroundColor={theme.palette.background.alt}
@@ -194,7 +194,8 @@ const EmployeeLogin = () => {
             Digital Dream Forge
           </Typography>
         </Box>
-        <CommandList users={users} commandsColumn={commandsColumn} />
+        {/* Render the CommandList component with employees and commandsColumn props */}
+        <CommandList employees={employees} commandsColumn={commandsColumn} />
       </Box>
     </UserProvider>
   );
