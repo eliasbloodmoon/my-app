@@ -217,19 +217,26 @@ const ManagerLogin = () => {
           Digital Dream Forge
         </Typography>
       </Box>
-
+  
+      {/* Grid container for layout */}
       <Grid container>
+        {/* Sidebar column */}
         <Grid item xs={12} sm={3} md={2}>
           <Box display="flex" flexDirection="column" justifyContent="flex-start" marginBottom={1} paddingLeft={1} paddingRight={1} paddingTop={1}>
+            {/* Button to toggle auto-refresh */}
             <Button color="info" variant="contained" onClick={handleToggleFetch} style={{ width: '100%', marginBottom: '1rem' }}>
               {fetchData ? "Turn off auto-refresh" : "Turn on auto-refresh"}
             </Button>
+            {/* Button to export data as CSV */}
             <Button variant="contained" onClick={handleExportCsv} style={{ marginBottom: '1rem' }}>Export All as CSV</Button>
+            {/* Button to export data as PDF */}
             <Button variant="contained" onClick={handleExportPdf} style={{ marginBottom: '1rem' }}>Export All as PDF</Button>
           </Box>
         </Grid>
+        {/* Main content column */}
         <Grid item xs={12} sm={9} md={10}>
           <Box>
+            {/* Ternary operator to display EmployeeList or CommandList based on currentPage */}
             {currentPage === "commands" ? (
               <EmployeeList employees={employees} />
             ) : (

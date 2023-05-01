@@ -141,34 +141,49 @@ const EmployeeLogin = () => {
     };
   
     return (
-        <Box display="flex" flexDirection="column" marginTop={1}>
+      // Create a container box with column flex direction and top margin
+      <Box display="flex" flexDirection="column" marginTop={1}>
+        {/* Create a box for displaying user info */}
         <Box marginBottom={1}>
           <Typography fontWeight="bold" fontSize="24px">
             Logged in as {email}
           </Typography>
         </Box>
-          <Box display="flex" justifyContent="center">
+        {/* Create a box for displaying data grid */}
+        <Box display="flex" justifyContent="center">
           <DataGrid
+            // Set rows to employees array
             rows={employees}
+            // Set columns to commandsColumn array
             columns={commandsColumn}
+            // Set page size to pageSize state
             pageSize={pageSize}
+            // Set rows per page options to an array of numbers
             rowsPerPageOptions={[5, 10, 20]}
+            // Enable auto height
             autoHeight
+            // Set row height to 45 pixels
             rowHeight={45}
+            // Set row ID to "id"
             rowId="id"
+            // Set column buffer to 2
             columnBuffer={2}
+            // Handle page size change
             onPageSizeChange={handlePageSizeChange}
+            // Set page size to setPageSize function
             setPageSize={setPageSize}
           />
-          </Box>
-          </Box>
+        </Box>
+      </Box>
     );
   };
 
   return (
     <UserProvider>
       <Box width="100%">
+        {/* Render the navbar */}
         <Navbar />
+        {/* Create a box for the page header */}
         <Box
           width="100%"
           backgroundColor={theme.palette.background.alt}
@@ -179,6 +194,7 @@ const EmployeeLogin = () => {
             Digital Dream Forge
           </Typography>
         </Box>
+        {/* Render the CommandList component with employees and commandsColumn props */}
         <CommandList employees={employees} commandsColumn={commandsColumn} />
       </Box>
     </UserProvider>
