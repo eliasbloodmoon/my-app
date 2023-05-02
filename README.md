@@ -1,6 +1,67 @@
-# Getting Started with Create React App
+# Front End Website
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+
+## Installation
+
+Requirements:
+
+- Node.js
+- Node package manager (NPM)
+
+Dependencies are defined in the `package-lock.json` file.
+
+Simply use `npm install` in the root project directory to install them all.
+
+## File Structure
+
+### .env
+
+Stores environment variables/secrets.
+
+### /public
+
+Contains the core index.html file that processes the root, along with text resources.
+
+### /src
+
+Contains the .js files that hold our routes with index and App, along with the UserContext that is used to store user email locally throughout the project.
+
+### /src/app
+
+Contains store.js, which is used for authentication.
+
+### /src/components
+
+Contains FlexBetween.jsx, which is used for layouts in the rest of the project.
+
+### /src/features/auth
+
+Contains authSlice.js, which holds states used for logins and the dark/light mode.
+
+### /src/state
+
+Contrains files relating to states related to authetication and the API.
+
+### /src/scenes/loginPage
+
+Contaings the index that holds the information of our login page, Form which holds our login form, and the DDF logo used on the main page.
+
+### /src/scenes/EmployeePage
+
+Holds the code for the employee index, the page that is linked to the everyday user. Includes the tables and API calls.
+
+### /src/scenes/AdministratorPage
+
+Holds the code for the Administrator index, the page that is linked to the highest level users. Along with the tables and API calls, it also includes forms and buttons for adding users and editing information.
+
+### /src/scenes/ManagerPage
+
+Holds the code for the Manager index, that is linked to the Manager level role. This containts all the tables, buttons and API calls of the Admin page minus the edit and delete commands.
+
+### /src/scenes/navbar
+
+Holds the code for the framing navbar that wraps every page, which holds buttons relating to logging out and the dark and light mode.
 
 ## Available Scripts
 
@@ -29,42 +90,3 @@ Your app is ready to be deployed!
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
